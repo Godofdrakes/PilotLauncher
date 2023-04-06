@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PilotLauncher.WPF.ViewModels;
 using PilotLauncher.WPF.Views;
+using ReactiveUI;
 
 namespace PilotLauncher.WPF
 {
@@ -16,15 +18,18 @@ namespace PilotLauncher.WPF
 		private readonly ILogger<App> _logger;
 		private readonly IServiceProvider _serviceProvider;
 		private readonly IHostEnvironment _hostEnvironment;
-		
+		private readonly LogObservable _logObservable;
+
 		public App(
 			ILogger<App> logger,
 			IServiceProvider serviceProvider,
-			IHostEnvironment hostEnvironment)
+			IHostEnvironment hostEnvironment,
+			LogObservable logObservable)
 		{
 			_logger = logger;
 			_serviceProvider = serviceProvider;
 			_hostEnvironment = hostEnvironment;
+			_logObservable = logObservable;
 
 			InitializeComponent();
 		}
@@ -39,6 +44,10 @@ namespace PilotLauncher.WPF
 			{
 				Title = _hostEnvironment.ApplicationName,
 			};
+
+			_logObservable.Output
+				.ObserveOn(RxApp.MainThreadScheduler)
+				.Subscribe(mainWindowView.ViewModel.ConsoleOutputObserver);
 
 			this.MainWindow = mainWindowView;
 			this.MainWindow!.Show();

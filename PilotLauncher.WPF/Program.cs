@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using Dapplo.Microsoft.Extensions.Hosting.AppServices;
 using Dapplo.Microsoft.Extensions.Hosting.Wpf;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PilotLauncher.Plugins;
@@ -19,6 +23,7 @@ public static class Program
 	public static Task Main(string[] args)
 	{
 		var host = Host.CreateDefaultBuilder(args)
+			.ConfigureLogging()
 			.ConfigureSingleInstance()
 			.ConfigureSplatForMicrosoftDependencyResolver()
 			.ConfigureReactiveUIViews()
@@ -28,6 +33,25 @@ public static class Program
 			.Build()
 			.MapSplatLocator()
 			.RunAsync();
+	}
+
+	private static IHostBuilder ConfigureLogging(this IHostBuilder hostBuilder)
+	{
+		var loggingSubject = new ReplaySubject<string>(500);
+
+		return hostBuilder
+			.ConfigureLogging((context, builder) =>
+			{
+				// forward log output from here...
+				builder.AddObserver(loggingSubject.AsObserver());
+				builder.AddConsole();
+				builder.AddDebug();
+			})
+			.ConfigureServices((context, collection) =>
+			{
+				// to here...
+				collection.AddSingleton(new LogObservable(loggingSubject.AsObservable()));
+			});
 	}
 
 	private static IHostBuilder ConfigureSingleInstance(this IHostBuilder hostBuilder)
