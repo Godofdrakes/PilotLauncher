@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using Dapplo.Microsoft.Extensions.Hosting.AppServices;
 using Dapplo.Microsoft.Extensions.Hosting.Plugins;
 using Dapplo.Microsoft.Extensions.Hosting.Wpf;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
@@ -15,15 +20,45 @@ namespace PilotLauncher.WPF;
 
 public static class Program
 {
+	private static DirectoryInfo? GetSolutionDir(IHostEnvironment hostEnvironment)
+	{
+		var dir = new DirectoryInfo(hostEnvironment.ContentRootPath);
+
+		while (dir != null && !dir.EnumerateFiles().Any(file => file.Extension.Equals(".sln")))
+		{
+			dir = dir.Parent;
+		}
+
+		return dir;
+	}
+
+	private static IEnumerable<DirectoryInfo> GetPluginDirs(DirectoryInfo solutionDir)
+	{
+		return solutionDir.GetDirectories("Plugins/*/bin/Debug/net6.0", SearchOption.AllDirectories);
+	}
+
 	[STAThread]
 	public static Task Main(string[] args)
 	{
+		var tempHost = Host.CreateDefaultBuilder(args)
+			.Build();
+
+		var hostEnvironment = tempHost.Services.GetRequiredService<IHostEnvironment>();
+
 		var host = Host.CreateDefaultBuilder(args)
 			.ConfigureSingleInstance()
 			.ConfigureSplatForMicrosoftDependencyResolver()
 			.ConfigureReactiveUIViews()
 			.ConfigurePlugins()
 			.ConfigureWpf<App>();
+
+		if (hostEnvironment.IsDevelopment())
+		{
+			host.ConfigurePlugins(builder =>
+			{
+				
+			});
+		}
 
 		return host
 			.Build()
