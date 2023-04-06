@@ -6,6 +6,7 @@ using Dapplo.Microsoft.Extensions.Hosting.AppServices;
 using Dapplo.Microsoft.Extensions.Hosting.Wpf;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PilotLauncher.Plugins;
 using ReactiveUI;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;

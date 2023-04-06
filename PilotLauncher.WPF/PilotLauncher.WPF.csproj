@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\PilotLauncher.Plugins\PilotLauncher.Plugins.csproj" />
       <ProjectReference Include="..\PilotLauncher\PilotLauncher.csproj" />
     </ItemGroup>
 

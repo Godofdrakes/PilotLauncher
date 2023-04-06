@@ -10,5 +10,5 @@ public abstract class WindowViewModel : ReactiveObject
 		set => this.RaiseAndSetIfChanged(ref _title, value);
 	}
 
-	private string _title;
+	private string _title = string.Empty;
 }
