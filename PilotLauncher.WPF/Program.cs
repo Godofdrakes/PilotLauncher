@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using Dapplo.Microsoft.Extensions.Hosting.AppServices;
-using Dapplo.Microsoft.Extensions.Hosting.Plugins;
 using Dapplo.Microsoft.Extensions.Hosting.Wpf;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;

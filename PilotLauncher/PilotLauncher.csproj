@@ -7,8 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Dapplo.Microsoft.Extensions.Hosting.Plugins" Version="1.0.14" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
       <PackageReference Include="ReactiveUI" Version="18.4.26" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Interfaces" />
     </ItemGroup>
 
 </Project>
