@@ -20,45 +20,14 @@ namespace PilotLauncher.WPF;
 
 public static class Program
 {
-	private static DirectoryInfo? GetSolutionDir(IHostEnvironment hostEnvironment)
-	{
-		var dir = new DirectoryInfo(hostEnvironment.ContentRootPath);
-
-		while (dir != null && !dir.EnumerateFiles().Any(file => file.Extension.Equals(".sln")))
-		{
-			dir = dir.Parent;
-		}
-
-		return dir;
-	}
-
-	private static IEnumerable<DirectoryInfo> GetPluginDirs(DirectoryInfo solutionDir)
-	{
-		return solutionDir.GetDirectories("Plugins/*/bin/Debug/net6.0", SearchOption.AllDirectories);
-	}
-
 	[STAThread]
 	public static Task Main(string[] args)
 	{
-		var tempHost = Host.CreateDefaultBuilder(args)
-			.Build();
-
-		var hostEnvironment = tempHost.Services.GetRequiredService<IHostEnvironment>();
-
 		var host = Host.CreateDefaultBuilder(args)
 			.ConfigureSingleInstance()
 			.ConfigureSplatForMicrosoftDependencyResolver()
 			.ConfigureReactiveUIViews()
-			.ConfigurePlugins()
 			.ConfigureWpf<App>();
-
-		if (hostEnvironment.IsDevelopment())
-		{
-			host.ConfigurePlugins(builder =>
-			{
-				
-			});
-		}
 
 		return host
 			.Build()
@@ -77,15 +46,6 @@ public static class Program
 			{
 				logger.LogWarning("An instance of the application already exists");
 			};
-		});
-	}
-
-	private static IHostBuilder ConfigurePlugins(this IHostBuilder hostBuilder)
-	{
-		return hostBuilder.ConfigurePlugins(builder =>
-		{
-			builder.AssemblyScanFunc = PluginScanner.ByNamingConvention;
-			builder.UseContentRoot = true;
 		});
 	}
 

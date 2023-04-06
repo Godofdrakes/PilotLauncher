@@ -8,10 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8F792CD0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Test", "PilotLauncher.Test\PilotLauncher.Test.csproj", "{CC6863E6-A98F-4EB5-85F1-34596DCFC986}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{745ED4D0-E5F5-4519-A668-30FDFB978F39}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Example", "PilotLauncher.Example\PilotLauncher.Example.csproj", "{68F54593-9179-4825-AFDA-8D52554BDE20}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,13 +26,8 @@ Global
 		{CC6863E6-A98F-4EB5-85F1-34596DCFC986}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC6863E6-A98F-4EB5-85F1-34596DCFC986}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC6863E6-A98F-4EB5-85F1-34596DCFC986}.Release|Any CPU.Build.0 = Release|Any CPU
-		{68F54593-9179-4825-AFDA-8D52554BDE20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{68F54593-9179-4825-AFDA-8D52554BDE20}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{68F54593-9179-4825-AFDA-8D52554BDE20}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{68F54593-9179-4825-AFDA-8D52554BDE20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CC6863E6-A98F-4EB5-85F1-34596DCFC986} = {8F792CD0-C7D3-41B1-B90A-A6191E7CF51E}
-		{68F54593-9179-4825-AFDA-8D52554BDE20} = {745ED4D0-E5F5-4519-A668-30FDFB978F39}
 	EndGlobalSection
 EndGlobal
