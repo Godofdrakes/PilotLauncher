@@ -13,8 +13,4 @@
       <PackageReference Include="ReactiveUI" Version="18.4.26" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Attributes" />
-    </ItemGroup>
-
 </Project>
