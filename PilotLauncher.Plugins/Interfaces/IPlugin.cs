@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace PilotLauncher.Plugins.Interfaces;
+namespace PilotLauncher.Plugins;
 
 public interface IPlugin
 {

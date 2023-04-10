@@ -11,11 +11,21 @@
                       xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                       xmlns:system="clr-namespace:System;assembly=System.Runtime"
+                      xmlns:plugins="clr-namespace:PilotLauncher.Plugins;assembly=PilotLauncher.Plugins"
                       WindowStartupLocation="CenterScreen"
                       ResizeMode="CanResizeWithGrip"
                       MinHeight="400" Height="400"
                       MinWidth="500" Width="500"
                       mc:Ignorable="d">
+    <views:MetroWindowFor.Resources>
+        <ResourceDictionary>
+            <HierarchicalDataTemplate DataType="{x:Type plugins:IWorkflowNode}"
+                                      ItemsSource="{Binding Children}">
+                <TextBlock Text="{Binding Label}" />
+            </HierarchicalDataTemplate>
+        </ResourceDictionary>
+    </views:MetroWindowFor.Resources>
+
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
             <Button x:Name="ConsoleOutputButton">
@@ -40,6 +50,15 @@
     </mah:MetroWindow.Flyouts>
 
     <DockPanel>
-        <ListView x:Name="ListView" />
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <Button Grid.Column="1" x:Name="RunButton">Run</Button>
+        </Grid>
+
+        <TreeView x:Name="TreeView"/>
     </DockPanel>
 </views:MetroWindowFor>

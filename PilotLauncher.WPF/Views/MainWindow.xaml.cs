@@ -26,6 +26,11 @@ public partial class MainWindow
 			this.OneWayBind(ViewModel,
 				model => model.ConsoleOutput,
 				window => window.ConsoleOutput.ItemsSource);
+
+			this.BindCommand(ViewModel,
+				model => model.ExecuteCommand,
+				window => window.RunButton,
+				model => model.WorkflowRoot);
 		});
 	}
 

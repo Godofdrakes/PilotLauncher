@@ -5,15 +5,14 @@ using ReactiveUI;
 
 namespace PilotLauncher;
 
-public sealed class WorkflowLeafExample : WorkflowLeafBase
+public sealed class WorkflowLeafExample : WorkflowLeaf
 {
 	public override string Label => _label.Value;
-	public override Exception? LastException => _lastException.Value;
+
 	public override ReactiveCommand<Unit, Unit> ExecuteCommand { get; }
 	public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
 	private readonly ObservableAsPropertyHelper<string> _label;
-	private readonly ObservableAsPropertyHelper<Exception?> _lastException;
 
 	public int DelaySeconds
 	{
@@ -32,10 +31,7 @@ public sealed class WorkflowLeafExample : WorkflowLeafBase
 				.Select(_ => Unit.Default));
 		
 		_label = this.WhenAnyValue(x => x.DelaySeconds)
-			.Select(seconds => $"Wait {seconds} seconds")
+			.Select(seconds => $"wait {seconds} seconds")
 			.ToProperty(this, x => x.Label);
-		_lastException = ExecuteCommand.ThrownExceptions
-			.Merge(ExecuteCommand.IsExecuting.Where(isRunning => isRunning).Select(_ => (Exception?)null))
-			.ToProperty(this, x => x.LastException, (Exception?)null);
 	}
 }
