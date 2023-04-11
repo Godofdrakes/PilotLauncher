@@ -16,6 +16,7 @@ public sealed class WorkflowLeafExample : WorkflowLeaf
 
 	private readonly ObservableAsPropertyHelper<string> _label;
 
+	[ReactivePropertyInfo]
 	public int DelaySeconds
 	{
 		get => _delaySeconds;

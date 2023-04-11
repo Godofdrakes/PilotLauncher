@@ -39,9 +39,22 @@ public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 
 		WorkflowRoot = new WorkflowBranch
 		{
+			new WorkflowBranch
+			{
+				new WorkflowLeafExample
+				{
+					DelaySeconds = 1,
+					Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
+				},
+				new WorkflowLeafExample
+				{
+					DelaySeconds = 2,
+					Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
+				}
+			},
 			new WorkflowLeafExample
 			{
-				DelaySeconds = 10,
+				DelaySeconds = 3,
 				Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
 			}
 		};
@@ -58,28 +71,8 @@ public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 			e => consoleOutput.Edit(list => list.Add(e.Message)));
 	}
 
-	private static Queue<WorkflowLeaf> GetWorkflowQueue(IWorkflowNode root)
+	private static IEnumerable<WorkflowLeaf> GetWorkflowQueue(IWorkflowNode root)
 	{
-		var leaves = new Queue<WorkflowLeaf>();
-		var queue = new Queue<IWorkflowNode>();
-
-		queue.Enqueue(root);
-
-		while (queue.TryDequeue(out var node))
-		{
-			foreach (var child in node.Children)
-			{
-				if (child is WorkflowLeaf leaf)
-				{
-					leaves.Enqueue(leaf);
-				}
-				else
-				{
-					queue.Enqueue(child);
-				}
-			}
-		}
-
-		return leaves;
+		return root.Flatten(node => node.Children).OfType<WorkflowLeaf>();
 	}
 }
