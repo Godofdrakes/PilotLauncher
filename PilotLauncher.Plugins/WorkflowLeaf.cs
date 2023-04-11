@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace PilotLauncher.Plugins;
 
-public abstract class WorkflowLeaf : ReactiveObject, IWorkflowNode
+public abstract class WorkflowLeaf : ReactivePrototypeObject, IWorkflowNode
 {
 	public abstract string Label { get; }
 	

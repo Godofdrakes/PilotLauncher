@@ -1,5 +1,6 @@
-﻿using System.Reactive;
-using System.Reactive.Disposables;
+﻿using System.Linq;
+using System.Reactive;
+using PilotLauncher.Plugins;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF.Views;
@@ -15,9 +16,8 @@ public partial class MainWindow
 
 		this.WhenActivated(d =>
 		{
-			ViewModel!.Interactions.ShowConsoleOutput
-				.RegisterHandler(ShowConsoleOutput)
-				.DisposeWith(d);
+			d(ViewModel!.Interactions.ShowEditFlyout.RegisterHandler(ShowEditFlyout));
+			d(ViewModel!.Interactions.ShowConsoleOutput.RegisterHandler(ShowConsoleOutput));
 
 			this.BindCommand(ViewModel,
 				model => model.Interactions.ShowConsoleOutputCommand,
@@ -27,6 +27,22 @@ public partial class MainWindow
 				model => model.ConsoleOutput,
 				window => window.ConsoleOutput.ItemsSource);
 		});
+	}
+
+	private void ShowEditFlyout(InteractionContext<IWorkflowNode, Unit> context)
+	{
+		if (context.Input is ReactivePrototypeObject prototype)
+		{
+			EditWorkflowDataGrid.ItemsSource = prototype.GetExposedProperties();
+		}
+		else
+		{
+			EditWorkflowDataGrid.ItemsSource = Enumerable.Empty<ReactivePropertyInfo>();
+		}
+
+		EditWorkflowFlyout.IsOpen = true;
+
+		context.SetOutput(Unit.Default);
 	}
 
 	private void ShowConsoleOutput(InteractionContext<ShowConsoleOutputMode, Unit> context)

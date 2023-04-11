@@ -23,7 +23,7 @@
 	<Window.Resources>
 
 		<ResourceDictionary>
-
+			
 			<Style TargetType="TreeViewItem"
 				BasedOn="{StaticResource {x:Type TreeViewItem}}">
 
@@ -49,11 +49,17 @@
 						<StackPanel Orientation="Horizontal">
 
 							<Button Content="Run"
-								HorizontalAlignment="Right"
 								Command="{Binding
 									RelativeSource={RelativeSource AncestorType=views:MainWindow},
 									Path=ViewModel.ExecuteCommand}"
 								CommandParameter="{Binding}"/>
+
+							<Button Content="Edit"
+								Command="{Binding
+									RelativeSource={RelativeSource AncestorType=views:MainWindow},
+									Path=ViewModel.Interactions.ShowEditFlyoutCommand}"
+								CommandParameter="{Binding}"/>
+
 						</StackPanel>
 					</mah:MetroHeader>
 				</DataTemplate>
@@ -73,28 +79,52 @@
 	</mah:MetroWindow.RightWindowCommands>
 
 	<mah:MetroWindow.Flyouts>
+
 		<mah:FlyoutsControl>
+
 			<mah:Flyout x:Name="ConsoleOutputFlyout" Header="Console Output"
 				Position="Right" MinWidth="300">
+
 				<ListView x:Name="ConsoleOutput">
+
 					<ListView.ItemTemplate>
+
 						<DataTemplate DataType="{x:Type system:String}">
+
 							<TextBlock Text="{Binding}" />
+							
 						</DataTemplate>
 					</ListView.ItemTemplate>
 				</ListView>
 			</mah:Flyout>
 
-			<mah:Flyout x:Name="EditWorkflowFlyout">
-				<DataGrid x:Name="EditWorkflowDataGrid"/>
+			<mah:Flyout x:Name="EditWorkflowFlyout" Header="Edit Workflow Node"
+				Position="Right" MinWidth="200">
+
+				<DataGrid x:Name="EditWorkflowDataGrid"
+					ItemsSource="{Binding WorkflowProperties}"
+					AutoGenerateColumns="False"
+					HeadersVisibility="Column">
+
+					<DataGrid.Columns>
+
+						<DataGridTextColumn Header="Type" Binding="{Binding PropertyInfo.PropertyType.Name}"/>
+						<DataGridTextColumn Header="Property" Binding="{Binding PropertyInfo.Name}"/>
+						<DataGridTemplateColumn Header="Value"
+							CellTemplateSelector="{StaticResource ReactivePropertyInfoTemplateSelector}"/>
+
+					</DataGrid.Columns>
+				</DataGrid>
 			</mah:Flyout>
 		</mah:FlyoutsControl>
 	</mah:MetroWindow.Flyouts>
 
 	<DockPanel>
+
 		<mah:MetroHeader DockPanel.Dock="Top">
 
 			<mah:MetroHeader.Header>
+
 				<Grid Margin="4,0">
 
 					<TextBlock Text="Workflow" FontSize="22"/>
@@ -103,13 +133,14 @@
 						HorizontalAlignment="Right"
 						Command="{Binding ExecuteCommand}"
 						CommandParameter="{Binding WorkflowRoot}"/>
+
 				</Grid>
 			</mah:MetroHeader.Header>
 		</mah:MetroHeader>
 
 		<TreeView x:Name="TreeView"
 			ItemTemplateSelector="{StaticResource WorkflowNodeTemplateSelector}"
-			ItemsSource="{Binding WorkflowRoot}">
-		</TreeView>
+			ItemsSource="{Binding WorkflowRoot}"/>
+
 	</DockPanel>
 </views:MetroWindowFor>

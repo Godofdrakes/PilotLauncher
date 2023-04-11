@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reactive;
+﻿using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Extensions.Logging;
 using PilotLauncher.Plugins;

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reflection;
 using DynamicData;
 using Microsoft.Extensions.Logging;
 using PilotLauncher.Plugins;
@@ -27,6 +28,13 @@ public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 
 	public MainWindowViewModel(ILoggerFactory loggerFactory)
 	{
+		var consoleOutput = new SourceList<string>();
+		consoleOutput
+			.Connect()
+			.ObserveOn(RxApp.MainThreadScheduler)
+			.Bind(out _consoleOutput)
+			.Subscribe();
+
 		ExecuteCommand = ReactiveCommand.CreateFromObservable<IWorkflowNode, Unit>(node =>
 		{
 			return GetWorkflowQueue(node)
@@ -50,21 +58,14 @@ public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 				{
 					DelaySeconds = 2,
 					Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
-				}
+				},
 			},
 			new WorkflowLeafExample
 			{
 				DelaySeconds = 3,
 				Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
-			}
+			},
 		};
-
-		var consoleOutput = new SourceList<string>();
-		consoleOutput
-			.Connect()
-			.ObserveOn(RxApp.MainThreadScheduler)
-			.Bind(out _consoleOutput)
-			.Subscribe();
 
 		ConsoleOutputObserver = Observer.Create<string>(
 			s => consoleOutput.Add(s),
