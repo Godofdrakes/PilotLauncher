@@ -19,17 +19,20 @@ namespace PilotLauncher.WPF
 		private readonly IServiceProvider _serviceProvider;
 		private readonly IHostEnvironment _hostEnvironment;
 		private readonly LogObservable _logObservable;
+		private readonly ILoggerFactory _loggerFactory;
 
 		public App(
 			ILogger<App> logger,
 			IServiceProvider serviceProvider,
 			IHostEnvironment hostEnvironment,
-			LogObservable logObservable)
+			LogObservable logObservable,
+			ILoggerFactory loggerFactory)
 		{
 			_logger = logger;
 			_serviceProvider = serviceProvider;
 			_hostEnvironment = hostEnvironment;
 			_logObservable = logObservable;
+			_loggerFactory = loggerFactory;
 
 			InitializeComponent();
 		}
@@ -40,7 +43,7 @@ namespace PilotLauncher.WPF
 
 			var mainWindowView = _serviceProvider.GetRequiredService<MainWindow>();
 
-			mainWindowView.ViewModel = new MainWindowViewModel
+			mainWindowView.ViewModel = new MainWindowViewModel(_loggerFactory)
 			{
 				Title = _hostEnvironment.ApplicationName,
 			};

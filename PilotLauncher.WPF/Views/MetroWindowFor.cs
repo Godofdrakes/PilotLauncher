@@ -39,9 +39,8 @@ public class MetroWindowFor<TViewModel> : MetroWindow, IViewFor<TViewModel>
 
 	protected MetroWindowFor()
 	{
-		this.WhenActivated(d =>
-		{
-			d(this.OneWayBind(ViewModel, model => model.Title, window => window.Title));
-		});
+		this.OneWayBind(ViewModel, model => model.Title, window => window.Title);
+		this.WhenAnyValue(window => window.ViewModel)
+			.BindTo(this, window => window.DataContext);
 	}
 }

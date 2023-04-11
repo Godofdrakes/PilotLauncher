@@ -1,4 +1,5 @@
-﻿using System.Reactive;
+﻿using System.Collections;
+using System.Reactive;
 using ReactiveUI;
 
 namespace PilotLauncher.Plugins;
@@ -11,4 +12,7 @@ public abstract class WorkflowLeaf : ReactiveObject, IWorkflowNode
 	public abstract ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
 	public IEnumerable<IWorkflowNode> Children => Enumerable.Empty<IWorkflowNode>();
+
+	public IEnumerator<IWorkflowNode> GetEnumerator() => Children.GetEnumerator();
+	IEnumerator IEnumerable.GetEnumerator() => Children.GetEnumerator();
 }

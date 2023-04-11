@@ -5,18 +5,19 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
+using Microsoft.Extensions.Logging;
 using PilotLauncher.Plugins;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF.ViewModels;
 
-public class MainWindowViewModel : WindowViewModel
+public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 {
 	public MainWindowInteractions Interactions { get; } = new();
 
 	public ReactiveCommand<IWorkflowNode,Unit> ExecuteCommand { get; }
 
-	public WorkflowBranch WorkflowRoot { get; } = new();
+	public WorkflowBranch WorkflowRoot { get; }
 
 	public IObserver<string> ConsoleOutputObserver { get; }
 
@@ -24,7 +25,7 @@ public class MainWindowViewModel : WindowViewModel
 
 	private readonly ReadOnlyObservableCollection<string> _consoleOutput;
 
-	public MainWindowViewModel()
+	public MainWindowViewModel(ILoggerFactory loggerFactory)
 	{
 		ExecuteCommand = ReactiveCommand.CreateFromObservable<IWorkflowNode, Unit>(node =>
 		{
@@ -32,9 +33,18 @@ public class MainWindowViewModel : WindowViewModel
 				.ToObservable()
 				// Commands will be executed as they are subscribed to
 				.Select(leaf => leaf.ExecuteCommand.Execute())
-				// Concat to subscribe in squence
+				// Concat to subscribe in sequence
 				.Concat();
 		});
+
+		WorkflowRoot = new WorkflowBranch
+		{
+			new WorkflowLeafExample
+			{
+				DelaySeconds = 10,
+				Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
+			}
+		};
 
 		var consoleOutput = new SourceList<string>();
 		consoleOutput
