@@ -84,6 +84,10 @@
 					</ListView.ItemTemplate>
 				</ListView>
 			</mah:Flyout>
+
+			<mah:Flyout x:Name="EditWorkflowFlyout">
+				<DataGrid x:Name="EditWorkflowDataGrid"/>
+			</mah:Flyout>
 		</mah:FlyoutsControl>
 	</mah:MetroWindow.Flyouts>
 

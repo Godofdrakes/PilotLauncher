@@ -9,8 +9,6 @@ public abstract class ReactivePropertyInfo : ReactiveObject
 	public PropertyInfo PropertyInfo { get; }
 	public ReactivePrototypeObject SourceObject { get; }
 
-	public bool CanEdit => PropertyInfo.CanWrite;
-
 	protected ReactivePropertyInfo(ReactivePrototypeObject sourceObject, PropertyInfo propertyInfo, Type propertyType)
 	{
 		ArgumentNullException.ThrowIfNull(sourceObject);
