@@ -16,13 +16,27 @@ public sealed class WorkflowLeafExample : WorkflowLeaf
 	private readonly ObservableAsPropertyHelper<string> _label;
 
 	[ReactivePropertyInfo]
-	public int DelaySeconds
+	public string Message
 	{
-		get => _delaySeconds;
-		set => this.RaiseAndSetIfChanged(ref _delaySeconds, value);
+		get => _message;
+		set => this.RaiseAndSetIfChanged(ref _message, value);
 	}
 
-	private int _delaySeconds = 5;
+	private string _message = string.Empty;
+
+	[ReactivePropertyInfo]
+	public string FullMessage => _fullMessage.Value;
+
+	private ObservableAsPropertyHelper<string> _fullMessage;
+
+	[ReactivePropertyInfo]
+	public int Delay
+	{
+		get => _delay;
+		set => this.RaiseAndSetIfChanged(ref _delay, value);
+	}
+
+	private int _delay = 5;
 
 	public ILogger<WorkflowLeafExample>? Logger { get; set; }
 
@@ -30,14 +44,19 @@ public sealed class WorkflowLeafExample : WorkflowLeaf
 	{
 		CancelCommand = ReactiveCommand.Create(() => { });
 		ExecuteCommand = ReactiveCommand.CreateFromObservable(() =>
-			Observable.Interval(TimeSpan.FromSeconds(1))
-				.Take(DelaySeconds)
+			Observable.Timer(TimeSpan.FromSeconds(Delay))
 				.TakeUntil(CancelCommand)
-				.Do(i => Logger?.LogInformation("{seconds}", i + 1))
 				.Select(_ => Unit.Default));
-		
-		_label = this.WhenAnyValue(x => x.DelaySeconds)
+
+		ExecuteCommand.Subscribe(_ => Logger?.LogInformation("{Message}", Message));
+
+		_label = this.WhenAnyValue(x => x.Delay)
 			.Select(seconds => $"wait {seconds} seconds")
 			.ToProperty(this, x => x.Label);
+
+		_fullMessage = this.WhenAnyValue(x => x.Delay, x => x.Message)
+			.Select(tuple =>
+				$"I've waited {tuple.Item1} seconds to tell you: {(string.IsNullOrEmpty(tuple.Item2) ? "nothing" : tuple.Item2)}")
+			.ToProperty(this, example => example.FullMessage);
 	}
 }

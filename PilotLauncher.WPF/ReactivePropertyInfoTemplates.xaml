@@ -31,6 +31,16 @@
 						MinWidth="50"/>
 
 				</DataTemplate>
+
+				<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}"
+					x:Key="{x:Type system:String}">
+
+					<TextBox
+						Text="{Binding Value}"
+						IsEnabled="{Binding PropertyInfo.CanWrite}"
+						MinWidth="50"/>
+
+				</DataTemplate>
 			</local:DataTemplateTypeMap>
 		</local:ReactivePropertyInfoTemplateSelector.Templates>
 
@@ -40,7 +50,7 @@
 
 				<TextBlock
 					Text="{Binding Value}"
-					IsEnabled="{Binding PropertyInfo.CanWrite}"
+					IsEnabled="false"
 					MinWidth="50"/>
 
 			</DataTemplate>

@@ -17,16 +17,16 @@ public class MainWindowViewModel : IMainWindowViewModel
 		{
 			new WorkflowLeafExample
 			{
-				DelaySeconds = 1,
+				Delay = 1,
 			},
 			new WorkflowLeafExample
 			{
-				DelaySeconds = 2,
+				Delay = 2,
 			},
 		},
 		new WorkflowLeafExample
 		{
-			DelaySeconds = 3,
+			Delay = 3,
 		},
 	};
 }

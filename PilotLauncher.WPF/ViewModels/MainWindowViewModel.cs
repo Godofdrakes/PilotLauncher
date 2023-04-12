@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Reflection;
 using DynamicData;
 using Microsoft.Extensions.Logging;
@@ -14,23 +15,25 @@ namespace PilotLauncher.WPF.ViewModels;
 
 public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 {
+	public EditWorkflowViewModel EditWorkflowViewModel { get; } = new();
+
 	public MainWindowInteractions Interactions { get; } = new();
 
 	public ReactiveCommand<IWorkflowNode,Unit> ExecuteCommand { get; }
 
 	public WorkflowBranch WorkflowRoot { get; }
 
-	public IObserver<string> ConsoleOutputObserver { get; }
+	public IObserver<string> ConsoleOutputObserver => ConsoleOutputSubject.AsObserver();
+
+	private Subject<string> ConsoleOutputSubject { get; } = new();
 
 	public ReadOnlyObservableCollection<string> ConsoleOutput => _consoleOutput;
 
 	private readonly ReadOnlyObservableCollection<string> _consoleOutput;
-
+	
 	public MainWindowViewModel(ILoggerFactory loggerFactory)
 	{
-		var consoleOutput = new SourceList<string>();
-		consoleOutput
-			.Connect()
+		ConsoleOutputSubject.ToObservableChangeSet(limitSizeTo: 10000)
 			.ObserveOn(RxApp.MainThreadScheduler)
 			.Bind(out _consoleOutput)
 			.Subscribe();
@@ -51,25 +54,21 @@ public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 			{
 				new WorkflowLeafExample
 				{
-					DelaySeconds = 1,
+					Delay = 1,
 					Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
 				},
 				new WorkflowLeafExample
 				{
-					DelaySeconds = 2,
+					Delay = 2,
 					Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
 				},
 			},
 			new WorkflowLeafExample
 			{
-				DelaySeconds = 3,
+				Delay = 3,
 				Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
 			},
 		};
-
-		ConsoleOutputObserver = Observer.Create<string>(
-			s => consoleOutput.Add(s),
-			e => consoleOutput.Edit(list => list.Add(e.Message)));
 	}
 
 	private static IEnumerable<WorkflowLeaf> GetWorkflowQueue(IWorkflowNode root)

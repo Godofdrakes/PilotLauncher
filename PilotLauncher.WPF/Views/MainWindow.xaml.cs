@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reactive;
 using PilotLauncher.Plugins;
+using PilotLauncher.WPF.ViewModels;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF.Views;
@@ -26,19 +27,16 @@ public partial class MainWindow
 			this.OneWayBind(ViewModel,
 				model => model.ConsoleOutput,
 				window => window.ConsoleOutput.ItemsSource);
+
+			this.OneWayBind(ViewModel,
+				model => model.EditWorkflowViewModel,
+				window => window.EditWorkflowView.ViewModel);
 		});
 	}
 
 	private void ShowEditFlyout(InteractionContext<IWorkflowNode, Unit> context)
 	{
-		if (context.Input is ReactivePrototypeObject prototype)
-		{
-			EditWorkflowDataGrid.ItemsSource = prototype.GetExposedProperties();
-		}
-		else
-		{
-			EditWorkflowDataGrid.ItemsSource = Enumerable.Empty<ReactivePropertyInfo>();
-		}
+		ViewModel!.EditWorkflowViewModel.WorkflowNode = context.Input;
 
 		EditWorkflowFlyout.IsOpen = true;
 

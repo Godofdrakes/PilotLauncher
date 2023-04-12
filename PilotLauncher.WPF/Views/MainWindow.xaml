@@ -16,14 +16,14 @@
 	WindowStartupLocation="CenterScreen"
 	ResizeMode="CanResizeWithGrip"
 	MinHeight="400" Height="400"
-	MinWidth="500" Width="500"
+	MinWidth="500" Width="600"
 	mc:Ignorable="d"
 	d:DataContext="{d:DesignInstance design:MainWindowViewModel, IsDesignTimeCreatable=True}">
 
 	<Window.Resources>
 
 		<ResourceDictionary>
-			
+
 			<Style TargetType="TreeViewItem"
 				BasedOn="{StaticResource {x:Type TreeViewItem}}">
 
@@ -101,20 +101,7 @@
 			<mah:Flyout x:Name="EditWorkflowFlyout" Header="Edit Workflow Node"
 				Position="Right" MinWidth="200">
 
-				<DataGrid x:Name="EditWorkflowDataGrid"
-					ItemsSource="{Binding WorkflowProperties}"
-					AutoGenerateColumns="False"
-					HeadersVisibility="Column">
-
-					<DataGrid.Columns>
-
-						<DataGridTextColumn Header="Type" Binding="{Binding PropertyInfo.PropertyType.Name}"/>
-						<DataGridTextColumn Header="Property" Binding="{Binding PropertyInfo.Name}"/>
-						<DataGridTemplateColumn Header="Value"
-							CellTemplateSelector="{StaticResource ReactivePropertyInfoTemplateSelector}"/>
-
-					</DataGrid.Columns>
-				</DataGrid>
+				<views:EditWorkflowView x:Name="EditWorkflowView"/>
 			</mah:Flyout>
 		</mah:FlyoutsControl>
 	</mah:MetroWindow.Flyouts>
