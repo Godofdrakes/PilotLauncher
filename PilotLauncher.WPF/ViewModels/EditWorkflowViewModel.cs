@@ -31,7 +31,7 @@ public class EditWorkflowViewModel : ReactiveObject, IEditWorkflowViewModel
 					.Subscribe(_ => cache.Clear());
 				var add = this.WhenAnyValue(model => model.WorkflowNode)
 					.WhereNotNull()
-					.OfType<WorkflowLeaf>()
+					.OfType<WorkflowStep>()
 					.Select(leaf => leaf.GetExposedProperties())
 					.Subscribe(cache.AddOrUpdate);
 				return new CompositeDisposable(clear, add);

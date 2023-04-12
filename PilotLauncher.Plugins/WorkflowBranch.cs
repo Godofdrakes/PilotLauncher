@@ -9,6 +9,8 @@ public sealed class WorkflowBranch : ReactiveObject, IWorkflowNode
 {
 	public string Label => "sequence";
 
+	public string Description => "run in sequence";
+
 	public IEnumerable<IWorkflowNode> Children => _children;
 
 	private readonly ReadOnlyObservableCollection<IWorkflowNode> _children;

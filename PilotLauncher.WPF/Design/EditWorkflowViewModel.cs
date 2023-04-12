@@ -4,6 +4,10 @@ public class EditWorkflowViewModel : ViewModels.EditWorkflowViewModel
 {
 	public EditWorkflowViewModel()
 	{
-		WorkflowNode = new WorkflowLeafExample();
+		WorkflowNode = new WorkflowStepExample
+		{
+			Delay = 5,
+			Message = "Hello World!"
+		};
 	}
 }

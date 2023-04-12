@@ -52,27 +52,27 @@ public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 		{
 			new WorkflowBranch
 			{
-				new WorkflowLeafExample
+				new WorkflowStepExample
 				{
 					Delay = 1,
-					Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
+					Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
 				},
-				new WorkflowLeafExample
+				new WorkflowStepExample
 				{
 					Delay = 2,
-					Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
+					Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
 				},
 			},
-			new WorkflowLeafExample
+			new WorkflowStepExample
 			{
 				Delay = 3,
-				Logger = loggerFactory.CreateLogger<WorkflowLeafExample>(),
+				Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
 			},
 		};
 	}
 
-	private static IEnumerable<WorkflowLeaf> GetWorkflowQueue(IWorkflowNode root)
+	private static IEnumerable<WorkflowStep> GetWorkflowQueue(IWorkflowNode root)
 	{
-		return root.Flatten(node => node.Children).OfType<WorkflowLeaf>();
+		return root.Flatten(node => node.Children).OfType<WorkflowStep>();
 	}
 }

@@ -1,12 +1,13 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using PilotLauncher.Plugins;
 using ReactiveUI;
 
 namespace PilotLauncher;
 
-public sealed class WorkflowLeafExample : WorkflowLeaf
+public sealed class WorkflowStepExample : WorkflowStep
 {
 	public override string Label => _label.Value;
 
@@ -22,12 +23,7 @@ public sealed class WorkflowLeafExample : WorkflowLeaf
 		set => this.RaiseAndSetIfChanged(ref _message, value);
 	}
 
-	private string _message = string.Empty;
-
-	[ReactivePropertyInfo]
-	public string FullMessage => _fullMessage.Value;
-
-	private ObservableAsPropertyHelper<string> _fullMessage;
+	private string _message = "Hello World!";
 
 	[ReactivePropertyInfo]
 	public int Delay
@@ -38,9 +34,9 @@ public sealed class WorkflowLeafExample : WorkflowLeaf
 
 	private int _delay = 5;
 
-	public ILogger<WorkflowLeafExample>? Logger { get; set; }
+	public ILogger<WorkflowStepExample>? Logger { get; set; }
 
-	public WorkflowLeafExample()
+	public WorkflowStepExample()
 	{
 		CancelCommand = ReactiveCommand.Create(() => { });
 		ExecuteCommand = ReactiveCommand.CreateFromObservable(() =>
@@ -54,9 +50,13 @@ public sealed class WorkflowLeafExample : WorkflowLeaf
 			.Select(seconds => $"wait {seconds} seconds")
 			.ToProperty(this, x => x.Label);
 
-		_fullMessage = this.WhenAnyValue(x => x.Delay, x => x.Message)
+		DescriptionObservable = this.WhenAnyValue(x => x.Delay, x => x.Message)
 			.Select(tuple =>
-				$"I've waited {tuple.Item1} seconds to tell you: {(string.IsNullOrEmpty(tuple.Item2) ? "nothing" : tuple.Item2)}")
-			.ToProperty(this, example => example.FullMessage);
+			{
+				var builder = new StringBuilder();
+				builder.AppendLine($"Wait {tuple.Item1} seconds");
+				builder.Append($"Log \"{tuple.Item2}\"");
+				return builder.ToString();
+			});
 	}
 }

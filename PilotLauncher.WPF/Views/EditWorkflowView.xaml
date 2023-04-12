@@ -69,48 +69,60 @@
 		</wpf:ReactivePropertyInfoTemplateSelector>
 	</UserControl.Resources>
 
-	<DataGrid x:Name="DataGrid" AutoGenerateColumns="False"
-		ItemsSource="{Binding PropertyInfo, Mode=OneWay}"
-		mah:DataGridHelper.CellPadding="4,0">
+	<Grid>
 
-		<DataGrid.Columns>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
 
-			<DataGridTemplateColumn Header="Type" IsReadOnly="True">
+		<DataGrid x:Name="DataGrid" Grid.Row="0"
+			ItemsSource="{Binding PropertyInfo, Mode=OneWay}"
+			AutoGenerateColumns="False"
+			mah:DataGridHelper.CellPadding="4,0">
 
-				<DataGridTemplateColumn.CellTemplate>
+			<DataGrid.Columns>
 
-					<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}">
+				<DataGridTemplateColumn Header="Type" IsReadOnly="True">
 
-						<TextBlock Text="{Binding PropertyInfo.PropertyType.Name}" />
+					<DataGridTemplateColumn.CellTemplate>
 
-					</DataTemplate>
-				</DataGridTemplateColumn.CellTemplate>
-			</DataGridTemplateColumn>
+						<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}">
 
-			<DataGridTemplateColumn Header="Name" IsReadOnly="True">
+							<TextBlock Text="{Binding PropertyInfo.PropertyType.Name}" />
 
-				<DataGridTemplateColumn.CellTemplate>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 
-					<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}">
+				<DataGridTemplateColumn Header="Name" IsReadOnly="True">
 
-						<TextBlock Text="{Binding PropertyInfo.Name}"/>
+					<DataGridTemplateColumn.CellTemplate>
 
-					</DataTemplate>
-				</DataGridTemplateColumn.CellTemplate>
-			</DataGridTemplateColumn>
+						<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}">
 
-			<DataGridTemplateColumn Header="Value" MinWidth="400"
-				CellEditingTemplateSelector="{StaticResource ReactivePropertyInfoTemplateSelector}">
+							<TextBlock Text="{Binding PropertyInfo.Name}" />
 
-				<DataGridTemplateColumn.CellTemplate>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 
-					<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}">
+				<DataGridTemplateColumn Header="Value" MinWidth="400"
+					CellEditingTemplateSelector="{StaticResource ReactivePropertyInfoTemplateSelector}">
 
-						<TextBlock Text="{Binding Value, Mode=OneWay}" />
+					<DataGridTemplateColumn.CellTemplate>
 
-					</DataTemplate>
-				</DataGridTemplateColumn.CellTemplate>
-			</DataGridTemplateColumn>
-		</DataGrid.Columns>
-	</DataGrid>
+						<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}">
+
+							<TextBlock Text="{Binding Value, Mode=OneWay}" />
+
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<TextBlock Grid.Row="1" Padding="4"
+			Text="{Binding WorkflowNode.Description}"/>
+	</Grid>
 </local:UserControlFor>

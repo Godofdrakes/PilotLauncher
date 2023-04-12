@@ -15,16 +15,16 @@ public class MainWindowViewModel : IMainWindowViewModel
 	{
 		new WorkflowBranch
 		{
-			new WorkflowLeafExample
+			new WorkflowStepExample
 			{
 				Delay = 1,
 			},
-			new WorkflowLeafExample
+			new WorkflowStepExample
 			{
 				Delay = 2,
 			},
 		},
-		new WorkflowLeafExample
+		new WorkflowStepExample
 		{
 			Delay = 3,
 		},
