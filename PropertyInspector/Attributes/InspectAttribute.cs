@@ -1,7 +1,7 @@
 ﻿namespace PropertyInspector.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
-public class InspectAttribute : System.Attribute
+public class InspectAttribute : PropertyInspectorAttribute
 {
 	public bool CanWrite { get; }
 

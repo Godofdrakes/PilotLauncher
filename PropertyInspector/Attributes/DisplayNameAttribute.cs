@@ -1,7 +1,7 @@
 ﻿namespace PropertyInspector.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
-public class DisplayNameAttribute : Attribute
+public class DisplayNameAttribute : PropertyInspectorAttribute
 {
 	public string Name { get; }
 

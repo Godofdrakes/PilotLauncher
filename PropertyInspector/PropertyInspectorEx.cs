@@ -18,7 +18,7 @@ public static class PropertyInspectorEx
 		// All instance properties
 		return sourceObject.GetType().GetProperties(PublicInstanceMembers)
 			// That are tagged for inspection
-			.Where(info => info.GetCustomAttribute<InspectAttribute>() is not null)
+			.Where(info => info.GetCustomAttributes<PropertyInspectorAttribute>().Any())
 			// That are readable
 			.Where(info => info.CanRead);
 	}
