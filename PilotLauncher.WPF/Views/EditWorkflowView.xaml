@@ -16,57 +16,11 @@
 	d:DataContext="{d:DesignInstance design:EditWorkflowViewModel, IsDesignTimeCreatable=True}">
 
 	<UserControl.Resources>
-		<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}">
-
-			<TextBlock
-				Text="{Binding Value}"
-				IsEnabled="{Binding PropertyInfo.CanWrite}"
-				MinWidth="50" />
-
-		</DataTemplate>
-
-		<wpf:ReactivePropertyInfoTemplateSelector x:Key="ReactivePropertyInfoTemplateSelector">
-
-			<wpf:ReactivePropertyInfoTemplateSelector.Templates>
-
-				<wpf:DataTemplateTypeMap>
-
-					<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}"
-						x:Key="{x:Type system:Int32}">
-
-						<mah:NumericUpDown
-							Value="{Binding Value, Converter={x:Static wpf:NumberConverter.Instance}}"
-							IsEnabled="{Binding PropertyInfo.CanWrite}"
-							NumericInputMode="Numbers"
-							ParsingNumberStyle="Integer"
-							MinWidth="50" />
-
-					</DataTemplate>
-
-					<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}"
-						x:Key="{x:Type system:String}">
-
-						<TextBox
-							Text="{Binding Value}"
-							IsEnabled="{Binding PropertyInfo.CanWrite}"
-							MinWidth="50" />
-
-					</DataTemplate>
-				</wpf:DataTemplateTypeMap>
-			</wpf:ReactivePropertyInfoTemplateSelector.Templates>
-
-			<wpf:ReactivePropertyInfoTemplateSelector.DefaultTemplate>
-
-				<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}">
-
-					<TextBlock
-						Text="{Binding Value}"
-						IsEnabled="false"
-						MinWidth="50" />
-
-				</DataTemplate>
-			</wpf:ReactivePropertyInfoTemplateSelector.DefaultTemplate>
-		</wpf:ReactivePropertyInfoTemplateSelector>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/DataTemplates/PropertyInspector.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
 	</UserControl.Resources>
 
 	<Grid>
@@ -82,42 +36,12 @@
 			mah:DataGridHelper.CellPadding="4,0">
 
 			<DataGrid.Columns>
-
-				<DataGridTemplateColumn Header="Type" IsReadOnly="True">
-
-					<DataGridTemplateColumn.CellTemplate>
-
-						<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}">
-
-							<TextBlock Text="{Binding PropertyInfo.PropertyType.Name}" />
-
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-
-				<DataGridTemplateColumn Header="Name" IsReadOnly="True">
-
-					<DataGridTemplateColumn.CellTemplate>
-
-						<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}">
-
-							<TextBlock Text="{Binding PropertyInfo.Name}" />
-
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
+				<DataGridTextColumn Header="Type" IsReadOnly="True" Binding="{Binding PropertyType.Name}"/>
+				<DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding PropertyName}"/>
 
 				<DataGridTemplateColumn Header="Value" MinWidth="400"
-					CellEditingTemplateSelector="{StaticResource ReactivePropertyInfoTemplateSelector}">
-
-					<DataGridTemplateColumn.CellTemplate>
-
-						<DataTemplate DataType="{x:Type plugins:ReactivePropertyInfo}">
-
-							<TextBlock Text="{Binding Value, Mode=OneWay}" />
-
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
+					CellTemplate="{StaticResource PropertyInspectorReadOnly}"
+					CellEditingTemplateSelector="{StaticResource PropertyInspectorTemplateSelector}">
 				</DataGridTemplateColumn>
 			</DataGrid.Columns>
 		</DataGrid>

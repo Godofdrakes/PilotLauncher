@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using PilotLauncher.Plugins;
+using PropertyInspector.Attributes;
 using ReactiveUI;
 
 namespace PilotLauncher;
@@ -16,7 +17,7 @@ public sealed class WorkflowStepExample : WorkflowStep
 
 	private readonly ObservableAsPropertyHelper<string> _label;
 
-	[ReactivePropertyInfo]
+	[Inspect]
 	public string Message
 	{
 		get => _message;
@@ -25,7 +26,7 @@ public sealed class WorkflowStepExample : WorkflowStep
 
 	private string _message = "Hello World!";
 
-	[ReactivePropertyInfo]
+	[Inspect]
 	public int Delay
 	{
 		get => _delay;
@@ -34,15 +35,32 @@ public sealed class WorkflowStepExample : WorkflowStep
 
 	private int _delay = 5;
 
+	[Inspect]
+	public bool ShouldDelay
+	{
+		get => _shouldDelay;
+		set => this.RaiseAndSetIfChanged(ref _shouldDelay, value);
+	}
+
+	private bool _shouldDelay = true;
+
 	public ILogger<WorkflowStepExample>? Logger { get; set; }
 
 	public WorkflowStepExample()
 	{
 		CancelCommand = ReactiveCommand.Create(() => { });
 		ExecuteCommand = ReactiveCommand.CreateFromObservable(() =>
-			Observable.Timer(TimeSpan.FromSeconds(Delay))
-				.TakeUntil(CancelCommand)
-				.Select(_ => Unit.Default));
+		{
+			var observable = Observable.Return<long>(0);
+
+			if (ShouldDelay)
+			{
+				observable = Observable.Timer(TimeSpan.FromSeconds(Delay))
+					.TakeUntil(CancelCommand);
+			}
+
+			return observable.Select(_ => Unit.Default);
+		});
 
 		ExecuteCommand.Subscribe(_ => Logger?.LogInformation("{Message}", Message));
 
@@ -50,12 +68,20 @@ public sealed class WorkflowStepExample : WorkflowStep
 			.Select(seconds => $"wait {seconds} seconds")
 			.ToProperty(this, x => x.Label);
 
-		DescriptionObservable = this.WhenAnyValue(x => x.Delay, x => x.Message)
-			.Select(tuple =>
+		DescriptionObservable = this.Changed
+			.Select(args =>
 			{
+				var self = args.Sender as WorkflowStepExample;
+
 				var builder = new StringBuilder();
-				builder.AppendLine($"Wait {tuple.Item1} seconds");
-				builder.Append($"Log \"{tuple.Item2}\"");
+
+				if (ShouldDelay)
+				{
+					builder.AppendLine($"Wait {self!.Delay} seconds");
+				}
+
+				builder.Append($"Log \"{self!.Message}\"");
+
 				return builder.ToString();
 			});
 	}

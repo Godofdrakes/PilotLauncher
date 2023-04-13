@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:wpf="clr-namespace:PropertyInspector.WPF;assembly=PropertyInspector.WPF"
+	xmlns:system="clr-namespace:System;assembly=System.Runtime"
+	xmlns:interfaces="clr-namespace:PropertyInspector.Interfaces;assembly=PropertyInspector"
+	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+	xmlns:local="clr-namespace:PilotLauncher.WPF">
+
+	<DataTemplate x:Key="PropertyInspectorReadOnly" DataType="{x:Type interfaces:IPropertyInspector}">
+		<TextBlock Text="{Binding Value, Mode=OneWay}" />
+	</DataTemplate>
+
+	<wpf:PropertyInspectorTemplateSelector x:Key="PropertyInspectorTemplateSelector">
+
+		<wpf:PropertyInspectorTemplateSelector.DefaultTemplate>
+			<StaticResource ResourceKey="PropertyInspectorReadOnly" />
+		</wpf:PropertyInspectorTemplateSelector.DefaultTemplate>
+		<wpf:PropertyInspectorTemplateSelector.PropertyTemplates>
+
+			<DataTemplate x:Key="{x:Type system:String}" DataType="{x:Type interfaces:IPropertyInspector}">
+				<TextBox x:Name="StringInput" Text="{Binding Value}" />
+
+				<DataTemplate.Triggers>
+					<DataTrigger Binding="{Binding CanWrite}" Value="False">
+						<Setter TargetName="StringInput" Property="IsReadOnly" Value="True" />
+						<Setter TargetName="StringInput" Property="Text">
+							<Setter.Value>
+								<Binding Path="Value" Mode="OneWay"/>
+							</Setter.Value>
+						</Setter>
+					</DataTrigger>
+				</DataTemplate.Triggers>
+			</DataTemplate>
+
+			<DataTemplate x:Key="{x:Type system:Int32}" DataType="{x:Type interfaces:IPropertyInspector}">
+				<mah:NumericUpDown
+					Value="{Binding Value, Converter={x:Static local:NumberConverter.BindToInteger}}"
+					IsEnabled="{Binding CanWrite}"
+					NumericInputMode="Numbers"
+					ParsingNumberStyle="Integer" />
+			</DataTemplate>
+
+			<DataTemplate x:Key="{x:Type system:Boolean}" DataType="{x:Type interfaces:IPropertyInspector}">
+				<ToggleButton IsChecked="{Binding Value}" />
+			</DataTemplate>
+
+		</wpf:PropertyInspectorTemplateSelector.PropertyTemplates>
+	</wpf:PropertyInspectorTemplateSelector>
+</ResourceDictionary>

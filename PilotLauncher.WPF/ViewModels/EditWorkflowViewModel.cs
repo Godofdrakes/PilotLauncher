@@ -5,6 +5,8 @@ using System.Reactive.Linq;
 using System.Reflection;
 using DynamicData;
 using PilotLauncher.Plugins;
+using PropertyInspector;
+using PropertyInspector.Interfaces;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF.ViewModels;
@@ -19,23 +21,23 @@ public class EditWorkflowViewModel : ReactiveObject, IEditWorkflowViewModel
 
 	private IWorkflowNode? _workflowNode;
 
-	public ReadOnlyObservableCollection<ReactivePropertyInfo> PropertyInfo => _propertyInfo;
+	public ReadOnlyObservableCollection<IPropertyInspector> PropertyInfo => _propertyInfo;
 
-	private readonly ReadOnlyObservableCollection<ReactivePropertyInfo> _propertyInfo;
+	private readonly ReadOnlyObservableCollection<IPropertyInspector> _propertyInfo;
 
 	public EditWorkflowViewModel()
 	{
-		ObservableChangeSet.Create<ReactivePropertyInfo, PropertyInfo>(cache =>
+		ObservableChangeSet.Create<IPropertyInspector>(list =>
 			{
 				var clear = this.WhenAnyValue(model => model.WorkflowNode)
-					.Subscribe(_ => cache.Clear());
+					.Subscribe(_ => list.Clear());
 				var add = this.WhenAnyValue(model => model.WorkflowNode)
 					.WhereNotNull()
-					.OfType<WorkflowStep>()
-					.Select(leaf => leaf.GetExposedProperties())
-					.Subscribe(cache.AddOrUpdate);
+					.OfType<ReactiveObject>()
+					.Select(node => node.CreatePropertyInspectors())
+					.Subscribe(list.AddRange);
 				return new CompositeDisposable(clear, add);
-			}, info => info.PropertyInfo)
+			})
 			.Bind(out _propertyInfo)
 			.Subscribe();
 	}

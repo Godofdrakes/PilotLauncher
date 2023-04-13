@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Test", "Pilot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Plugins", "PilotLauncher.Plugins\PilotLauncher.Plugins.csproj", "{01735DCC-88E8-4EBD-9D1E-76604F71CA96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyInspector", "PropertyInspector\PropertyInspector.csproj", "{B89E938B-53ED-46AD-B0CE-57274A82291F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyInspector.WPF", "PropertyInspector.WPF\PropertyInspector.WPF.csproj", "{2E270847-D0D9-41AE-A193-D789BCE14848}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +36,14 @@ Global
 		{01735DCC-88E8-4EBD-9D1E-76604F71CA96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01735DCC-88E8-4EBD-9D1E-76604F71CA96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01735DCC-88E8-4EBD-9D1E-76604F71CA96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B89E938B-53ED-46AD-B0CE-57274A82291F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B89E938B-53ED-46AD-B0CE-57274A82291F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B89E938B-53ED-46AD-B0CE-57274A82291F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B89E938B-53ED-46AD-B0CE-57274A82291F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E270847-D0D9-41AE-A193-D789BCE14848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E270847-D0D9-41AE-A193-D789BCE14848}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E270847-D0D9-41AE-A193-D789BCE14848}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E270847-D0D9-41AE-A193-D789BCE14848}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CC6863E6-A98F-4EB5-85F1-34596DCFC986} = {8F792CD0-C7D3-41B1-B90A-A6191E7CF51E}

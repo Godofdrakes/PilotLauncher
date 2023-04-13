@@ -20,7 +20,7 @@ public class WorkflowNodeTemplateSelector : DataTemplateSelector
 		return item switch
 		{
 			WorkflowBranch => BranchTemplate,
-			_              => DefaultTemplate
+			_              => DefaultTemplate,
 		};
 	}
 }
