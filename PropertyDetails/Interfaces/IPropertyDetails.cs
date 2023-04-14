@@ -1,6 +1,6 @@
-﻿namespace PropertyInspector.Interfaces;
+﻿namespace PropertyDetails.Interfaces;
 
-public interface IPropertyInspector
+public interface IPropertyDetails
 {
 	string PropertyName { get; }
 

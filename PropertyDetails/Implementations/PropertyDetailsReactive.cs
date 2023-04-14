@@ -1,11 +1,11 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using PropertyInspector.Interfaces;
+using PropertyDetails.Interfaces;
 using ReactiveUI;
 
-namespace PropertyInspector.Implementations;
+namespace PropertyDetails.Implementations;
 
-internal class PropertyInspectorReactive : ReactiveObject, IPropertyInspector
+internal class PropertyDetailsReactive : ReactiveObject, IPropertyDetails
 {
 	public string PropertyName { get; }
 	public Type PropertyType { get; }
@@ -21,7 +21,7 @@ internal class PropertyInspectorReactive : ReactiveObject, IPropertyInspector
 	private readonly PropertyInfo _propertyInfo;
 	private readonly ObservableAsPropertyHelper<object?> _value;
 
-	public PropertyInspectorReactive(ReactiveObject sourceObject, PropertyInfo propertyInfo)
+	public PropertyDetailsReactive(ReactiveObject sourceObject, PropertyInfo propertyInfo)
 	{
 		_sourceObject = sourceObject;
 		_propertyInfo = propertyInfo;

@@ -10,9 +10,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Test", "Pilot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Plugins", "PilotLauncher.Plugins\PilotLauncher.Plugins.csproj", "{01735DCC-88E8-4EBD-9D1E-76604F71CA96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyInspector", "PropertyInspector\PropertyInspector.csproj", "{B89E938B-53ED-46AD-B0CE-57274A82291F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyDetails", "PropertyDetails\PropertyDetails.csproj", "{B89E938B-53ED-46AD-B0CE-57274A82291F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyInspector.WPF", "PropertyInspector.WPF\PropertyInspector.WPF.csproj", "{2E270847-D0D9-41AE-A193-D789BCE14848}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyDetails.WPF", "PropertyDetails.WPF\PropertyDetails.WPF.csproj", "{2E270847-D0D9-41AE-A193-D789BCE14848}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

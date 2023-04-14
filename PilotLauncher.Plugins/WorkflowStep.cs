@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Reactive;
 using System.Reactive.Linq;
-using PropertyInspector.Attributes;
+using PropertyDetails.Attributes;
 using ReactiveUI;
 
 namespace PilotLauncher.Plugins;

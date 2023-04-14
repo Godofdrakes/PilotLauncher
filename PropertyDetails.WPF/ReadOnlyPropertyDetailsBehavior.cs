@@ -1,17 +1,17 @@
 ﻿using System.Windows.Controls;
 using Microsoft.Xaml.Behaviors;
-using PropertyInspector.Interfaces;
+using PropertyDetails.Interfaces;
 
-namespace PropertyInspector.WPF;
+namespace PropertyDetails.WPF;
 
-public class ReadOnlyPropertyInspectorBehavior : Behavior<DataGrid>
+public class ReadOnlyPropertyDetailsBehavior : Behavior<DataGrid>
 {
 	protected override void OnAttached() => AssociatedObject.BeginningEdit += OnBeginningEdit;
 	protected override void OnDetaching() => AssociatedObject.BeginningEdit -= OnBeginningEdit;
 
 	private static void OnBeginningEdit(object? sender, DataGridBeginningEditEventArgs args)
 	{
-		if (args.Row.Item is IPropertyInspector { CanWrite: false })
+		if (args.Row.Item is IPropertyDetails { CanWrite: false })
 		{
 			args.Cancel = true;
 		}

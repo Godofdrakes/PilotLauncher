@@ -1,34 +1,28 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using PropertyInspector.Attributes;
-using PropertyInspector.Implementations;
-using PropertyInspector.Interfaces;
+using PropertyDetails.Attributes;
+using PropertyDetails.Implementations;
+using PropertyDetails.Interfaces;
 using ReactiveUI;
 
-namespace PropertyInspector;
+namespace PropertyDetails;
 
-public static class PropertyInspectorEx
+public static class PropertyDetailsEx
 {
-	private const BindingFlags PublicInstanceMembers = BindingFlags.Public | BindingFlags.Instance;
+	private const BindingFlags PUBLIC_INSTANCE_MEMBERS = BindingFlags.Public | BindingFlags.Instance;
 
-	public static IEnumerable<PropertyInfo> GetPropertiesForInspection(
-		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
-		this object sourceObject)
-	{
-		// All instance properties
-		return sourceObject.GetType().GetProperties(PublicInstanceMembers)
-			// That are tagged for inspection
-			.Where(info => info.GetCustomAttributes<PropertyInspectorAttribute>().Any())
-			// That are readable
-			.Where(info => info.CanRead);
-	}
-
-	public static IEnumerable<IPropertyInspector> CreatePropertyInspectors(
+	public static IEnumerable<IPropertyDetails> CreatePropertyDetails(
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
 		this ReactiveObject sourceObject)
 	{
-		return sourceObject.GetPropertiesForInspection()
-			.Select(info => new PropertyInspectorReactive(sourceObject, info));
+		return sourceObject.GetType()
+			// All public instance properties
+			.GetProperties(PUBLIC_INSTANCE_MEMBERS)
+			// That are tagged for inspection
+			.Where(info => info.GetCustomAttributes<PropertyDetailsAttribute>().Any())
+			// That are readable
+			.Where(info => info.CanRead)
+			.Select(info => new PropertyDetailsReactive(sourceObject, info));
 	}
 
 	private static string GetPropertyValueWithFallback(this PropertyInfo propertyInfo, string fallback, Func<PropertyInfo, string?> getter)

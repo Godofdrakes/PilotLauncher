@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using PropertyInspector.Interfaces;
+using PropertyDetails.Interfaces;
 
-namespace PropertyInspector.WPF;
+namespace PropertyDetails.WPF;
 
-public class PropertyInspectorTemplateSelector : DataTemplateSelector
+public class PropertyDetailsTemplateSelector : DataTemplateSelector
 {
 	public Dictionary<Type, DataTemplate> PropertyTemplates { get; } = new();
 
@@ -14,7 +14,7 @@ public class PropertyInspectorTemplateSelector : DataTemplateSelector
 
 	public override DataTemplate? SelectTemplate(object item, DependencyObject container)
 	{
-		if (item is not IPropertyInspector inspector)
+		if (item is not IPropertyDetails inspector)
 			return null;
 
 		if (PropertyTemplates.TryGetValue(inspector.PropertyType, out var dataTemplate))

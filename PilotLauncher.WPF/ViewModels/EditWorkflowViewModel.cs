@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reflection;
 using DynamicData;
 using PilotLauncher.Plugins;
-using PropertyInspector;
-using PropertyInspector.Interfaces;
+using PropertyDetails;
+using PropertyDetails.Interfaces;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF.ViewModels;
@@ -21,23 +19,18 @@ public class EditWorkflowViewModel : ReactiveObject, IEditWorkflowViewModel
 
 	private IWorkflowNode? _workflowNode;
 
-	public ReadOnlyObservableCollection<IPropertyInspector> PropertyInfo => _propertyInfo;
+	public ReadOnlyObservableCollection<IPropertyDetails> PropertyInfo => _propertyInfo;
 
-	private readonly ReadOnlyObservableCollection<IPropertyInspector> _propertyInfo;
+	private readonly ReadOnlyObservableCollection<IPropertyDetails> _propertyInfo;
 
 	public EditWorkflowViewModel()
 	{
-		ObservableChangeSet.Create<IPropertyInspector>(list =>
-			{
-				var clear = this.WhenAnyValue(model => model.WorkflowNode)
-					.Subscribe(_ => list.Clear());
-				var add = this.WhenAnyValue(model => model.WorkflowNode)
+		ObservableChangeSet.Create<IPropertyDetails>(list =>
+				this.WhenAnyValue(model => model.WorkflowNode)
 					.WhereNotNull()
 					.OfType<ReactiveObject>()
-					.Select(node => node.CreatePropertyInspectors())
-					.Subscribe(list.AddRange);
-				return new CompositeDisposable(clear, add);
-			})
+					.Select(node => node.CreatePropertyDetails())
+					.Subscribe(list.ReplaceAll))
 			.Bind(out _propertyInfo)
 			.Subscribe();
 	}

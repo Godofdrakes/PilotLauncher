@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using System.Reactive;
+﻿using System.Reactive;
 using PilotLauncher.Plugins;
-using PilotLauncher.WPF.ViewModels;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF.Views;

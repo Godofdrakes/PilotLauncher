@@ -12,7 +12,7 @@
     <ItemGroup>
       <ProjectReference Include="..\PilotLauncher.Plugins\PilotLauncher.Plugins.csproj" />
       <ProjectReference Include="..\PilotLauncher\PilotLauncher.csproj" />
-      <ProjectReference Include="..\PropertyInspector.WPF\PropertyInspector.WPF.csproj" />
+      <ProjectReference Include="..\PropertyDetails.WPF\PropertyDetails.WPF.csproj" />
     </ItemGroup>
 
     <ItemGroup>

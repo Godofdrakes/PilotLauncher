@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
 using PilotLauncher.Plugins;
-using PropertyInspector.Interfaces;
+using PropertyDetails.Interfaces;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF.Design;
@@ -10,7 +10,7 @@ public class MainWindowViewModel : IMainWindowViewModel
 {
 	public ReactiveCommand<IWorkflowNode, Unit> ExecuteCommand { get; }
 
-	public ReadOnlyObservableCollection<IPropertyInspector> WorkflowProperties { get; }
+	public ReadOnlyObservableCollection<IPropertyDetails> WorkflowProperties { get; }
 
 	public WorkflowBranch WorkflowRoot { get; } = new()
 	{

@@ -8,9 +8,6 @@
 	xmlns:viewModels="clr-namespace:PilotLauncher.WPF.ViewModels"
 	xmlns:design="clr-namespace:PilotLauncher.WPF.Design"
 	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-	xmlns:plugins="clr-namespace:PilotLauncher.Plugins;assembly=PilotLauncher.Plugins"
-	xmlns:wpf="clr-namespace:PilotLauncher.WPF"
-	xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	mc:Ignorable="d"
 	d:DesignHeight="200" d:DesignWidth="600"
 	d:DataContext="{d:DesignInstance design:EditWorkflowViewModel, IsDesignTimeCreatable=True}">
@@ -23,30 +20,19 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<Grid>
+	<DataGrid x:Name="DataGrid"
+		ItemsSource="{Binding PropertyInfo, Mode=OneWay}"
+		AutoGenerateColumns="False"
+		mah:DataGridHelper.CellPadding="4,0">
 
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
+		<DataGrid.Columns>
+			<DataGridTextColumn Header="Type" IsReadOnly="True" Binding="{Binding PropertyType.Name}"/>
+			<DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding PropertyName}"/>
 
-		<DataGrid x:Name="DataGrid" Grid.Row="0"
-			ItemsSource="{Binding PropertyInfo, Mode=OneWay}"
-			AutoGenerateColumns="False"
-			mah:DataGridHelper.CellPadding="4,0">
-
-			<DataGrid.Columns>
-				<DataGridTextColumn Header="Type" IsReadOnly="True" Binding="{Binding PropertyType.Name}"/>
-				<DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding PropertyName}"/>
-
-				<DataGridTemplateColumn Header="Value" MinWidth="400"
-					CellTemplate="{StaticResource PropertyInspectorReadOnly}"
-					CellEditingTemplateSelector="{StaticResource PropertyInspectorTemplateSelector}">
-				</DataGridTemplateColumn>
-			</DataGrid.Columns>
-		</DataGrid>
-
-		<TextBlock Grid.Row="1" Padding="4"
-			Text="{Binding WorkflowNode.Description}"/>
-	</Grid>
+			<DataGridTemplateColumn Header="Value" MinWidth="400"
+				CellTemplate="{StaticResource PropertyInspectorReadOnly}"
+				CellEditingTemplateSelector="{StaticResource PropertyInspectorTemplateSelector}">
+			</DataGridTemplateColumn>
+		</DataGrid.Columns>
+	</DataGrid>
 </local:UserControlFor>

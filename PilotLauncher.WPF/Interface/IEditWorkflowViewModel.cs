@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using PilotLauncher.Plugins;
-using PropertyInspector.Interfaces;
+using PropertyDetails.Interfaces;
 
 namespace PilotLauncher.WPF;
 
@@ -8,5 +8,5 @@ public interface IEditWorkflowViewModel
 {
 	public IWorkflowNode? WorkflowNode { get; set; }
 
-	public ReadOnlyObservableCollection<IPropertyInspector> PropertyInfo { get; }
+	public ReadOnlyObservableCollection<IPropertyDetails> PropertyInfo { get; }
 }

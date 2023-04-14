@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PropertyInspector\PropertyInspector.csproj" />
+      <ProjectReference Include="..\PropertyDetails\PropertyDetails.csproj" />
     </ItemGroup>
 
 </Project>

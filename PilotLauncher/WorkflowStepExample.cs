@@ -3,7 +3,7 @@ using System.Reactive.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using PilotLauncher.Plugins;
-using PropertyInspector.Attributes;
+using PropertyDetails.Attributes;
 using ReactiveUI;
 
 namespace PilotLauncher;
