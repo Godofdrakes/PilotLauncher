@@ -1,4 +1,4 @@
-﻿namespace PilotLauncher.Plugins;
+﻿namespace PilotLauncher.Common;
 
 public static class EnumerableEx
 {

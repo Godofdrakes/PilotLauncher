@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PilotLauncher.Plugins\PilotLauncher.Plugins.csproj" />
+      <ProjectReference Include="..\PilotLauncher.Common\PilotLauncher.Common.csproj" />
     </ItemGroup>
 
 </Project>

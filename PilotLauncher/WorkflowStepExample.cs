@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
-using PilotLauncher.Plugins;
+using PilotLauncher.Common;
 using PropertyDetails.Attributes;
 using ReactiveUI;
 

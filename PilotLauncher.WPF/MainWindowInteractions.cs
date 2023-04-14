@@ -1,5 +1,5 @@
 ﻿using System.Reactive;
-using PilotLauncher.Plugins;
+using PilotLauncher.Common;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF;

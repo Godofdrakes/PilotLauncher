@@ -1,8 +1,8 @@
 ﻿namespace PilotLauncher.WPF.Design;
 
-public class EditWorkflowViewModel : ViewModels.EditWorkflowViewModel
+public class PropertyDetailsViewModel : ViewModels.PropertyDetailsViewModel
 {
-	public EditWorkflowViewModel()
+	public PropertyDetailsViewModel()
 	{
 		WorkflowNode = new WorkflowStepExample
 		{

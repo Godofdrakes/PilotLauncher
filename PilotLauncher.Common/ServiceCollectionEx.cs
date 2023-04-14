@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReactiveUI;
 
-namespace PilotLauncher.Plugins;
+namespace PilotLauncher.Common;
 
 public static class ServiceCollectionEx
 {

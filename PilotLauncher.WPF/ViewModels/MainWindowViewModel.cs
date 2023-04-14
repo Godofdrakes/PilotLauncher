@@ -7,14 +7,14 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using DynamicData;
 using Microsoft.Extensions.Logging;
-using PilotLauncher.Plugins;
+using PilotLauncher.Common;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF.ViewModels;
 
 public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 {
-	public EditWorkflowViewModel EditWorkflowViewModel { get; } = new();
+	public PropertyDetailsViewModel PropertyDetailsViewModel { get; } = new();
 
 	public MainWindowInteractions Interactions { get; } = new();
 
@@ -29,7 +29,7 @@ public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 	public ReadOnlyObservableCollection<string> ConsoleOutput => _consoleOutput;
 
 	private readonly ReadOnlyObservableCollection<string> _consoleOutput;
-	
+
 	public MainWindowViewModel(ILoggerFactory loggerFactory)
 	{
 		ConsoleOutputSubject.ToObservableChangeSet(limitSizeTo: 10000)
@@ -47,27 +47,11 @@ public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 				.Concat();
 		});
 
-		WorkflowRoot = new WorkflowBranch
-		{
-			new WorkflowBranch
-			{
-				new WorkflowStepExample
-				{
-					Delay = 1,
-					Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
-				},
-				new WorkflowStepExample
-				{
-					Delay = 2,
-					Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
-				},
-			},
-			new WorkflowStepExample
-			{
-				Delay = 3,
-				Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
-			},
-		};
+		WorkflowRoot = new WorkflowBranch()
+			.Sequence(
+				new WorkflowStepExample { Delay = 1 },
+				new WorkflowStepExample { Delay = 2 })
+			.Add(new WorkflowStepExample { Delay = 3 });
 	}
 
 	private static IEnumerable<WorkflowStep> GetWorkflowQueue(IWorkflowNode root)

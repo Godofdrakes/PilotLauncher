@@ -1,4 +1,4 @@
-﻿<local:UserControlFor x:TypeArguments="viewModels:EditWorkflowViewModel"
+﻿<local:UserControlFor x:TypeArguments="viewModels:PropertyDetailsViewModel"
 	x:Class="PilotLauncher.WPF.Views.EditWorkflowView"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,7 +10,7 @@
 	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
 	mc:Ignorable="d"
 	d:DesignHeight="200" d:DesignWidth="600"
-	d:DataContext="{d:DesignInstance design:EditWorkflowViewModel, IsDesignTimeCreatable=True}">
+	d:DataContext="{d:DesignInstance design:PropertyDetailsViewModel, IsDesignTimeCreatable=True}">
 
 	<UserControl.Resources>
 		<ResourceDictionary>

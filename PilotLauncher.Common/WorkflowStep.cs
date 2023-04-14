@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using PropertyDetails.Attributes;
 using ReactiveUI;
 
-namespace PilotLauncher.Plugins;
+namespace PilotLauncher.Common;
 
 public abstract class WorkflowStep : ReactiveObject, IWorkflowNode
 {
@@ -28,9 +28,6 @@ public abstract class WorkflowStep : ReactiveObject, IWorkflowNode
 	public abstract ReactiveCommand<Unit, Unit> CancelCommand { get; }
 	
 	public IEnumerable<IWorkflowNode> Children => Enumerable.Empty<IWorkflowNode>();
-
-	public IEnumerator<IWorkflowNode> GetEnumerator() => Children.GetEnumerator();
-	IEnumerator IEnumerable.GetEnumerator() => Children.GetEnumerator();
 
 	protected WorkflowStep()
 	{

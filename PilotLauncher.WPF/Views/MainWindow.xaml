@@ -11,7 +11,7 @@
 	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:system="clr-namespace:System;assembly=System.Runtime"
-	xmlns:plugins="clr-namespace:PilotLauncher.Plugins;assembly=PilotLauncher.Plugins"
+	xmlns:plugins="clr-namespace:PilotLauncher.Common;assembly=PilotLauncher.Common"
 	xmlns:design="clr-namespace:PilotLauncher.WPF.Design"
 	WindowStartupLocation="CenterScreen"
 	ResizeMode="CanResizeWithGrip"
@@ -44,24 +44,23 @@
 
 				<DataTemplate DataType="{x:Type plugins:IWorkflowNode}">
 
-					<mah:MetroHeader Header="{Binding Label}">
+					<StackPanel Orientation="Horizontal">
 
-						<StackPanel Orientation="Horizontal">
+						<Label Content="{Binding Label}"/>
 
-							<Button Content="Run"
-								Command="{Binding
+						<Button Content="Run"
+							Command="{Binding
 									RelativeSource={RelativeSource AncestorType=views:MainWindow},
 									Path=ViewModel.ExecuteCommand}"
-								CommandParameter="{Binding}"/>
+							CommandParameter="{Binding}"/>
 
-							<Button Content="Edit"
-								Command="{Binding
+						<Button Content="Edit"
+							Command="{Binding
 									RelativeSource={RelativeSource AncestorType=views:MainWindow},
 									Path=ViewModel.Interactions.ShowEditFlyoutCommand}"
-								CommandParameter="{Binding}"/>
+							CommandParameter="{Binding}"/>
 
-						</StackPanel>
-					</mah:MetroHeader>
+					</StackPanel>
 				</DataTemplate>
 			</local:WorkflowNodeTemplateSelector>
 		</ResourceDictionary>
@@ -127,7 +126,7 @@
 
 		<TreeView x:Name="TreeView"
 			ItemTemplateSelector="{StaticResource WorkflowNodeTemplateSelector}"
-			ItemsSource="{Binding WorkflowRoot}"/>
+			ItemsSource="{Binding WorkflowRoot.Children}"/>
 
 	</DockPanel>
 </views:MetroWindowFor>

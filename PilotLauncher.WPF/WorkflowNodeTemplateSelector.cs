@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using PilotLauncher.Plugins;
+using PilotLauncher.Common;
 
 namespace PilotLauncher.WPF;
 

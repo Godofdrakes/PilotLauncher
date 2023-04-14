@@ -18,14 +18,14 @@
 		<wpf:PropertyDetailsTemplateSelector.PropertyTemplates>
 
 			<DataTemplate x:Key="{x:Type system:String}" DataType="{x:Type interfaces:IPropertyDetails}">
-				<TextBox x:Name="StringInput" Text="{Binding Value}" />
+				<TextBox x:Name="TextBox" Text="{Binding Value}" />
 
 				<DataTemplate.Triggers>
 					<DataTrigger Binding="{Binding CanWrite}" Value="False">
-						<Setter TargetName="StringInput" Property="IsReadOnly" Value="True" />
-						<Setter TargetName="StringInput" Property="Text">
+						<Setter TargetName="TextBox" Property="IsReadOnly" Value="True" />
+						<Setter TargetName="TextBox" Property="Text">
 							<Setter.Value>
-								<Binding Path="Value" Mode="OneWay"/>
+								<Binding Path="Value" Mode="OneWay" />
 							</Setter.Value>
 						</Setter>
 					</DataTrigger>
@@ -34,14 +34,38 @@
 
 			<DataTemplate x:Key="{x:Type system:Int32}" DataType="{x:Type interfaces:IPropertyDetails}">
 				<mah:NumericUpDown
-					Value="{Binding Value, Converter={x:Static local:NumberConverter.BindToInteger}}"
-					IsEnabled="{Binding CanWrite}"
+					x:Name="NumericUpDown"
+					Value="{Binding Value,
+						Converter={x:Static local:NumberConverter.BindToInteger}}"
 					NumericInputMode="Numbers"
 					ParsingNumberStyle="Integer" />
+
+				<DataTemplate.Triggers>
+					<DataTrigger Binding="{Binding CanWrite}" Value="False">
+						<Setter TargetName="NumericUpDown" Property="IsEnabled" Value="False" />
+						<Setter TargetName="NumericUpDown" Property="Value">
+							<Setter.Value>
+								<Binding Path="Value" Mode="OneWay"
+									Converter="{x:Static local:NumberConverter.BindToInteger}" />
+							</Setter.Value>
+						</Setter>
+					</DataTrigger>
+				</DataTemplate.Triggers>
 			</DataTemplate>
 
 			<DataTemplate x:Key="{x:Type system:Boolean}" DataType="{x:Type interfaces:IPropertyDetails}">
-				<ToggleButton IsChecked="{Binding Value}" />
+				<mah:ToggleSwitch x:Name="ToggleSwitch" IsOn="{Binding Value}"/>
+
+				<DataTemplate.Triggers>
+					<DataTrigger Binding="{Binding CanWrite}" Value="False">
+						<Setter TargetName="ToggleSwitch" Property="IsEnabled" Value="False" />
+						<Setter TargetName="ToggleSwitch" Property="IsOn">
+							<Setter.Value>
+								<Binding Path="Value" Mode="OneWay" />
+							</Setter.Value>
+						</Setter>
+					</DataTrigger>
+				</DataTemplate.Triggers>
 			</DataTemplate>
 
 		</wpf:PropertyDetailsTemplateSelector.PropertyTemplates>

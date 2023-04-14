@@ -1,5 +1,5 @@
 ﻿using System.Reactive;
-using PilotLauncher.Plugins;
+using PilotLauncher.Common;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF.Views;
@@ -27,14 +27,14 @@ public partial class MainWindow
 				window => window.ConsoleOutput.ItemsSource);
 
 			this.OneWayBind(ViewModel,
-				model => model.EditWorkflowViewModel,
+				model => model.PropertyDetailsViewModel,
 				window => window.EditWorkflowView.ViewModel);
 		});
 	}
 
 	private void ShowEditFlyout(InteractionContext<IWorkflowNode, Unit> context)
 	{
-		ViewModel!.EditWorkflowViewModel.WorkflowNode = context.Input;
+		ViewModel!.PropertyDetailsViewModel.WorkflowNode = context.Input;
 
 		EditWorkflowFlyout.IsOpen = true;
 

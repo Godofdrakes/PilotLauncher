@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using PilotLauncher.Plugins;
+using PilotLauncher.Common;
 using PropertyDetails.Interfaces;
 
 namespace PilotLauncher.WPF;

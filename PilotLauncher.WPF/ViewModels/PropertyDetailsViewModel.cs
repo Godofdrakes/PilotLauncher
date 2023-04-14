@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Linq;
 using DynamicData;
-using PilotLauncher.Plugins;
+using PilotLauncher.Common;
 using PropertyDetails;
 using PropertyDetails.Interfaces;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF.ViewModels;
 
-public class EditWorkflowViewModel : ReactiveObject, IEditWorkflowViewModel
+public class PropertyDetailsViewModel : ReactiveObject, IEditWorkflowViewModel
 {
 	public IWorkflowNode? WorkflowNode
 	{
@@ -23,13 +24,12 @@ public class EditWorkflowViewModel : ReactiveObject, IEditWorkflowViewModel
 
 	private readonly ReadOnlyObservableCollection<IPropertyDetails> _propertyInfo;
 
-	public EditWorkflowViewModel()
+	public PropertyDetailsViewModel()
 	{
 		ObservableChangeSet.Create<IPropertyDetails>(list =>
-				this.WhenAnyValue(model => model.WorkflowNode)
-					.WhereNotNull()
-					.OfType<ReactiveObject>()
-					.Select(node => node.CreatePropertyDetails())
+				this.WhenAnyValue(model => model.WorkflowNode)!
+					.Cast<ReactiveObject?>()
+					.Select(node => node?.CreatePropertyDetails() ?? Enumerable.Empty<IPropertyDetails>())
 					.Subscribe(list.ReplaceAll))
 			.Bind(out _propertyInfo)
 			.Subscribe();

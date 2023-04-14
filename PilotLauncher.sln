@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8F792CD0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Test", "PilotLauncher.Test\PilotLauncher.Test.csproj", "{CC6863E6-A98F-4EB5-85F1-34596DCFC986}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Plugins", "PilotLauncher.Plugins\PilotLauncher.Plugins.csproj", "{01735DCC-88E8-4EBD-9D1E-76604F71CA96}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Common", "PilotLauncher.Common\PilotLauncher.Common.csproj", "{01735DCC-88E8-4EBD-9D1E-76604F71CA96}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyDetails", "PropertyDetails\PropertyDetails.csproj", "{B89E938B-53ED-46AD-B0CE-57274A82291F}"
 EndProject

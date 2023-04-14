@@ -10,7 +10,7 @@ using Dapplo.Microsoft.Extensions.Hosting.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PilotLauncher.Plugins;
+using PilotLauncher.Common;
 using ReactiveUI;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;

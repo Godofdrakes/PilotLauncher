@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 
-namespace PilotLauncher.Plugins;
+namespace PilotLauncher.Common;
 
-public interface IWorkflowNode : IEnumerable<IWorkflowNode>
+public interface IWorkflowNode
 {
 	string Label { get; }
 

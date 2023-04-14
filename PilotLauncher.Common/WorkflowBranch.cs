@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using DynamicData;
 using ReactiveUI;
 
-namespace PilotLauncher.Plugins;
+namespace PilotLauncher.Common;
 
-public sealed class WorkflowBranch : ReactiveObject, IWorkflowNode
+public class WorkflowBranch : ReactiveObject, IWorkflowNode
 {
 	public string Label => "sequence";
 
@@ -24,9 +23,16 @@ public sealed class WorkflowBranch : ReactiveObject, IWorkflowNode
 			.Subscribe();
 	}
 
-	public void Add(IWorkflowNode node) => _sourceCache.AddOrUpdate(node);
-	public void Remove(IWorkflowNode node) => _sourceCache.Remove(node);
+	public WorkflowBranch Add(params IWorkflowNode[] nodes)
+	{
+		_sourceCache.AddOrUpdate(nodes);
+		return this;
+	}
 
-	public IEnumerator<IWorkflowNode> GetEnumerator() => _children.GetEnumerator();
-	IEnumerator IEnumerable.GetEnumerator() => Children.GetEnumerator();
+	public WorkflowBranch Sequence(params IWorkflowNode[] nodes)
+	{
+		return Add(new WorkflowBranch().Add(nodes));
+	}
+
+	public void Remove(IWorkflowNode node) => _sourceCache.Remove(node);
 }
