@@ -38,6 +38,43 @@ public class PropertyGrid : Control
 		throw new ArgumentException(message ?? $"Assertion failed: {assertion.Body}", paramName);
 	}
 
+	private static PropertyMetadata? CreatePropertyMetadata(
+		object? defaultValue = default,
+		bool affectsRender = default,
+		bool affectsMeasure = default,
+		bool affectsArrange = default)
+	{
+		FrameworkPropertyMetadata? frameworkMetadata = default;
+
+		if (affectsRender)
+		{
+			frameworkMetadata ??= new FrameworkPropertyMetadata();
+			frameworkMetadata.AffectsRender = true;
+		}
+
+		if (affectsMeasure)
+		{
+			frameworkMetadata ??= new FrameworkPropertyMetadata();
+			frameworkMetadata.AffectsMeasure = true;
+		}
+
+		if (affectsArrange)
+		{
+			frameworkMetadata ??= new FrameworkPropertyMetadata();
+			frameworkMetadata.AffectsArrange = true;
+		}
+
+		PropertyMetadata? propertyMetadata = frameworkMetadata;
+
+		if (defaultValue is not null)
+		{
+			propertyMetadata ??= new PropertyMetadata();
+			propertyMetadata.DefaultValue = defaultValue;
+		}
+
+		return propertyMetadata;
+	}
+
 	private static TReturn RegisterPropertyCommon<TProperty, TReturn>(
 		Func<string, Type, Type, PropertyMetadata?, ValidateValueCallback?, TReturn> registerFunc,
 		Expression<Func<PropertyGrid, TProperty>> propertyExpression,
@@ -75,43 +112,49 @@ public class PropertyGrid : Control
 			validateValueCallback);
 	}
 
-	private static DependencyProperty RegisterProperty<T>(Expression<Func<PropertyGrid, T>> propertyExpression,
-		PropertyMetadata? propertyMetadata = default, ValidateValueCallback? validateValueCallback = default) =>
-		RegisterPropertyCommon(DependencyProperty.Register, propertyExpression, propertyMetadata,
-			validateValueCallback);
-
-	private static DependencyPropertyKey RegisterReadOnlyProperty<T>(
-		Expression<Func<PropertyGrid, T>> propertyExpression, PropertyMetadata? propertyMetadata = default,
+	private static DependencyProperty RegisterProperty<TProperty>(
+		Expression<Func<PropertyGrid, TProperty>> propertyExpression,
+		TProperty defaultValue = default!,
+		bool affectsRender = default,
+		bool affectsMeasure = default,
+		bool affectsArrange = default,
 		ValidateValueCallback? validateValueCallback = default) =>
-		RegisterPropertyCommon(DependencyProperty.RegisterReadOnly, propertyExpression, propertyMetadata,
+		RegisterPropertyCommon(
+			DependencyProperty.Register,
+			propertyExpression,
+			CreatePropertyMetadata(defaultValue, affectsRender, affectsMeasure, affectsArrange),
 			validateValueCallback);
 
-	public static readonly DependencyProperty PropertySourceProperty = RegisterProperty(
-		propertyGrid => propertyGrid.PropertySource, new FrameworkPropertyMetadata()
-		{
-			DefaultValue = null,
-			AffectsRender = true,
-			AffectsMeasure = true,
-		});
+	private static DependencyPropertyKey RegisterReadOnlyProperty<TProperty>(
+		Expression<Func<PropertyGrid, TProperty>> propertyExpression,
+		TProperty defaultValue = default!,
+		bool affectsRender = default,
+		bool affectsMeasure = default,
+		bool affectsArrange = default,
+		ValidateValueCallback? validateValueCallback = default) =>
+		RegisterPropertyCommon(
+			DependencyProperty.RegisterReadOnly,
+			propertyExpression,
+			CreatePropertyMetadata(defaultValue, affectsRender, affectsMeasure, affectsArrange),
+			validateValueCallback);
 
-	public static readonly DependencyProperty DataTemplateSelectorProperty = RegisterProperty(
-		propertyGrid => propertyGrid.DataTemplateSelector, new FrameworkPropertyMetadata()
-		{
-			DefaultValue = null,
-			AffectsRender = true,
-			AffectsMeasure = true,
-			PropertyChangedCallback = DataTemplateSelectorChanged,
-		});
+	private static readonly DependencyPropertyKey PropertyItemsPropertyKey =
+		RegisterReadOnlyProperty(grid => grid.PropertyItems);
 
-	private static readonly DependencyPropertyKey PropertyItemsPropertyKey = RegisterReadOnlyProperty(
-		propertyGrid => propertyGrid.PropertyItems, new FrameworkPropertyMetadata()
-		{
-			DefaultValue = null,
-			AffectsRender = true,
-			AffectsMeasure = true,
-		});
+	public static readonly DependencyProperty PropertySourceProperty =
+		RegisterProperty(grid => grid.PropertySource, affectsRender: true);
 
-	public static readonly DependencyProperty PropertyItemsProperty = PropertyItemsPropertyKey.DependencyProperty;
+	public static readonly DependencyProperty DataTemplateSelectorProperty =
+		RegisterProperty(grid => grid.DataTemplateSelector, affectsRender: true);
+
+	public static readonly DependencyProperty PropertyItemsProperty =
+		PropertyItemsPropertyKey.DependencyProperty;
+
+	public static readonly DependencyProperty PropertyNameVisibleProperty =
+		RegisterProperty(grid => grid.PropertyNameVisible, defaultValue: true, affectsMeasure: true);
+
+	public static readonly DependencyProperty PropertyTypeVisibleProperty =
+		RegisterProperty(grid => grid.PropertyTypeVisible, defaultValue: false, affectsMeasure: true);
 
 	static PropertyGrid()
 	{
@@ -176,6 +219,18 @@ public class PropertyGrid : Control
 	{
 		get => (DataTemplateSelector)GetValue(DataTemplateSelectorProperty);
 		set => SetValue(DataTemplateSelectorProperty, value);
+	}
+
+	public bool PropertyNameVisible
+	{
+		get => (bool)GetValue(PropertyNameVisibleProperty);
+		set => SetValue(PropertyNameVisibleProperty, value);
+	}
+
+	public bool PropertyTypeVisible
+	{
+		get => (bool)GetValue(PropertyTypeVisibleProperty);
+		set => SetValue(PropertyTypeVisibleProperty, value);
 	}
 
 	public event PropertyGridItemAddedEventHandler? PropertyItemAdded;

@@ -1,16 +1,22 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="clr-namespace:PilotLauncher.PropertyGrid">
-
-	<ControlTemplate x:Key="PilotLauncher.PropertyGrid.ControlTemplate" TargetType="local:PropertyGrid">
-		<DataGrid x:Name="DataGrid" AutoGenerateColumns="True"
-			ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:PropertyGrid},
-				Path=PropertyItems}">
+	
+	<ControlTemplate x:Key="PilotLauncher.PropertyGrid.ControlTemplate"
+		TargetType="local:PropertyGrid">
+		<DataGrid x:Name="DataGrid" AutoGenerateColumns="False" IsReadOnly="True"
+			ItemsSource="{TemplateBinding PropertyItems}">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Name" IsReadOnly="True"
+					Binding="{Binding PropertyName}" />
+				<DataGridTextColumn Header="Type" IsReadOnly="True"
+					Binding="{Binding PropertyType.Name}" />
+			</DataGrid.Columns>
 		</DataGrid>
 	</ControlTemplate>
 
 	<Style TargetType="local:PropertyGrid">
-		<Setter Property="Template" Value="{StaticResource PilotLauncher.PropertyGrid.ControlTemplate}"/>
+		<Setter Property="Template" Value="{StaticResource PilotLauncher.PropertyGrid.ControlTemplate}" />
 	</Style>
 
 </ResourceDictionary>
