@@ -190,13 +190,21 @@ public class PropertyGrid : Control
 			.Switch();
 
 		propertySourceChanged
-			.Select(propertySource => propertySource is not null
-				? PropertyGridItem.Scan(propertySource)
-				: Enumerable.Empty<PropertyInfo>())
-			.Select(propertyInfo => propertyInfo
-				.Where(FilterPropertyInfo)
-				.Select(PropertyGridItem.Create)
-				.AsObservableChangeSet(item => item.PropertyName))
+			.Select(propertySource =>
+			{
+				var propertyEnumerable = propertySource is not null
+					? PropertyGridItem.Scan(propertySource)
+					: Enumerable.Empty<PropertyInfo>();
+
+				return propertyEnumerable
+					.Where(FilterPropertyInfo)
+					// If there are any items to run select on propertySource won't be null
+					.Select(info => new PropertyGridItem(propertySource!, info))
+					.AsObservableChangeSet(item => item.PropertyName)
+					// Dispose of items when change set is disposed
+					.DisposeMany();
+			})
+			// Dispose of old changeset when new one is generated
 			.Switch()
 			.ToCollection()
 			.SubscribeOn(Dispatcher)

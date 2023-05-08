@@ -28,7 +28,7 @@ public class PropertyGridTemplateSelector : DataTemplateSelector
 		PropertyGridItem propertyGridItem)
 	{
 		return templates
-			.Where(template => template.IsReadOnly is not null || template.IsReadOnly == propertyGridItem.IsReadOnly)
-			.Where(template => template.PropertyType is not null || template.PropertyType == propertyGridItem.PropertyType);
+			.Where(template => template.IsReadOnly is null || template.IsReadOnly == propertyGridItem.IsReadOnly)
+			.Where(template => template.PropertyType is null || template.PropertyType == propertyGridItem.PropertyType);
 	}
 }

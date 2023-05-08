@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using System.Reflection;
+using ReactiveUI;
 
 namespace PilotLauncher.PropertyGrid.WPF;
 
@@ -18,6 +19,11 @@ public partial class MainWindow
 
 	private void PropertyGrid_OnPropertyItemAdded(object sender, PropertyGridItemAddedEventArgs eventArgs)
 	{
-		eventArgs.Cancel = typeof(ReactiveObject).IsAssignableTo(eventArgs.PropertyInfo.DeclaringType);
+		var declaringType = eventArgs.PropertyInfo.DeclaringType;
+		if (declaringType is not null && declaringType.Assembly != Assembly.GetExecutingAssembly())
+		{
+			// Skip properties declared in library types
+			eventArgs.Cancel = true;
+		}
 	}
 }
