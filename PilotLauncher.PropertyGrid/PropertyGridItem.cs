@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Disposables;
@@ -8,7 +7,6 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace PilotLauncher.PropertyGrid;
 
@@ -32,9 +30,6 @@ public sealed class PropertyGridItem : ReactiveObject, IDisposable
 	}
 
 	private object? _value;
-
-	public string TextValue => _textValue.Value;
-	private readonly ObservableAsPropertyHelper<string> _textValue;
 
 	private readonly CompositeDisposable _disposable = new();
 
@@ -65,12 +60,6 @@ public sealed class PropertyGridItem : ReactiveObject, IDisposable
 			})
 			.DisposeWith(_disposable);
 
-		// Update textual representation of value
-		_textValue = this.WhenAnyValue(instance => instance.Value)
-			.Select(value => value?.ToString() ?? "<null>")
-			.ToProperty(this, instance => instance.TextValue)
-			.DisposeWith(_disposable);
-
 		// Propagate changes back to the source
 		this.ObservableForProperty(item => item.Value, beforeChange: false, skipInitial: true)
 			.SkipWhile(_ => _suppressValuePropagation.IsSet)
@@ -80,9 +69,24 @@ public sealed class PropertyGridItem : ReactiveObject, IDisposable
 
 	private static readonly NullabilityInfoContext NullabilityContext = new();
 
-	public static IEnumerable<PropertyInfo> Scan(object propertySource) => propertySource.GetType()
-		.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-		.Where(info => info.CanRead);
+	public static IEnumerable<PropertyGridItem> Scan(object? propertySource, Func<PropertyInfo, bool>? filter = default)
+	{
+		if (propertySource is null)
+		{
+			return Enumerable.Empty<PropertyGridItem>();
+		}
+
+		var properties = propertySource.GetType()
+			.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+			.Where(info => info.CanRead);
+
+		if (filter is not null)
+		{
+			properties = properties.Where(filter);
+		}
+
+		return properties.Select(info => new PropertyGridItem(propertySource!, info));
+	}
 
 	public void Dispose() => _disposable.Dispose();
 }

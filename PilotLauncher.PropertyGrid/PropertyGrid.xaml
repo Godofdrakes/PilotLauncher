@@ -1,11 +1,16 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="clr-namespace:PilotLauncher.PropertyGrid"
-	xmlns:system="clr-namespace:System;assembly=System.Runtime">
+	xmlns:system="clr-namespace:System;assembly=System.Runtime"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="Converters/Converters.xaml" />
+	</ResourceDictionary.MergedDictionaries>
 
 	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.Unknown"
 		DataType="{x:Type local:PropertyGridItem}">
-		<TextBlock Text="{Binding TextValue, Mode=OneWay}" />
+		<TextBlock Text="{Binding Value, Mode=OneWay}" />
 	</DataTemplate>
 
 	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.String"
@@ -15,11 +20,11 @@
 			Mode=TwoWay}" />
 	</DataTemplate>
 
-	<local:PropertyGridTemplateSelector x:Key="PilotLauncher.PropertyGrid.TemplateSelector">
+	<local:PropertyGridTemplateSelector x:Key="PilotLauncher.PropertyGrid.EditTemplateSelector">
 		<local:PropertyGridTemplate
 			PropertyType="{x:Type system:String}"
 			IsReadOnly="False"
-			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.String}"/>
+			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.String}" />
 		<local:PropertyGridTemplate
 			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}" />
 	</local:PropertyGridTemplateSelector>
@@ -27,28 +32,53 @@
 	<Style x:Key="PilotLauncher.PropertyGrid.DataGridStyle" TargetType="DataGrid"
 		BasedOn="{StaticResource {x:Type DataGrid}}">
 		<Setter Property="AutoGenerateColumns" Value="False" />
-		<Setter Property="IsReadOnly" Value="True" />
 	</Style>
 
 	<ControlTemplate x:Key="PilotLauncher.PropertyGrid.ControlTemplate"
 		TargetType="local:PropertyGrid">
-		<DataGrid x:Name="DataGrid"
-			Style="{StaticResource PilotLauncher.PropertyGrid.DataGridStyle}"
-			ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},
+		<Grid>
+			<!-- These are necessary as the data grid column items arn't actually part of the visual tree -->
+			<FrameworkElement x:Name="PropertyNameProxy"
+				Visibility="{TemplateBinding PropertyNameVisible,
+			Converter={StaticResource VisibilityConverter}}" />
+			<FrameworkElement x:Name="PropertyTypeProxy"
+				Visibility="{TemplateBinding PropertyTypeVisible,
+			Converter={StaticResource VisibilityConverter}}" />
+
+			<DataGrid x:Name="DataGrid"
+				Style="{StaticResource PilotLauncher.PropertyGrid.DataGridStyle}"
+				ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},
 				Path=PropertyItems, Mode=OneWay}">
-			<DataGrid.Columns>
-				<DataGridTextColumn Header="Name" Width="Auto" IsReadOnly="True"
-					Binding="{Binding PropertyName}" />
-				<DataGridTextColumn Header="Type" Width="Auto" IsReadOnly="True"
-					Binding="{Binding PropertyType.Name}" />
-				<DataGridTemplateColumn Header="Value" Width="*"
-					CellTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.TemplateSelector}" />
-			</DataGrid.Columns>
-		</DataGrid>
+
+				<i:Interaction.Behaviors>
+					<local:ReadOnlyDataGridRowBehavior />
+				</i:Interaction.Behaviors>
+
+				<DataGrid.Columns>
+
+					<DataGridTextColumn Header="Name" Width="Auto" IsReadOnly="True"
+						Visibility="{Binding Visibility,
+							Source={x:Reference PropertyNameProxy}}"
+						Binding="{Binding PropertyName}" />
+
+					<DataGridTextColumn Header="Type" Width="Auto" IsReadOnly="True"
+						Visibility="{Binding Visibility,
+							Source={x:Reference PropertyTypeProxy}}"
+						Binding="{Binding PropertyType.Name}" />
+
+					<DataGridTemplateColumn Header="Value" Width="*"
+						CellTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}"
+						CellEditingTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.EditTemplateSelector}" />
+
+				</DataGrid.Columns>
+
+			</DataGrid>
+		</Grid>
 	</ControlTemplate>
 
 	<Style TargetType="local:PropertyGrid">
-		<Setter Property="Template" Value="{StaticResource PilotLauncher.PropertyGrid.ControlTemplate}" />
+		<Setter Property="Template"
+			Value="{StaticResource PilotLauncher.PropertyGrid.ControlTemplate}" />
 	</Style>
 
 </ResourceDictionary>

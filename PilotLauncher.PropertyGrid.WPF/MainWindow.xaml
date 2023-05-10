@@ -5,9 +5,32 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:local="clr-namespace:PilotLauncher.PropertyGrid.WPF"
 	xmlns:propertyGrid="clr-namespace:PilotLauncher.PropertyGrid;assembly=PilotLauncher.PropertyGrid"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	mc:Ignorable="d"
+	DataContext="{Binding RelativeSource={RelativeSource Self}}"
 	Title="MainWindow" Height="450" Width="800">
-	<propertyGrid:PropertyGrid
-		x:Name="PropertyGrid"
-		PropertyItemAdded="PropertyGrid_OnPropertyItemAdded" />
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+
+		<TextBlock Grid.Row="0" Grid.Column="0" Text="Show Property Name:" Margin="5" />
+		<CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding PropertyNameVisible, ElementName=PropertyGrid}" />
+
+		<TextBlock Grid.Row="1" Grid.Column="0" Text="Show Property Type:" Margin="5"/>
+		<CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding PropertyTypeVisible, ElementName=PropertyGrid}" />
+
+		<propertyGrid:PropertyGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="PropertyGrid" PropertySource="{Binding Person}">
+			<i:Interaction.Behaviors>
+				<local:ExcludeLibraryTypesBehavior />
+			</i:Interaction.Behaviors>
+		</propertyGrid:PropertyGrid>
+	</Grid>
 </Window>

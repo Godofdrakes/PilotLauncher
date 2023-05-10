@@ -138,17 +138,11 @@ public class PropertyGrid : Control
 			CreatePropertyMetadata(defaultValue, affectsRender, affectsMeasure, affectsArrange),
 			validateValueCallback);
 
-	private static readonly DependencyPropertyKey PropertyItemsPropertyKey =
-		RegisterReadOnlyProperty(grid => grid.PropertyItems);
-
 	public static readonly DependencyProperty PropertySourceProperty =
-		RegisterProperty(grid => grid.PropertySource, affectsRender: true);
+		RegisterProperty(grid => grid.PropertySource);
 
-	public static readonly DependencyProperty DataTemplateSelectorProperty =
-		RegisterProperty(grid => grid.DataTemplateSelector, affectsRender: true);
-
-	public static readonly DependencyProperty PropertyItemsProperty =
-		PropertyItemsPropertyKey.DependencyProperty;
+	public static readonly DependencyProperty PropertyEditTemplateSelectorProperty =
+		RegisterProperty(grid => grid.PropertyEditTemplateSelector);
 
 	public static readonly DependencyProperty PropertyNameVisibleProperty =
 		RegisterProperty(grid => grid.PropertyNameVisible, defaultValue: true, affectsMeasure: true);
@@ -173,7 +167,7 @@ public class PropertyGrid : Control
 			.WhenAnyValue(propertyGrid => propertyGrid.PropertySource);
 
 		var dataTemplateSelectorChanged = this
-			.WhenAnyValue(propertyGrid => propertyGrid.DataTemplateSelector);
+			.WhenAnyValue(propertyGrid => propertyGrid.PropertyEditTemplateSelector);
 
 		var sourcePropertyChanged = propertySourceChanged
 			.Select(sourceObject =>
@@ -190,25 +184,16 @@ public class PropertyGrid : Control
 			.Switch();
 
 		propertySourceChanged
-			.Select(propertySource =>
-			{
-				var propertyEnumerable = propertySource is not null
-					? PropertyGridItem.Scan(propertySource)
-					: Enumerable.Empty<PropertyInfo>();
-
-				return propertyEnumerable
-					.Where(FilterPropertyInfo)
-					// If there are any items to run select on propertySource won't be null
-					.Select(info => new PropertyGridItem(propertySource!, info))
-					.AsObservableChangeSet(item => item.PropertyName)
-					// Dispose of items when change set is disposed
-					.DisposeMany();
-			})
+			.Select(propertySource => PropertyGridItem
+				.Scan(propertySource, FilterPropertyInfo)
+				.AsObservableChangeSet(item => item.PropertyName)
+				// Dispose of items when change set is disposed
+				.DisposeMany())
 			// Dispose of old changeset when new one is generated
 			.Switch()
-			.ToCollection()
+			.Bind(out _propertyItems)
 			.SubscribeOn(Dispatcher)
-			.Subscribe(items => PropertyItems = items);
+			.Subscribe();
 	}
 
 	public object? PropertySource
@@ -217,16 +202,13 @@ public class PropertyGrid : Control
 		set => SetValue(PropertySourceProperty, value);
 	}
 
-	public IReadOnlyCollection<PropertyGridItem>? PropertyItems
-	{
-		get => (IReadOnlyCollection<PropertyGridItem>)GetValue(PropertyItemsProperty);
-		private set => SetValue(PropertyItemsPropertyKey, value);
-	}
+	public IEnumerable<PropertyGridItem> PropertyItems => _propertyItems;
+	private readonly ReadOnlyObservableCollection<PropertyGridItem> _propertyItems;
 
-	public DataTemplateSelector? DataTemplateSelector
+	public DataTemplateSelector? PropertyEditTemplateSelector
 	{
-		get => (DataTemplateSelector)GetValue(DataTemplateSelectorProperty);
-		set => SetValue(DataTemplateSelectorProperty, value);
+		get => (DataTemplateSelector)GetValue(PropertyEditTemplateSelectorProperty);
+		set => SetValue(PropertyEditTemplateSelectorProperty, value);
 	}
 
 	public bool PropertyNameVisible
@@ -259,7 +241,7 @@ public class PropertyGrid : Control
 	private ItemsControl? _itemsControlElement;
 }
 
-public delegate void PropertyGridItemAddedEventHandler(object sender, PropertyGridItemAddedEventArgs eventArgs);
+public delegate void PropertyGridItemAddedEventHandler(object sender, PropertyGridItemAddedEventArgs e);
 
 public class PropertyGridItemAddedEventArgs : CancelEventArgs
 {
