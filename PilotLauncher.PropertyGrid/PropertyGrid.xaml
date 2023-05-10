@@ -1,13 +1,27 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:local="clr-namespace:PilotLauncher.PropertyGrid">
+	xmlns:local="clr-namespace:PilotLauncher.PropertyGrid"
+	xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.Unknown"
+		DataType="{x:Type local:PropertyGridItem}">
+		<TextBlock Text="{Binding TextValue, Mode=OneWay}" />
+	</DataTemplate>
+
+	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.String"
+		DataType="{x:Type local:PropertyGridItem}">
+		<TextBox Text="{Binding Value,
+			UpdateSourceTrigger=PropertyChanged,
+			Mode=TwoWay}" />
+	</DataTemplate>
 
 	<local:PropertyGridTemplateSelector x:Key="PilotLauncher.PropertyGrid.TemplateSelector">
-		<local:PropertyGridTemplate>
-			<DataTemplate DataType="{x:Type local:PropertyGridItem}">
-				<TextBlock Text="{Binding TextValue, Mode=OneWay}" />
-			</DataTemplate>
-		</local:PropertyGridTemplate>
+		<local:PropertyGridTemplate
+			PropertyType="{x:Type system:String}"
+			IsReadOnly="False"
+			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.String}"/>
+		<local:PropertyGridTemplate
+			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}" />
 	</local:PropertyGridTemplateSelector>
 
 	<Style x:Key="PilotLauncher.PropertyGrid.DataGridStyle" TargetType="DataGrid"
@@ -23,9 +37,9 @@
 			ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},
 				Path=PropertyItems, Mode=OneWay}">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="Name" Width="Auto"
+				<DataGridTextColumn Header="Name" Width="Auto" IsReadOnly="True"
 					Binding="{Binding PropertyName}" />
-				<DataGridTextColumn Header="Type" Width="Auto"
+				<DataGridTextColumn Header="Type" Width="Auto" IsReadOnly="True"
 					Binding="{Binding PropertyType.Name}" />
 				<DataGridTemplateColumn Header="Value" Width="*"
 					CellTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.TemplateSelector}" />
