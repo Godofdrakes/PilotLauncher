@@ -8,9 +8,8 @@
 
     <ItemGroup>
       <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
-      <PackageReference Include="ReactiveUI" Version="18.4.34" />
-      <PackageReference Include="ReactiveUI.Fody" Version="18.4.34" />
-      <PackageReference Include="ReactiveUI.WPF" Version="18.4.34" />
+      <PackageReference Include="ReactiveUI" Version="18.4.44" />
+      <PackageReference Include="ReactiveUI.WPF" Version="18.4.44" />
     </ItemGroup>
 
 </Project>

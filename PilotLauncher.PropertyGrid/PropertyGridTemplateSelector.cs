@@ -17,7 +17,7 @@ public class PropertyGridTemplateSelector : DataTemplateSelector
 			return null;
 
 		return Templates
-			.Where(template => template.Match(propertyGridItem))
+			.Where(template => template.Match?.Invoke(propertyGridItem) ?? true)
 			.Select(template => template.DataTemplate)
 			.FirstOrDefault();
 	}

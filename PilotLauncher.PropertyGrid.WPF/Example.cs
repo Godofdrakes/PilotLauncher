@@ -2,18 +2,46 @@
 using System.Reactive.Linq;
 using System.Windows;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace PilotLauncher.PropertyGrid.WPF;
 
 public class Example : ReactiveObject
 {
-	[Reactive] public string FirstName { get; set; }
-	[Reactive] public string LastName { get; set; }
-	[Reactive] public DateTime Birthday { get; set; }
+	public string FirstName
+	{
+		get => _firstName;
+		set => this.RaiseAndSetIfChanged(ref _firstName, value);
+	}
 
-	[Reactive] public Visibility PropertyNameVisibility { get; set; }
-	[Reactive] public Visibility PropertyTypeVisibility { get; set; }
+	public string LastName
+	{
+		get => _lastName;
+		set => this.RaiseAndSetIfChanged(ref _lastName, value);
+	}
+
+	public DateTime Birthday
+	{
+		get => _birthday;
+		set => this.RaiseAndSetIfChanged(ref _birthday, value);
+	}
+
+	public Visibility PropertyNameVisibility
+	{
+		get => _propertyNameVisibility;
+		set => this.RaiseAndSetIfChanged(ref _propertyNameVisibility, value);
+	}
+
+	public Visibility PropertyTypeVisibility
+	{
+		get => _propertyTypeVisibility;
+		set => this.RaiseAndSetIfChanged(ref _propertyTypeVisibility, value);
+	}
+
+	private string _firstName;
+	private string _lastName;
+	private DateTime _birthday;
+	private Visibility _propertyNameVisibility;
+	private Visibility _propertyTypeVisibility;
 
 	public int Age => _age.Value;
 	public bool IsNameVisible => _isNameVisible.Value;
