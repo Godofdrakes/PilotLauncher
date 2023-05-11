@@ -1,4 +1,5 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="clr-namespace:PilotLauncher.PropertyGrid"
 	xmlns:system="clr-namespace:System;assembly=System.Runtime"
@@ -34,46 +35,30 @@
 		<Setter Property="AutoGenerateColumns" Value="False" />
 	</Style>
 
-	<ControlTemplate x:Key="PilotLauncher.PropertyGrid.ControlTemplate"
-		TargetType="local:PropertyGrid">
-		<Grid>
-			<!-- These are necessary as the data grid column items arn't actually part of the visual tree -->
-			<FrameworkElement x:Name="PropertyNameProxy"
-				Visibility="{TemplateBinding PropertyNameVisible,
-			Converter={StaticResource VisibilityConverter}}" />
-			<FrameworkElement x:Name="PropertyTypeProxy"
-				Visibility="{TemplateBinding PropertyTypeVisible,
-			Converter={StaticResource VisibilityConverter}}" />
+	<ControlTemplate x:Key="PilotLauncher.PropertyGrid.ControlTemplate" TargetType="local:PropertyGrid">
+		<DataGrid x:Name="DataGrid"
+			Style="{StaticResource PilotLauncher.PropertyGrid.DataGridStyle}"
+			ItemsSource="{TemplateBinding PropertyItems}">
 
-			<DataGrid x:Name="DataGrid"
-				Style="{StaticResource PilotLauncher.PropertyGrid.DataGridStyle}"
-				ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},
-				Path=PropertyItems, Mode=OneWay}">
+			<i:Interaction.Behaviors>
+				<local:ReadOnlyDataGridRowBehavior />
+			</i:Interaction.Behaviors>
 
-				<i:Interaction.Behaviors>
-					<local:ReadOnlyDataGridRowBehavior />
-				</i:Interaction.Behaviors>
+			<DataGrid.Columns>
+				<DataGridTextColumn x:Name="PropertyNameColumn"
+					Header="Name" Width="Auto" IsReadOnly="True"
+					Binding="{Binding PropertyName}" />
 
-				<DataGrid.Columns>
+				<DataGridTextColumn x:Name="PropertyTypeColumn"
+					Header="Type" Width="Auto" IsReadOnly="True"
+					Binding="{Binding PropertyType.Name}" />
 
-					<DataGridTextColumn Header="Name" Width="Auto" IsReadOnly="True"
-						Visibility="{Binding Visibility,
-							Source={x:Reference PropertyNameProxy}}"
-						Binding="{Binding PropertyName}" />
-
-					<DataGridTextColumn Header="Type" Width="Auto" IsReadOnly="True"
-						Visibility="{Binding Visibility,
-							Source={x:Reference PropertyTypeProxy}}"
-						Binding="{Binding PropertyType.Name}" />
-
-					<DataGridTemplateColumn Header="Value" Width="*"
-						CellTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}"
-						CellEditingTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.EditTemplateSelector}" />
-
-				</DataGrid.Columns>
-
-			</DataGrid>
-		</Grid>
+				<DataGridTemplateColumn x:Name="PropertyValueColumn"
+					Header="Value" Width="*"
+					CellTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}"
+					CellEditingTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.EditTemplateSelector}" />
+			</DataGrid.Columns>
+		</DataGrid>
 	</ControlTemplate>
 
 	<Style TargetType="local:PropertyGrid">

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -17,6 +14,9 @@ using ReactiveUI;
 
 namespace PilotLauncher.PropertyGrid;
 
+[TemplatePart(Name = nameof(PropertyNameColumn), Type = typeof(DataGridColumn))]
+[TemplatePart(Name = nameof(PropertyTypeColumn), Type = typeof(DataGridColumn))]
+[TemplatePart(Name = nameof(PropertyValueColumn), Type = typeof(DataGridTemplateColumn))]
 public class PropertyGrid : Control
 {
 	[DebuggerHidden, StackTraceHidden]
@@ -141,14 +141,38 @@ public class PropertyGrid : Control
 	public static readonly DependencyProperty PropertySourceProperty =
 		RegisterProperty(grid => grid.PropertySource);
 
+	private static readonly DependencyPropertyKey PropertyItemsPropertyKey =
+		RegisterReadOnlyProperty(grid => grid.PropertyItems);
+
+	public static readonly DependencyProperty PropertyItemsProperty =
+		PropertyItemsPropertyKey.DependencyProperty;
+
 	public static readonly DependencyProperty PropertyEditTemplateSelectorProperty =
 		RegisterProperty(grid => grid.PropertyEditTemplateSelector);
 
-	public static readonly DependencyProperty PropertyNameVisibleProperty =
-		RegisterProperty(grid => grid.PropertyNameVisible, defaultValue: true, affectsMeasure: true);
+	public static readonly DependencyProperty PropertyNameVisibilityProperty =
+		RegisterProperty(grid => grid.PropertyNameVisibility);
 
-	public static readonly DependencyProperty PropertyTypeVisibleProperty =
-		RegisterProperty(grid => grid.PropertyTypeVisible, defaultValue: false, affectsMeasure: true);
+	public static readonly DependencyProperty PropertyTypeVisibilityProperty =
+		RegisterProperty(grid => grid.PropertyTypeVisibility);
+
+	private static readonly DependencyPropertyKey PropertyNameColumnPropertyKey =
+		RegisterReadOnlyProperty(grid => grid.PropertyNameColumn);
+
+	private static readonly DependencyPropertyKey PropertyTypeColumnPropertyKey =
+		RegisterReadOnlyProperty(grid => grid.PropertyTypeColumn);
+
+	private static readonly DependencyPropertyKey PropertyValueColumnPropertyKey =
+		RegisterReadOnlyProperty(grid => grid.PropertyValueColumn);
+
+	public static readonly DependencyProperty PropertyNameColumnProperty =
+		PropertyNameColumnPropertyKey.DependencyProperty;
+
+	public static readonly DependencyProperty PropertyTypeColumnProperty =
+		PropertyTypeColumnPropertyKey.DependencyProperty;
+
+	public static readonly DependencyProperty PropertyValueColumnProperty =
+		PropertyValueColumnPropertyKey.DependencyProperty;
 
 	static PropertyGrid()
 	{
@@ -156,34 +180,31 @@ public class PropertyGrid : Control
 			new FrameworkPropertyMetadata(typeof(PropertyGrid)));
 	}
 
-	private static void DataTemplateSelectorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-	{
-		throw new System.NotImplementedException();
-	}
-
 	public PropertyGrid()
 	{
-		var propertySourceChanged = this
-			.WhenAnyValue(propertyGrid => propertyGrid.PropertySource);
-
-		var dataTemplateSelectorChanged = this
-			.WhenAnyValue(propertyGrid => propertyGrid.PropertyEditTemplateSelector);
-
-		var sourcePropertyChanged = propertySourceChanged
-			.Select(sourceObject =>
+		this.WhenAnyValue(grid => grid.PropertyNameColumn, grid => grid.PropertyNameVisibility)
+			.SubscribeOn(Dispatcher)
+			.ObserveOn(Dispatcher)
+			.Subscribe(pair =>
 			{
-				if (sourceObject is not INotifyPropertyChanged notifyPropertyChanged)
+				if (pair.Item1 is not null)
 				{
-					return Observable.Never<EventPattern<PropertyChangedEventArgs>>();
+					pair.Item1.Visibility = pair.Item2;
 				}
+			});
 
-				return Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
-					handler => notifyPropertyChanged.PropertyChanged += handler,
-					handler => notifyPropertyChanged.PropertyChanged -= handler);
-			})
-			.Switch();
+		this.WhenAnyValue(grid => grid.PropertyTypeColumn, grid => grid.PropertyTypeVisibility)
+			.SubscribeOn(Dispatcher)
+			.ObserveOn(Dispatcher)
+			.Subscribe(pair =>
+			{
+				if (pair.Item1 is not null)
+				{
+					pair.Item1.Visibility = pair.Item2;
+				}
+			});
 
-		propertySourceChanged
+		this.WhenAnyValue(propertyGrid => propertyGrid.PropertySource)
 			.Select(propertySource => PropertyGridItem
 				.Scan(propertySource, FilterPropertyInfo)
 				.AsObservableChangeSet(item => item.PropertyName)
@@ -191,9 +212,12 @@ public class PropertyGrid : Control
 				.DisposeMany())
 			// Dispose of old changeset when new one is generated
 			.Switch()
-			.Bind(out _propertyItems)
 			.SubscribeOn(Dispatcher)
+			.ObserveOn(Dispatcher)
+			.Bind(out var propertyItems)
 			.Subscribe();
+
+		PropertyItems = propertyItems;
 	}
 
 	public object? PropertySource
@@ -202,25 +226,28 @@ public class PropertyGrid : Control
 		set => SetValue(PropertySourceProperty, value);
 	}
 
-	public IEnumerable<PropertyGridItem> PropertyItems => _propertyItems;
-	private readonly ReadOnlyObservableCollection<PropertyGridItem> _propertyItems;
+	public IEnumerable<PropertyGridItem> PropertyItems
+	{
+		get => (IEnumerable<PropertyGridItem>) GetValue(PropertyItemsProperty);
+		private set => SetValue(PropertyItemsPropertyKey, value);
+	}
 
 	public DataTemplateSelector? PropertyEditTemplateSelector
 	{
-		get => (DataTemplateSelector)GetValue(PropertyEditTemplateSelectorProperty);
+		get => (DataTemplateSelector) GetValue(PropertyEditTemplateSelectorProperty);
 		set => SetValue(PropertyEditTemplateSelectorProperty, value);
 	}
 
-	public bool PropertyNameVisible
+	public Visibility PropertyNameVisibility
 	{
-		get => (bool)GetValue(PropertyNameVisibleProperty);
-		set => SetValue(PropertyNameVisibleProperty, value);
+		get => (Visibility) GetValue(PropertyNameVisibilityProperty);
+		set => SetValue(PropertyNameVisibilityProperty, value);
 	}
 
-	public bool PropertyTypeVisible
+	public Visibility PropertyTypeVisibility
 	{
-		get => (bool)GetValue(PropertyTypeVisibleProperty);
-		set => SetValue(PropertyTypeVisibleProperty, value);
+		get => (Visibility) GetValue(PropertyTypeVisibilityProperty);
+		set => SetValue(PropertyTypeVisibilityProperty, value);
 	}
 
 	public event PropertyGridItemAddedEventHandler? PropertyItemAdded;
@@ -232,13 +259,30 @@ public class PropertyGrid : Control
 		return !eventArgs.Cancel;
 	}
 
-	public ItemsControl? ItemsControlElement
+	public DataGridColumn? PropertyNameColumn
 	{
-		get => _itemsControlElement;
-		set => _itemsControlElement = value;
+		get => (DataGridColumn) GetValue(PropertyNameColumnProperty);
+		private set => SetValue(PropertyNameColumnPropertyKey, value);
 	}
 
-	private ItemsControl? _itemsControlElement;
+	public DataGridColumn? PropertyTypeColumn
+	{
+		get => (DataGridColumn) GetValue(PropertyTypeColumnProperty);
+		private set => SetValue(PropertyTypeColumnPropertyKey, value);
+	}
+
+	public DataGridTemplateColumn? PropertyValueColumn
+	{
+		get => (DataGridTemplateColumn) GetValue(PropertyValueColumnProperty);
+		private set => SetValue(PropertyValueColumnPropertyKey, value);
+	}
+
+	public override void OnApplyTemplate()
+	{
+		PropertyNameColumn = GetTemplateChild(nameof(PropertyNameColumn)) as DataGridColumn;
+		PropertyTypeColumn = GetTemplateChild(nameof(PropertyTypeColumn)) as DataGridColumn;
+		PropertyValueColumn = GetTemplateChild(nameof(PropertyValueColumn)) as DataGridTemplateColumn;
+	}
 }
 
 public delegate void PropertyGridItemAddedEventHandler(object sender, PropertyGridItemAddedEventArgs e);
