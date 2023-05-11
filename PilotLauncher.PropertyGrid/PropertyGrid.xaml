@@ -8,11 +8,13 @@
 		<ResourceDictionary Source="Converters/Converters.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
+	<!-- Read-only "ToString" template, works for all types  -->
 	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.Unknown"
 		DataType="{x:Type local:PropertyGridItem}">
 		<TextBlock Text="{Binding Value, Mode=OneWay}" />
 	</DataTemplate>
 
+	<!-- string editor template -->
 	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.String"
 		DataType="{x:Type local:PropertyGridItem}">
 		<TextBox Text="{Binding Value,
@@ -20,6 +22,7 @@
 			Mode=TwoWay}" />
 	</DataTemplate>
 
+	<!-- enum selector template -->
 	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.Enum"
 		DataType="{x:Type local:PropertyGridItem}">
 		<ComboBox
@@ -30,28 +33,30 @@
 				Mode=OneTime}" />
 	</DataTemplate>
 
+	<!-- template selector for PropertyGridItems -->
 	<local:PropertyGridTemplateSelector x:Key="PilotLauncher.PropertyGrid.EditTemplateSelector">
-		<local:PropertyGridTemplate DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Enum}">
-			<local:PropertyGridTemplate.Match>
-				<local:PropertyMatch IsEnum="True"/>
-			</local:PropertyGridTemplate.Match>
+		<local:PropertyGridTemplate
+			Match="{local:PropertyMatch IsReadOnly=False, IsEnum=True}"
+			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Enum}">
 		</local:PropertyGridTemplate>
 
-		<local:PropertyGridTemplate DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.String}">
-			<local:PropertyGridTemplate.Match>
-				<local:PropertyMatch IsReadOnly="False" ExactType="{x:Type system:String}"/>
-			</local:PropertyGridTemplate.Match>
+		<local:PropertyGridTemplate
+			Match="{local:PropertyMatch IsReadOnly=False, ExactType={x:Type system:String}}"
+			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.String}">
 		</local:PropertyGridTemplate>
 
+		<!-- fallback for all unhandled types -->
 		<local:PropertyGridTemplate DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}" />
 	</local:PropertyGridTemplateSelector>
 
+	<!-- style for the DataGrid within a PropertyGrid -->
 	<Style x:Key="PilotLauncher.PropertyGrid.DataGridStyle" TargetType="DataGrid"
 		BasedOn="{StaticResource {x:Type DataGrid}}">
 		<Setter Property="AutoGenerateColumns" Value="False" />
 		<Setter Property="IsReadOnly" Value="True" />
 	</Style>
 
+	<!-- control template for the PropertyGrid -->
 	<ControlTemplate x:Key="PilotLauncher.PropertyGrid.ControlTemplate" TargetType="local:PropertyGrid">
 		<DataGrid x:Name="DataGrid"
 			Style="{StaticResource PilotLauncher.PropertyGrid.DataGridStyle}"
@@ -73,6 +78,7 @@
 		</DataGrid>
 	</ControlTemplate>
 
+	<!-- default style for the PropertyGrid -->
 	<Style TargetType="local:PropertyGrid">
 		<Setter Property="Template"
 			Value="{StaticResource PilotLauncher.PropertyGrid.ControlTemplate}" />
