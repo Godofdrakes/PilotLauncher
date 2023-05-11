@@ -147,8 +147,8 @@ public class PropertyGrid : Control
 	public static readonly DependencyProperty PropertyItemsProperty =
 		PropertyItemsPropertyKey.DependencyProperty;
 
-	public static readonly DependencyProperty PropertyEditTemplateSelectorProperty =
-		RegisterProperty(grid => grid.PropertyEditTemplateSelector);
+	public static readonly DependencyProperty PropertyTemplateSelectorProperty =
+		RegisterProperty(grid => grid.PropertyTemplateSelector);
 
 	public static readonly DependencyProperty PropertyNameVisibilityProperty =
 		RegisterProperty(grid => grid.PropertyNameVisibility);
@@ -204,6 +204,17 @@ public class PropertyGrid : Control
 				}
 			});
 
+		this.WhenAnyValue(grid => grid.PropertyValueColumn, grid => grid.PropertyTemplateSelector)
+			.SubscribeOn(Dispatcher)
+			.ObserveOn(Dispatcher)
+			.Subscribe(pair =>
+			{
+				if (pair.Item1 is not null)
+				{
+					pair.Item1.CellTemplateSelector = pair.Item2;
+				}
+			});
+
 		this.WhenAnyValue(propertyGrid => propertyGrid.PropertySource)
 			.Select(propertySource => PropertyGridItem
 				.Scan(propertySource, FilterPropertyInfo)
@@ -232,10 +243,10 @@ public class PropertyGrid : Control
 		private set => SetValue(PropertyItemsPropertyKey, value);
 	}
 
-	public DataTemplateSelector? PropertyEditTemplateSelector
+	public DataTemplateSelector? PropertyTemplateSelector
 	{
-		get => (DataTemplateSelector) GetValue(PropertyEditTemplateSelectorProperty);
-		set => SetValue(PropertyEditTemplateSelectorProperty, value);
+		get => (DataTemplateSelector) GetValue(PropertyTemplateSelectorProperty);
+		set => SetValue(PropertyTemplateSelectorProperty, value);
 	}
 
 	public Visibility PropertyNameVisibility

@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using ReactiveUI;
-
-namespace PilotLauncher.PropertyGrid.WPF;
+﻿namespace PilotLauncher.PropertyGrid.WPF;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

@@ -18,8 +18,7 @@
 	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.String"
 		DataType="{x:Type local:PropertyGridItem}">
 		<TextBox Text="{Binding Value,
-			UpdateSourceTrigger=PropertyChanged,
-			Mode=TwoWay}" />
+			UpdateSourceTrigger=PropertyChanged}" />
 	</DataTemplate>
 
 	<!-- enum selector template -->
@@ -33,7 +32,7 @@
 				Mode=OneTime}" />
 	</DataTemplate>
 
-	<!-- template selector for PropertyGridItems -->
+	<!-- template selector for the view of a property value -->
 	<local:PropertyGridTemplateSelector x:Key="PilotLauncher.PropertyGrid.EditTemplateSelector">
 		<local:PropertyGridTemplate
 			Match="{local:PropertyMatch IsReadOnly=False, IsEnum=True}"
@@ -46,7 +45,8 @@
 		</local:PropertyGridTemplate>
 
 		<!-- fallback for all unhandled types -->
-		<local:PropertyGridTemplate DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}" />
+		<local:PropertyGridTemplate
+			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}" />
 	</local:PropertyGridTemplateSelector>
 
 	<!-- style for the DataGrid within a PropertyGrid -->
@@ -71,9 +71,9 @@
 					Header="Type" Width="Auto"
 					Binding="{Binding PropertyInfo.PropertyType.Name}" />
 
+				<!-- CellTemplateSelector is assigned by PropertyGrid -->
 				<DataGridTemplateColumn x:Name="PropertyValueColumn"
-					Header="Value" Width="*"
-					CellTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.EditTemplateSelector}" />
+					Header="Value" Width="*" />
 			</DataGrid.Columns>
 		</DataGrid>
 	</ControlTemplate>
@@ -82,6 +82,8 @@
 	<Style TargetType="local:PropertyGrid">
 		<Setter Property="Template"
 			Value="{StaticResource PilotLauncher.PropertyGrid.ControlTemplate}" />
+		<Setter Property="PropertyTemplateSelector"
+			Value="{StaticResource PilotLauncher.PropertyGrid.EditTemplateSelector}" />
 	</Style>
 
 </ResourceDictionary>
