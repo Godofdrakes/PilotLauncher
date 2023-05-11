@@ -12,9 +12,7 @@ namespace PilotLauncher.PropertyGrid;
 
 public sealed class PropertyGridItem : ReactiveObject, IDisposable
 {
-	public string PropertyName { get; }
-	public Type PropertyType { get; }
-	public bool IsNullable { get; }
+	public PropertyInfo PropertyInfo { get; }
 	public bool IsReadOnly { get; }
 
 	public object? Value
@@ -23,7 +21,7 @@ public sealed class PropertyGridItem : ReactiveObject, IDisposable
 		set
 		{
 			if (IsReadOnly)
-				throw new InvalidOperationException($"Property {PropertyName} is read only");
+				throw new InvalidOperationException($"Property {PropertyInfo.Name} is read only");
 
 			this.RaiseAndSetIfChanged(ref _value, value);
 		}
@@ -37,11 +35,7 @@ public sealed class PropertyGridItem : ReactiveObject, IDisposable
 
 	public PropertyGridItem(object propertySource, PropertyInfo propertyInfo)
 	{
-		var nullabilityInfo = NullabilityContext.Create(propertyInfo);
-
-		PropertyName = propertyInfo.Name;
-		PropertyType = propertyInfo.PropertyType;
-		IsNullable = nullabilityInfo.WriteState is not NullabilityState.NotNull;
+		PropertyInfo = propertyInfo;
 		IsReadOnly = propertyInfo is not { CanWrite: true, SetMethod.IsPublic: true };
 
 		var propertyExpression = Expression.Property(

@@ -8,7 +8,7 @@ namespace PilotLauncher.PropertyGrid.WPF;
 /// </summary>
 public partial class MainWindow
 {
-	public Person Person { get; } = new();
+	public Example Example { get; } = new();
 
 	public MainWindow() => InitializeComponent();
 }

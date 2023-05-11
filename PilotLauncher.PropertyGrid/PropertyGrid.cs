@@ -207,7 +207,7 @@ public class PropertyGrid : Control
 		this.WhenAnyValue(propertyGrid => propertyGrid.PropertySource)
 			.Select(propertySource => PropertyGridItem
 				.Scan(propertySource, FilterPropertyInfo)
-				.AsObservableChangeSet(item => item.PropertyName)
+				.AsObservableChangeSet(item => item.PropertyInfo.Name)
 				// Dispose of items when change set is disposed
 				.DisposeMany())
 			// Dispose of old changeset when new one is generated

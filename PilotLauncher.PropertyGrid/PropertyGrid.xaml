@@ -21,9 +21,21 @@
 			Mode=TwoWay}" />
 	</DataTemplate>
 
+	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.Enum"
+		DataType="{x:Type local:PropertyGridItem}">
+		<ComboBox SelectedValue="{Binding Value,
+			UpdateSourceTrigger=PropertyChanged}"
+			ItemsSource="{Binding PropertyInfo.PropertyType,
+				Converter={StaticResource EnumItemsConverter},
+				Mode=OneTime}" />
+	</DataTemplate>
+
 	<local:PropertyGridTemplateSelector x:Key="PilotLauncher.PropertyGrid.EditTemplateSelector">
 		<local:PropertyGridTemplate
-			PropertyType="{x:Type system:String}"
+			IsEnum="True"
+			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Enum}" />
+		<local:PropertyGridTemplate
+			ExactType="{x:Type system:String}"
 			IsReadOnly="False"
 			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.String}" />
 		<local:PropertyGridTemplate
@@ -47,11 +59,11 @@
 			<DataGrid.Columns>
 				<DataGridTextColumn x:Name="PropertyNameColumn"
 					Header="Name" Width="Auto" IsReadOnly="True"
-					Binding="{Binding PropertyName}" />
+					Binding="{Binding PropertyInfo.Name}" />
 
 				<DataGridTextColumn x:Name="PropertyTypeColumn"
 					Header="Type" Width="Auto" IsReadOnly="True"
-					Binding="{Binding PropertyType.Name}" />
+					Binding="{Binding PropertyInfo.PropertyType.Name}" />
 
 				<DataGridTemplateColumn x:Name="PropertyValueColumn"
 					Header="Value" Width="*"

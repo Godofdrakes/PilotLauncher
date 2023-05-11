@@ -9,38 +9,12 @@
 	mc:Ignorable="d"
 	DataContext="{Binding RelativeSource={RelativeSource Self}}"
 	Title="MainWindow" Height="450" Width="800">
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
-
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
-
-		<TextBlock Grid.Row="0" Grid.Column="0"
-			Text="Property Name Visibility:" Margin="5" />
-		<ComboBox Grid.Row="0" Grid.Column="1"
-			ItemsSource="{Binding Source={local:Enum {x:Type Visibility}}}"
-			SelectedItem="{Binding PropertyNameVisibility, Source={x:Reference PropertyGrid}}"/>
-
-		<TextBlock Grid.Row="1" Grid.Column="0"
-			Text="Property Type Visibility:" Margin="5" />
-		<ComboBox Grid.Row="1" Grid.Column="1"
-			ItemsSource="{Binding Source={local:Enum {x:Type Visibility}}}"
-			SelectedItem="{Binding PropertyTypeVisibility, Source={x:Reference PropertyGrid}}"/>
-
-		<propertyGrid:PropertyGrid x:Name="PropertyGrid"
-			Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-			PropertyNameVisibility="Visible"
-			PropertyTypeVisibility="Collapsed"
-			PropertySource="{Binding Person}">
-			<i:Interaction.Behaviors>
-				<local:ExcludeLibraryTypesBehavior />
-			</i:Interaction.Behaviors>
-		</propertyGrid:PropertyGrid>
-	</Grid>
+	<propertyGrid:PropertyGrid
+		PropertyNameVisibility="{Binding Example.PropertyNameVisibility, Mode=OneWay}"
+		PropertyTypeVisibility="{Binding Example.PropertyTypeVisibility, Mode=OneWay}"
+		PropertySource="{Binding Example}">
+		<i:Interaction.Behaviors>
+			<local:ExcludeLibraryTypesBehavior />
+		</i:Interaction.Behaviors>
+	</propertyGrid:PropertyGrid>
 </Window>

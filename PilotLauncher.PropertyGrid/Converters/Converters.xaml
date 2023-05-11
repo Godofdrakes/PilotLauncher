@@ -3,4 +3,5 @@
 	xmlns:propertyGrid="clr-namespace:PilotLauncher.PropertyGrid">
 	<BooleanToVisibilityConverter x:Key="VisibilityConverter" />
 	<propertyGrid:IndexConverter x:Key="IndexConverter" />
+	<propertyGrid:EnumItemsConverter x:Key="EnumItemsConverter" />
 </ResourceDictionary>
