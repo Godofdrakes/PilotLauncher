@@ -46,6 +46,7 @@
 
 		<!-- fallback for all unhandled types -->
 		<local:PropertyGridTemplate
+			Priority="{x:Static system:Int32.MinValue}"
 			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}" />
 	</local:PropertyGridTemplateSelector>
 

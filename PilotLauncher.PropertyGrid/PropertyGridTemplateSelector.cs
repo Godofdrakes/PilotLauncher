@@ -18,6 +18,7 @@ public class PropertyGridTemplateSelector : DataTemplateSelector
 
 		return Templates
 			.Where(template => template.Match?.Invoke(propertyGridItem) ?? true)
+			.OrderByDescending(template => template.Priority)
 			.Select(template => template.DataTemplate)
 			.FirstOrDefault();
 	}
