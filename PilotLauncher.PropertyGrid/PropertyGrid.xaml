@@ -20,7 +20,7 @@
 		<TextBox Text="{Binding Value,
 			UpdateSourceTrigger=PropertyChanged}" />
 	</DataTemplate>
-	
+
 	<!-- enum selector template -->
 	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.Enum"
 		DataType="{x:Type local:PropertyGridItem}">
@@ -50,4 +50,9 @@
 			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}" />
 	</local:PropertyGridTemplateSelector>
 
+	<!-- default style for PropertyGridView -->
+	<Style TargetType="local:PropertyGridView">
+		<Setter Property="PropertyTemplateSelector"
+			Value="{StaticResource PilotLauncher.PropertyGrid.DefaultTemplateSelector}" />
+	</Style>
 </ResourceDictionary>

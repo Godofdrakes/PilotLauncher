@@ -10,7 +10,7 @@
 	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
 	mc:Ignorable="d"
 	d:DesignHeight="200" d:DesignWidth="600"
-	d:DataContext="{d:DesignInstance design:PropertyDetailsViewModel, IsDesignTimeCreatable=True}">
+	DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}">
 
 	<UserControl.Resources>
 		<ResourceDictionary>

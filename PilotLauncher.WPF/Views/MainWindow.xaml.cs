@@ -25,16 +25,12 @@ public partial class MainWindow
 			this.OneWayBind(ViewModel,
 				model => model.ConsoleOutput,
 				window => window.ConsoleOutput.ItemsSource);
-
-			this.OneWayBind(ViewModel,
-				model => model.PropertyDetailsViewModel,
-				window => window.EditWorkflowView.ViewModel);
 		});
 	}
 
 	private void ShowEditFlyout(InteractionContext<IWorkflowNode, Unit> context)
 	{
-		ViewModel!.PropertyDetailsViewModel.WorkflowNode = context.Input;
+		PropertyGridView.PropertySource = context.Input;
 
 		EditWorkflowFlyout.IsOpen = true;
 

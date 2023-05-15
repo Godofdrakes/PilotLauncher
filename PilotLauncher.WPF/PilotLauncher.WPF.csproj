@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PilotLauncher.Common\PilotLauncher.Common.csproj" />
+      <ProjectReference Include="..\PilotLauncher.PropertyGrid\PilotLauncher.PropertyGrid.csproj" />
       <ProjectReference Include="..\PilotLauncher\PilotLauncher.csproj" />
       <ProjectReference Include="..\PropertyDetails.WPF\PropertyDetails.WPF.csproj" />
     </ItemGroup>
@@ -20,7 +21,7 @@
       <PackageReference Include="Dapplo.Microsoft.Extensions.Hosting.Wpf" Version="1.0.14" />
       <PackageReference Include="MahApps.Metro" Version="2.4.9" />
       <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-      <PackageReference Include="ReactiveUI.WPF" Version="18.4.26" />
+      <PackageReference Include="ReactiveUI.WPF" Version="18.4.44" />
       <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.6.8" />
     </ItemGroup>
 
