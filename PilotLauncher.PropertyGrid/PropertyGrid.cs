@@ -32,151 +32,28 @@ public class PropertyGridItemAddedEventArgs : CancelEventArgs
 [TemplatePart(Name = nameof(PropertyValueColumn), Type = typeof(DataGridTemplateColumn))]
 public class PropertyGrid : Control
 {
-#region Utils
-
-	[DebuggerHidden, StackTraceHidden]
-	private static void ArgumentAssertion<T>(
-		T param,
-		Expression<Func<T, bool>> assertion,
-		string? message = default,
-		[CallerArgumentExpression("param")] string paramName = "")
-	{
-		if (!assertion.Compile().Invoke(param))
-		{
-			ThrowArgumentAssertion(message, assertion, paramName);
-		}
-	}
-
-	[DoesNotReturn, DebuggerHidden, StackTraceHidden]
-	private static void ThrowArgumentAssertion(string? message, LambdaExpression assertion, string paramName)
-	{
-		throw new ArgumentException(message ?? $"Assertion failed: {assertion.Body}", paramName);
-	}
-
-	private static PropertyMetadata? CreatePropertyMetadata(
-		object? defaultValue = default,
-		bool affectsRender = default,
-		bool affectsMeasure = default,
-		bool affectsArrange = default)
-	{
-		FrameworkPropertyMetadata? frameworkMetadata = default;
-
-		if (affectsRender)
-		{
-			frameworkMetadata ??= new FrameworkPropertyMetadata();
-			frameworkMetadata.AffectsRender = true;
-		}
-
-		if (affectsMeasure)
-		{
-			frameworkMetadata ??= new FrameworkPropertyMetadata();
-			frameworkMetadata.AffectsMeasure = true;
-		}
-
-		if (affectsArrange)
-		{
-			frameworkMetadata ??= new FrameworkPropertyMetadata();
-			frameworkMetadata.AffectsArrange = true;
-		}
-
-		PropertyMetadata? propertyMetadata = frameworkMetadata;
-
-		if (defaultValue is not null)
-		{
-			propertyMetadata ??= new PropertyMetadata();
-			propertyMetadata.DefaultValue = defaultValue;
-		}
-
-		return propertyMetadata;
-	}
-
-	private static TReturn RegisterPropertyCommon<TProperty, TReturn>(
-		Func<string, Type, Type, PropertyMetadata?, ValidateValueCallback?, TReturn> registerFunc,
-		Expression<Func<PropertyGrid, TProperty>> propertyExpression,
-		PropertyMetadata? propertyMetadata = default,
-		ValidateValueCallback? validateValueCallback = default)
-	{
-		ArgumentNullException.ThrowIfNull(registerFunc);
-		ArgumentNullException.ThrowIfNull(propertyExpression);
-
-		var expression = Reflection.Rewrite(propertyExpression.Body);
-
-		var parent = expression.GetParent();
-
-		ArgumentAssertion(parent, expr => expr != null,
-			"The property expression does not have a valid parent.");
-		ArgumentAssertion(parent, expr => expr!.NodeType == ExpressionType.Parameter,
-			"Property expression must be of the form 'x => x.SomeProperty'");
-
-		var memberInfo = expression!.GetMemberInfo();
-
-		ArgumentAssertion(memberInfo, expr => expr != null,
-			"The property expression does not point towards a valid member.");
-
-		var memberName = memberInfo!.Name;
-		if (expression is IndexExpression)
-		{
-			memberName += "[]";
-		}
-
-		return registerFunc.Invoke(
-			memberName,
-			typeof(TProperty),
-			typeof(PropertyGrid),
-			propertyMetadata,
-			validateValueCallback);
-	}
-
-	private static DependencyProperty RegisterProperty<TProperty>(
-		Expression<Func<PropertyGrid, TProperty>> propertyExpression,
-		TProperty defaultValue = default!,
-		bool affectsRender = default,
-		bool affectsMeasure = default,
-		bool affectsArrange = default,
-		ValidateValueCallback? validateValueCallback = default) =>
-		RegisterPropertyCommon(
-			DependencyProperty.Register,
-			propertyExpression,
-			CreatePropertyMetadata(defaultValue, affectsRender, affectsMeasure, affectsArrange),
-			validateValueCallback);
-
-	private static DependencyPropertyKey RegisterReadOnlyProperty<TProperty>(
-		Expression<Func<PropertyGrid, TProperty>> propertyExpression,
-		TProperty defaultValue = default!,
-		bool affectsRender = default,
-		bool affectsMeasure = default,
-		bool affectsArrange = default,
-		ValidateValueCallback? validateValueCallback = default) =>
-		RegisterPropertyCommon(
-			DependencyProperty.RegisterReadOnly,
-			propertyExpression,
-			CreatePropertyMetadata(defaultValue, affectsRender, affectsMeasure, affectsArrange),
-			validateValueCallback);
-
-#endregion
-
 #region Dependency Properties
 
 	public static readonly DependencyProperty PropertySourceProperty =
-		RegisterProperty(grid => grid.PropertySource);
+		DependencyObjectEx.RegisterProperty((PropertyGrid grid) => grid.PropertySource);
 
 	public static readonly DependencyProperty PropertyTemplateSelectorProperty =
-		RegisterProperty(grid => grid.PropertyTemplateSelector);
+		DependencyObjectEx.RegisterProperty((PropertyGrid grid) => grid.PropertyTemplateSelector);
 
 	public static readonly DependencyProperty PropertyNameVisibilityProperty =
-		RegisterProperty(grid => grid.PropertyNameVisibility);
+		DependencyObjectEx.RegisterProperty((PropertyGrid grid) => grid.PropertyNameVisibility);
 
 	public static readonly DependencyProperty PropertyTypeVisibilityProperty =
-		RegisterProperty(grid => grid.PropertyTypeVisibility);
+		DependencyObjectEx.RegisterProperty((PropertyGrid grid) => grid.PropertyTypeVisibility);
 
 	private static readonly DependencyPropertyKey PropertyNameColumnPropertyKey =
-		RegisterReadOnlyProperty(grid => grid.PropertyNameColumn);
+		DependencyObjectEx.RegisterReadOnlyProperty((PropertyGrid grid) => grid.PropertyNameColumn);
 
 	private static readonly DependencyPropertyKey PropertyTypeColumnPropertyKey =
-		RegisterReadOnlyProperty(grid => grid.PropertyTypeColumn);
+		DependencyObjectEx.RegisterReadOnlyProperty((PropertyGrid grid) => grid.PropertyTypeColumn);
 
 	private static readonly DependencyPropertyKey PropertyValueColumnPropertyKey =
-		RegisterReadOnlyProperty(grid => grid.PropertyValueColumn);
+		DependencyObjectEx.RegisterReadOnlyProperty((PropertyGrid grid) => grid.PropertyValueColumn);
 
 	public static readonly DependencyProperty PropertyNameColumnProperty =
 		PropertyNameColumnPropertyKey.DependencyProperty;

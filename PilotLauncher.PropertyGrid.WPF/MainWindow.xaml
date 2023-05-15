@@ -9,13 +9,12 @@
 	mc:Ignorable="d"
 	DataContext="{Binding RelativeSource={RelativeSource Self}}"
 	Title="MainWindow" Height="450" Width="800">
-	<propertyGrid:PropertyGrid
-		PropertyTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.CustomTemplateSelector}"
-		PropertyNameVisibility="{Binding Example.PropertyNameVisibility, Mode=OneWay}"
-		PropertyTypeVisibility="{Binding Example.PropertyTypeVisibility, Mode=OneWay}"
-		PropertySource="{Binding Example}">
-		<i:Interaction.Behaviors>
-			<local:ExcludeLibraryTypesBehavior />
-		</i:Interaction.Behaviors>
-	</propertyGrid:PropertyGrid>
+	<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+		<propertyGrid:PropertyGridView
+			PropertySource="{Binding Example}"
+			PropertyItemAdded="PropertyGridView_OnPropertyItemAdded"
+			PropertyTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.CustomTemplateSelector}"
+			ShowPropertyName="{Binding Example.IsNameVisible, Mode=OneWay}"
+			ShowPropertyType="{Binding Example.IsTypeVisible, Mode=OneWay}"/>
+	</ScrollViewer>
 </Window>
