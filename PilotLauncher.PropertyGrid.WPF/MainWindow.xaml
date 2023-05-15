@@ -10,6 +10,7 @@
 	DataContext="{Binding RelativeSource={RelativeSource Self}}"
 	Title="MainWindow" Height="450" Width="800">
 	<propertyGrid:PropertyGrid
+		PropertyTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.CustomTemplateSelector}"
 		PropertyNameVisibility="{Binding Example.PropertyNameVisibility, Mode=OneWay}"
 		PropertyTypeVisibility="{Binding Example.PropertyTypeVisibility, Mode=OneWay}"
 		PropertySource="{Binding Example}">

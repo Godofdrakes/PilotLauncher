@@ -20,7 +20,7 @@
 		<TextBox Text="{Binding Value,
 			UpdateSourceTrigger=PropertyChanged}" />
 	</DataTemplate>
-
+	
 	<!-- enum selector template -->
 	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.Enum"
 		DataType="{x:Type local:PropertyGridItem}">
@@ -33,14 +33,14 @@
 	</DataTemplate>
 
 	<!-- template selector for the view of a property value -->
-	<local:PropertyGridTemplateSelector x:Key="PilotLauncher.PropertyGrid.EditTemplateSelector">
+	<local:PropertyGridTemplateSelector x:Key="PilotLauncher.PropertyGrid.DefaultTemplateSelector">
 		<local:PropertyGridTemplate
 			Match="{local:PropertyMatch IsReadOnly=False, IsEnum=True}"
 			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Enum}">
 		</local:PropertyGridTemplate>
 
 		<local:PropertyGridTemplate
-			Match="{local:PropertyMatch IsReadOnly=False, ExactType={x:Type system:String}}"
+			Match="{local:PropertyMatch IsReadOnly=False, ExactType=system:String}"
 			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.String}">
 		</local:PropertyGridTemplate>
 
@@ -58,10 +58,13 @@
 	</Style>
 
 	<!-- control template for the PropertyGrid -->
-	<ControlTemplate x:Key="PilotLauncher.PropertyGrid.ControlTemplate" TargetType="local:PropertyGrid">
+	<ControlTemplate x:Key="PilotLauncher.PropertyGrid.DefaultControlTemplate" TargetType="local:PropertyGrid">
 		<DataGrid x:Name="DataGrid"
-			Style="{StaticResource PilotLauncher.PropertyGrid.DataGridStyle}"
-			ItemsSource="{TemplateBinding PropertyItems}">
+			ItemsSource="{Binding
+				RelativeSource={RelativeSource TemplatedParent},
+				Path=PropertyItems,
+				Mode=OneWay}"
+			Style="{StaticResource PilotLauncher.PropertyGrid.DataGridStyle}">
 
 			<DataGrid.Columns>
 				<DataGridTextColumn x:Name="PropertyNameColumn"
@@ -82,9 +85,9 @@
 	<!-- default style for the PropertyGrid -->
 	<Style TargetType="local:PropertyGrid">
 		<Setter Property="Template"
-			Value="{StaticResource PilotLauncher.PropertyGrid.ControlTemplate}" />
+			Value="{StaticResource PilotLauncher.PropertyGrid.DefaultControlTemplate}" />
 		<Setter Property="PropertyTemplateSelector"
-			Value="{StaticResource PilotLauncher.PropertyGrid.EditTemplateSelector}" />
+			Value="{StaticResource PilotLauncher.PropertyGrid.DefaultTemplateSelector}" />
 	</Style>
 
 </ResourceDictionary>

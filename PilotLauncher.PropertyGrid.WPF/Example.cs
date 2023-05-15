@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using System.Windows;
 using ReactiveUI;
 
@@ -19,10 +18,10 @@ public class Example : ReactiveObject
 		set => this.RaiseAndSetIfChanged(ref _lastName, value);
 	}
 
-	public DateTime Birthday
+	public int Age
 	{
-		get => _birthday;
-		set => this.RaiseAndSetIfChanged(ref _birthday, value);
+		get => _age;
+		set => this.RaiseAndSetIfChanged(ref _age, value);
 	}
 
 	public Visibility PropertyNameVisibility
@@ -37,32 +36,25 @@ public class Example : ReactiveObject
 		set => this.RaiseAndSetIfChanged(ref _propertyTypeVisibility, value);
 	}
 
-	private string _firstName;
-	private string _lastName;
-	private DateTime _birthday;
-	private Visibility _propertyNameVisibility;
-	private Visibility _propertyTypeVisibility;
-
-	public int Age => _age.Value;
+	public string FullName => _fullName.Value;
 	public bool IsNameVisible => _isNameVisible.Value;
 	public bool IsTypeVisible => _isTypeVisible.Value;
 
-	private readonly ObservableAsPropertyHelper<int> _age;
+	private string _firstName = "John";
+	private string _lastName = "Doe";
+	private int _age = 42;
+	private Visibility _propertyNameVisibility = Visibility.Visible;
+	private Visibility _propertyTypeVisibility = Visibility.Collapsed;
+
+	private readonly ObservableAsPropertyHelper<string> _fullName;
 	private readonly ObservableAsPropertyHelper<bool> _isNameVisible;
 	private readonly ObservableAsPropertyHelper<bool> _isTypeVisible;
 
 	public Example()
 	{
-		FirstName = "John";
-		LastName = "Doe";
-		Birthday = DateTime.MinValue;
-
-		PropertyNameVisibility = Visibility.Visible;
-		PropertyTypeVisibility = Visibility.Collapsed;
-
-		_age = this.WhenAnyValue(person => person.Birthday)
-			.Select(GetAge)
-			.ToProperty(this, person => person.Age);
+		_fullName = this.WhenAnyValue(example => example.FirstName, example => example.LastName)
+			.Select(tuple => string.Join(' ', tuple.Item1, tuple.Item2))
+			.ToProperty(this, example => example.FullName);
 		_isNameVisible = this.WhenAnyValue(example => example.PropertyNameVisibility)
 			.Select(visibility => visibility is Visibility.Visible)
 			.ToProperty(this, example => example.IsNameVisible);
@@ -70,7 +62,4 @@ public class Example : ReactiveObject
 			.Select(visibility => visibility is Visibility.Visible)
 			.ToProperty(this, example => example.IsTypeVisible);
 	}
-
-	// Not correct but good enough
-	private static int GetAge(DateTime birthday) => Math.Max(0, DateTime.Now.Year - birthday.Year);
 }
