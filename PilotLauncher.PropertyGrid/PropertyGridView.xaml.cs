@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
@@ -8,6 +10,18 @@ using DynamicData;
 using ReactiveUI;
 
 namespace PilotLauncher.PropertyGrid;
+
+public delegate void PropertyGridItemAddedEventHandler(object sender, PropertyGridItemAddedEventArgs e);
+
+public class PropertyGridItemAddedEventArgs : CancelEventArgs
+{
+	public PropertyGridItemAddedEventArgs(PropertyInfo propertyInfo)
+	{
+		PropertyInfo = propertyInfo;
+	}
+
+	public PropertyInfo PropertyInfo { get; }
+}
 
 public partial class PropertyGridView
 {
@@ -57,6 +71,8 @@ public partial class PropertyGridView
 		set => SetValue(PropertySourceProperty, value);
 	}
 
+	public IEnumerable<PropertyGridItem> PropertyItems { get; init; }
+
 #endregion
 
 #region Public Events
@@ -69,18 +85,14 @@ public partial class PropertyGridView
 	{
 		InitializeComponent();
 
-		var propertyNameColumn = CreatePropertyNameColumn();
-		var propertyTypeColumn = CreatePropertyTypeColumn();
-		var propertyValueColumn = CreatePropertyValueColumn();
-
 		this.WhenAnyValue(view => view.ShowPropertyName)
 			.Select(show => show ? Visibility.Visible : Visibility.Collapsed)
-			.BindTo(propertyNameColumn, column => column.Visibility);
+			.BindTo(PropertyNameColumn, column => column.Visibility);
 		this.WhenAnyValue(view => view.ShowPropertyType)
 			.Select(show => show ? Visibility.Visible : Visibility.Collapsed)
-			.BindTo(propertyTypeColumn, column => column.Visibility);
+			.BindTo(PropertyTypeColumn, column => column.Visibility);
 		this.WhenAnyValue(view => view.PropertyTemplateSelector)
-			.BindTo(propertyValueColumn, column => column.CellTemplateSelector);
+			.BindTo(PropertyValueColumn, column => column.CellTemplateSelector);
 
 		this.WhenAnyValue(view => view.PropertySource)
 			.Select(source => PropertyGridItem
@@ -88,43 +100,21 @@ public partial class PropertyGridView
 				.AsObservableChangeSet(item => item.PropertyInfo.Name)
 				.DisposeMany())
 			.Switch()
-			.SubscribeOn(Dispatcher)
-			.ObserveOn(Dispatcher)
 			.Bind(out var propertyItems)
 			.Subscribe();
 
-		DataGrid.Columns.Add(propertyNameColumn);
-		DataGrid.Columns.Add(propertyTypeColumn);
-		DataGrid.Columns.Add(propertyValueColumn);
-		DataGrid.ItemsSource = propertyItems;
+		PropertyItems = propertyItems;
 	}
 
 	private bool FilterPropertyInfo(PropertyInfo propertyInfo)
 	{
+		if (PropertyItemAdded is null)
+		{
+			return true;
+		}
+
 		var eventArgs = new PropertyGridItemAddedEventArgs(propertyInfo);
-		PropertyItemAdded?.Invoke(this, eventArgs);
+		PropertyItemAdded.Invoke(this, eventArgs);
 		return !eventArgs.Cancel;
 	}
-
-	private static DataGridTextColumn CreatePropertyNameColumn() => new()
-	{
-		Header = "Name",
-		Width = DataGridLength.Auto,
-		Binding = BindingEx.Create((PropertyGridItem item) =>
-			item.PropertyInfo.Name),
-	};
-
-	private static DataGridTextColumn CreatePropertyTypeColumn() => new()
-	{
-		Header = "Type",
-		Width = DataGridLength.SizeToCells,
-		Binding = BindingEx.Create((PropertyGridItem item) =>
-			item.PropertyInfo.PropertyType.Name),
-	};
-
-	private static DataGridTemplateColumn CreatePropertyValueColumn() => new()
-	{
-		Header = "Value",
-		Width = new DataGridLength(1, DataGridLengthUnitType.Star),
-	};
 }

@@ -5,16 +5,13 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:local="clr-namespace:PilotLauncher.PropertyGrid.WPF"
 	xmlns:propertyGrid="clr-namespace:PilotLauncher.PropertyGrid;assembly=PilotLauncher.PropertyGrid"
-	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	mc:Ignorable="d"
 	DataContext="{Binding RelativeSource={RelativeSource Self}}"
 	Title="MainWindow" Height="450" Width="800">
-	<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
-		<propertyGrid:PropertyGridView
-			PropertySource="{Binding Example}"
-			PropertyItemAdded="PropertyGridView_OnPropertyItemAdded"
-			PropertyTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.CustomTemplateSelector}"
-			ShowPropertyName="{Binding Example.IsNameVisible, Mode=OneWay}"
-			ShowPropertyType="{Binding Example.IsTypeVisible, Mode=OneWay}"/>
-	</ScrollViewer>
+	<propertyGrid:PropertyGridView x:Name="PropertyGridView"
+		PropertySource="{Binding Example}"
+		PropertyItemAdded="PropertyGridView_OnPropertyItemAdded"
+		PropertyTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.CustomTemplateSelector}"
+		ShowPropertyName="{Binding Example.IsNameVisible, Mode=OneWay}"
+		ShowPropertyType="{Binding Example.IsTypeVisible, Mode=OneWay}" />
 </Window>

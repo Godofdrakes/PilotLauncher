@@ -50,44 +50,4 @@
 			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}" />
 	</local:PropertyGridTemplateSelector>
 
-	<!-- style for the DataGrid within a PropertyGrid -->
-	<Style x:Key="PilotLauncher.PropertyGrid.DataGridStyle" TargetType="DataGrid"
-		BasedOn="{StaticResource {x:Type DataGrid}}">
-		<Setter Property="AutoGenerateColumns" Value="False" />
-		<Setter Property="IsReadOnly" Value="True" />
-	</Style>
-
-	<!-- control template for the PropertyGrid -->
-	<ControlTemplate x:Key="PilotLauncher.PropertyGrid.DefaultControlTemplate" TargetType="local:PropertyGrid">
-		<DataGrid x:Name="DataGrid"
-			ItemsSource="{Binding
-				RelativeSource={RelativeSource TemplatedParent},
-				Path=PropertyItems,
-				Mode=OneWay}"
-			Style="{StaticResource PilotLauncher.PropertyGrid.DataGridStyle}">
-
-			<DataGrid.Columns>
-				<DataGridTextColumn x:Name="PropertyNameColumn"
-					Header="Name" Width="Auto"
-					Binding="{Binding PropertyInfo.Name}" />
-
-				<DataGridTextColumn x:Name="PropertyTypeColumn"
-					Header="Type" Width="Auto"
-					Binding="{Binding PropertyInfo.PropertyType.Name}" />
-
-				<!-- CellTemplateSelector is assigned by PropertyGrid -->
-				<DataGridTemplateColumn x:Name="PropertyValueColumn"
-					Header="Value" Width="*" />
-			</DataGrid.Columns>
-		</DataGrid>
-	</ControlTemplate>
-
-	<!-- default style for the PropertyGrid -->
-	<Style TargetType="local:PropertyGrid">
-		<Setter Property="Template"
-			Value="{StaticResource PilotLauncher.PropertyGrid.DefaultControlTemplate}" />
-		<Setter Property="PropertyTemplateSelector"
-			Value="{StaticResource PilotLauncher.PropertyGrid.DefaultTemplateSelector}" />
-	</Style>
-
 </ResourceDictionary>
