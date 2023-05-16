@@ -30,7 +30,7 @@ public partial class MainWindow
 
 	private void ShowEditFlyout(InteractionContext<IWorkflowNode, Unit> context)
 	{
-		PropertyGridView.PropertySource = context.Input;
+		ViewModel!.PropertyEditor.SelectedNode = context.Input;
 
 		EditWorkflowFlyout.IsOpen = true;
 

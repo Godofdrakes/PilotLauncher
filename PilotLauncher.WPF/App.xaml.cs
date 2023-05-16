@@ -8,52 +8,46 @@ using PilotLauncher.WPF.ViewModels;
 using PilotLauncher.WPF.Views;
 using ReactiveUI;
 
-namespace PilotLauncher.WPF
+namespace PilotLauncher.WPF;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App
 {
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
-	public partial class App
+	private readonly IServiceProvider _serviceProvider;
+	private readonly IHostEnvironment _hostEnvironment;
+	private readonly LogObservable _logObservable;
+	private readonly ILoggerFactory _loggerFactory;
+
+	public App(
+		IServiceProvider serviceProvider,
+		IHostEnvironment hostEnvironment,
+		LogObservable logObservable,
+		ILoggerFactory loggerFactory)
 	{
-		private readonly ILogger<App> _logger;
-		private readonly IServiceProvider _serviceProvider;
-		private readonly IHostEnvironment _hostEnvironment;
-		private readonly LogObservable _logObservable;
-		private readonly ILoggerFactory _loggerFactory;
+		_serviceProvider = serviceProvider;
+		_hostEnvironment = hostEnvironment;
+		_logObservable = logObservable;
+		_loggerFactory = loggerFactory;
 
-		public App(
-			ILogger<App> logger,
-			IServiceProvider serviceProvider,
-			IHostEnvironment hostEnvironment,
-			LogObservable logObservable,
-			ILoggerFactory loggerFactory)
+		InitializeComponent();
+	}
+
+	private void App_OnStartup(object sender, StartupEventArgs e)
+	{
+		var mainWindowView = _serviceProvider.GetRequiredService<MainWindow>();
+
+		mainWindowView.ViewModel = new MainWindowViewModel(_loggerFactory)
 		{
-			_logger = logger;
-			_serviceProvider = serviceProvider;
-			_hostEnvironment = hostEnvironment;
-			_logObservable = logObservable;
-			_loggerFactory = loggerFactory;
+			Title = _hostEnvironment.ApplicationName,
+		};
 
-			InitializeComponent();
-		}
+		_logObservable.Output
+			.ObserveOn(RxApp.MainThreadScheduler)
+			.Subscribe(mainWindowView.ViewModel.ConsoleOutputObserver);
 
-		private void App_OnStartup(object sender, StartupEventArgs e)
-		{
-			_logger.TraceFunction();
-
-			var mainWindowView = _serviceProvider.GetRequiredService<MainWindow>();
-
-			mainWindowView.ViewModel = new MainWindowViewModel(_loggerFactory)
-			{
-				Title = _hostEnvironment.ApplicationName,
-			};
-
-			_logObservable.Output
-				.ObserveOn(RxApp.MainThreadScheduler)
-				.Subscribe(mainWindowView.ViewModel.ConsoleOutputObserver);
-
-			this.MainWindow = mainWindowView;
-			this.MainWindow!.Show();
-		}
+		MainWindow = mainWindowView;
+		MainWindow.Show();
 	}
 }

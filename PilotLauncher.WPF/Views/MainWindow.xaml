@@ -12,55 +12,42 @@
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	xmlns:plugins="clr-namespace:PilotLauncher.Common;assembly=PilotLauncher.Common"
-	xmlns:design="clr-namespace:PilotLauncher.WPF.Design"
-	xmlns:propertyGrid="clr-namespace:PilotLauncher.PropertyGrid;assembly=PilotLauncher.PropertyGrid"
 	WindowStartupLocation="CenterScreen"
 	ResizeMode="CanResizeWithGrip"
 	MinHeight="400" Height="400"
 	MinWidth="500" Width="600"
 	mc:Ignorable="d"
-	d:DataContext="{d:DesignInstance design:MainWindowViewModel, IsDesignTimeCreatable=True}">
+	DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}">
 
 	<Window.Resources>
-
 		<ResourceDictionary>
-
 			<Style TargetType="TreeViewItem"
 				BasedOn="{StaticResource {x:Type TreeViewItem}}">
-
 				<Setter Property="IsExpanded" Value="True"/>
 			</Style>
 
 			<local:WorkflowNodeTemplateSelector x:Key="WorkflowNodeTemplateSelector">
-
 				<local:WorkflowNodeTemplateSelector.BranchTemplate>
-
 					<HierarchicalDataTemplate
 						DataType="{x:Type plugins:WorkflowBranch}"
 						ItemsSource="{Binding Children}">
-
 						<TextBlock Text="{Binding Label}" />
 					</HierarchicalDataTemplate>
 				</local:WorkflowNodeTemplateSelector.BranchTemplate>
 
 				<DataTemplate DataType="{x:Type plugins:IWorkflowNode}">
-
 					<StackPanel Orientation="Horizontal">
-
 						<Label Content="{Binding Label}"/>
-
 						<Button Content="Run"
 							Command="{Binding
 									RelativeSource={RelativeSource AncestorType=views:MainWindow},
 									Path=ViewModel.ExecuteCommand}"
 							CommandParameter="{Binding}"/>
-
 						<Button Content="Edit"
 							Command="{Binding
 									RelativeSource={RelativeSource AncestorType=views:MainWindow},
 									Path=ViewModel.Interactions.ShowEditFlyoutCommand}"
 							CommandParameter="{Binding}"/>
-
 					</StackPanel>
 				</DataTemplate>
 			</local:WorkflowNodeTemplateSelector>
@@ -68,31 +55,21 @@
 	</Window.Resources>
 
 	<mah:MetroWindow.RightWindowCommands>
-
 		<mah:WindowCommands>
-
 			<Button x:Name="ConsoleOutputButton">
-
 				<iconPacks:PackIconModern Kind="Console" />
 			</Button>
 		</mah:WindowCommands>
 	</mah:MetroWindow.RightWindowCommands>
 
 	<mah:MetroWindow.Flyouts>
-
 		<mah:FlyoutsControl>
-
 			<mah:Flyout x:Name="ConsoleOutputFlyout" Header="Console Output"
 				Position="Right" MinWidth="300">
-
 				<ListView x:Name="ConsoleOutput">
-
 					<ListView.ItemTemplate>
-
 						<DataTemplate DataType="{x:Type system:String}">
-
 							<TextBlock Text="{Binding}" />
-							
 						</DataTemplate>
 					</ListView.ItemTemplate>
 				</ListView>
@@ -100,27 +77,21 @@
 
 			<mah:Flyout x:Name="EditWorkflowFlyout" Header="Edit Workflow Node"
 				Position="Right" MinWidth="200">
-
-				<propertyGrid:PropertyGridView x:Name="PropertyGridView"/>
+				<views:PropertyEditorView
+					ViewModel="{Binding PropertyEditor}"/>
 			</mah:Flyout>
 		</mah:FlyoutsControl>
 	</mah:MetroWindow.Flyouts>
 
 	<DockPanel>
-
 		<mah:MetroHeader DockPanel.Dock="Top">
-
 			<mah:MetroHeader.Header>
-
 				<Grid Margin="4,0">
-
 					<TextBlock Text="Workflow" FontSize="22"/>
-
 					<Button Content="Run"
 						HorizontalAlignment="Right"
 						Command="{Binding ExecuteCommand}"
 						CommandParameter="{Binding WorkflowRoot}"/>
-
 				</Grid>
 			</mah:MetroHeader.Header>
 		</mah:MetroHeader>
@@ -128,6 +99,5 @@
 		<TreeView x:Name="TreeView"
 			ItemTemplateSelector="{StaticResource WorkflowNodeTemplateSelector}"
 			ItemsSource="{Binding WorkflowRoot.Children}"/>
-
 	</DockPanel>
 </views:MetroWindowFor>

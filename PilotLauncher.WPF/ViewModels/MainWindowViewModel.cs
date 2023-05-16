@@ -12,11 +12,11 @@ using ReactiveUI;
 
 namespace PilotLauncher.WPF.ViewModels;
 
-public class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
+public class MainWindowViewModel : WindowViewModel
 {
-	public PropertyDetailsViewModel PropertyDetailsViewModel { get; } = new();
-
 	public MainWindowInteractions Interactions { get; } = new();
+
+	public PropertyEditorViewModel PropertyEditor { get; } = new();
 
 	public ReactiveCommand<IWorkflowNode,Unit> ExecuteCommand { get; }
 

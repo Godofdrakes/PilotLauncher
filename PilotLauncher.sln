@@ -8,10 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Test", "Pilot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Common", "PilotLauncher.Common\PilotLauncher.Common.csproj", "{01735DCC-88E8-4EBD-9D1E-76604F71CA96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyDetails", "PropertyDetails\PropertyDetails.csproj", "{B89E938B-53ED-46AD-B0CE-57274A82291F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyDetails.WPF", "PropertyDetails.WPF\PropertyDetails.WPF.csproj", "{2E270847-D0D9-41AE-A193-D789BCE14848}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.PropertyGrid.WPF", "PilotLauncher.PropertyGrid.WPF\PilotLauncher.PropertyGrid.WPF.csproj", "{640C6440-9592-47BF-AC62-F1A2871F513F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.PropertyGrid", "PilotLauncher.PropertyGrid\PilotLauncher.PropertyGrid.csproj", "{A58153F8-175C-4568-A3C4-07843F60B600}"
@@ -38,14 +34,6 @@ Global
 		{01735DCC-88E8-4EBD-9D1E-76604F71CA96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01735DCC-88E8-4EBD-9D1E-76604F71CA96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01735DCC-88E8-4EBD-9D1E-76604F71CA96}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B89E938B-53ED-46AD-B0CE-57274A82291F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B89E938B-53ED-46AD-B0CE-57274A82291F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B89E938B-53ED-46AD-B0CE-57274A82291F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B89E938B-53ED-46AD-B0CE-57274A82291F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E270847-D0D9-41AE-A193-D789BCE14848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E270847-D0D9-41AE-A193-D789BCE14848}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E270847-D0D9-41AE-A193-D789BCE14848}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E270847-D0D9-41AE-A193-D789BCE14848}.Release|Any CPU.Build.0 = Release|Any CPU
 		{640C6440-9592-47BF-AC62-F1A2871F513F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{640C6440-9592-47BF-AC62-F1A2871F513F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{640C6440-9592-47BF-AC62-F1A2871F513F}.Release|Any CPU.ActiveCfg = Release|Any CPU

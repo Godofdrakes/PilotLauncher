@@ -1,17 +1,13 @@
-﻿using System.Collections;
-using System.Reactive;
+﻿using System.Reactive;
 using System.Reactive.Linq;
-using PropertyDetails.Attributes;
 using ReactiveUI;
 
 namespace PilotLauncher.Common;
 
 public abstract class WorkflowStep : ReactiveObject, IWorkflowNode
 {
-	[Inspect]
 	public abstract string Label { get; }
 
-	[Inspect]
 	public string Description => _description.Value;
 
 	private readonly ObservableAsPropertyHelper<string> _description;

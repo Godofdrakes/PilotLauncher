@@ -3,7 +3,6 @@ using System.Reactive.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using PilotLauncher.Common;
-using PropertyDetails.Attributes;
 using ReactiveUI;
 
 namespace PilotLauncher;
@@ -17,7 +16,6 @@ public sealed class WorkflowStepExample : WorkflowStep
 
 	private readonly ObservableAsPropertyHelper<string> _label;
 
-	[Inspect]
 	public string Message
 	{
 		get => _message;
@@ -26,7 +24,6 @@ public sealed class WorkflowStepExample : WorkflowStep
 
 	private string _message = "Hello World!";
 
-	[Inspect]
 	public int Delay
 	{
 		get => _delay;
@@ -35,7 +32,6 @@ public sealed class WorkflowStepExample : WorkflowStep
 
 	private int _delay = 5;
 
-	[Inspect]
 	public bool ShouldDelay
 	{
 		get => _shouldDelay;
