@@ -25,7 +25,7 @@ public static class Program
 		var host = Host.CreateDefaultBuilder(args)
 			.ConfigureLogging()
 			.ConfigureSingleInstance()
-			.ConfigureSplatForMicrosoftDependencyResolver()
+			.ConfigureSplat()
 			.ConfigureReactiveUIViews()
 			.ConfigureWpf<App>();
 
@@ -37,21 +37,11 @@ public static class Program
 
 	private static IHostBuilder ConfigureLogging(this IHostBuilder hostBuilder)
 	{
-		var loggingSubject = new ReplaySubject<string>(500);
-
-		return hostBuilder
-			.ConfigureLogging((context, builder) =>
-			{
-				// forward log output from here...
-				builder.AddObserver(loggingSubject.AsObserver());
-				builder.AddConsole();
-				builder.AddDebug();
-			})
-			.ConfigureServices((context, collection) =>
-			{
-				// to here...
-				collection.AddSingleton(new LogObservable(loggingSubject.AsObservable()));
-			});
+		return hostBuilder.ConfigureLogging(builder =>
+		{
+			builder.AddConsole();
+			builder.AddDebug();
+		});
 	}
 
 	private static IHostBuilder ConfigureSingleInstance(this IHostBuilder hostBuilder)
@@ -84,7 +74,7 @@ public static class Program
 			.UseWpfLifetime();
 	}
 
-	private static IHostBuilder ConfigureSplatForMicrosoftDependencyResolver(this IHostBuilder hostBuilder)
+	private static IHostBuilder ConfigureSplat(this IHostBuilder hostBuilder)
 	{
 		return hostBuilder.ConfigureServices(serviceCollection =>
 		{
