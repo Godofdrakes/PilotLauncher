@@ -16,7 +16,7 @@ public sealed class EchoNode : WorkflowNodeViewModel
 		set => this.RaiseAndSetIfChanged(ref _message, value);
 	}
 
-	private string _message = string.Empty;
+	private string _message = "echo";
 
 	public EchoNode(ILogger<EchoNode> logger)
 	{

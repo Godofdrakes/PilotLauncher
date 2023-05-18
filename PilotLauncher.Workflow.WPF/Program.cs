@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PilotLauncher.WorkflowLog;
 using PilotLauncher.WPF.Common;
@@ -20,6 +21,12 @@ public static class Program
 				{
 					options.HistorySize = 10000;
 				});
+			})
+			.ConfigureServices(collection =>
+			{
+				collection.AddTransient<MainWindow>();
+				collection.AddTransient<WorkflowViewModel>();
+				collection.AddTransient<WorkflowNodeFactoryViewModel>();
 			})
 			.ConfigureWpf<App>();
 

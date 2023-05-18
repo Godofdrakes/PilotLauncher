@@ -13,6 +13,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
@@ -36,9 +37,11 @@
 				CommandParameter="{Binding SelectedItem, Source={x:Reference ComboBox}}" />
 		</Grid>
 
-		<ListView Grid.Row="1"
-			ItemsSource="{Binding Workflow.Nodes}"/>
+		<ListView Grid.Row="1" ItemsSource="{Binding Workflow.Nodes}"/>
 
-		<TextBox Grid.Row="2" IsReadOnly="True" />
+		<Button Grid.Row="2" Content="Run"
+			Command="{Binding Workflow.ExecuteCommand}"/>
+
+		<TextBox x:Name="TextBox" Grid.Row="3" IsReadOnly="True" />
 	</Grid>
 </Window>

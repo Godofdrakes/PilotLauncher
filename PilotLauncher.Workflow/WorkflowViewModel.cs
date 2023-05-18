@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using DynamicData;
 using ReactiveUI;
 
@@ -17,10 +18,7 @@ public class WorkflowViewModel : ReactiveObject
 {
 	public IEnumerable<WorkflowNodeViewModel> Nodes => _nodes;
 
-	public ReactiveCommand<Unit, Unit> ExecuteCommand
-	{
-		get => throw new NotImplementedException();
-	}
+	public ReactiveCommand<Unit, Unit> ExecuteCommand { get; }
 
 	private readonly SourceList<WorkflowNodeViewModel> _nodeList;
 	private readonly ReadOnlyObservableCollection<WorkflowNodeViewModel> _nodes;
@@ -31,6 +29,21 @@ public class WorkflowViewModel : ReactiveObject
 		_nodeList.Connect()
 			.Bind(out _nodes)
 			.Subscribe();
+
+		var canExecute = _nodeList.Connect()
+			// Collect CanExecute for all nodes
+			.Transform(node => node.ExecuteCommand.CanExecute)
+			.QueryWhenChanged(observables => observables.CombineLatest())
+			.Switch()
+			// CanExecute if all true (or node list is empty)
+			.Select(list => list.All(canExecute => canExecute));
+
+		ExecuteCommand = ReactiveCommand.CreateFromObservable(() => Nodes
+				// Construct ExecuteCommand observables
+				.Select(node => node.ExecuteCommand.Execute())
+				// Run commands in sequence
+				.Concat(),
+			canExecute);
 	}
 
 	public void Add(WorkflowNodeViewModel node) => _nodeList.Add(node);
