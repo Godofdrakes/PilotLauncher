@@ -49,9 +49,18 @@ public class MainWindowViewModel : WindowViewModel
 
 		WorkflowRoot = new WorkflowBranch()
 			.Sequence(
-				new WorkflowStepExample { Delay = 1 },
-				new WorkflowStepExample { Delay = 2 })
-			.Add(new WorkflowStepExample { Delay = 3 });
+				new WorkflowStepExample
+				{
+					Delay = 1, Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
+				},
+				new WorkflowStepExample
+				{
+					Delay = 2, Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
+				})
+			.Add(new WorkflowStepExample
+			{
+				Delay = 3, Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
+			});
 	}
 
 	private static IEnumerable<WorkflowStep> GetWorkflowQueue(IWorkflowNode root)

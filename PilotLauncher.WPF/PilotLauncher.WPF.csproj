@@ -12,6 +12,7 @@
     <ItemGroup>
       <ProjectReference Include="..\PilotLauncher.Common\PilotLauncher.Common.csproj" />
       <ProjectReference Include="..\PilotLauncher.PropertyGrid\PilotLauncher.PropertyGrid.csproj" />
+      <ProjectReference Include="..\PilotLauncher.WPF.Common\PilotLauncher.WPF.Common.csproj" />
       <ProjectReference Include="..\PilotLauncher\PilotLauncher.csproj" />
     </ItemGroup>
 

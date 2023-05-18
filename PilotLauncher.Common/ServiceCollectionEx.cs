@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using ReactiveUI;
 
 namespace PilotLauncher.Common;
@@ -49,27 +48,11 @@ public static class ServiceCollectionEx
 		if (serviceImplementation.GetCustomAttribute<ViewContractAttribute>() is not null)
 			throw new NotSupportedException($"{nameof(ViewContractAttribute)} is not supported");
 
+		// @todo: this could be supported but not going to bother right now
 		if (serviceImplementation.GetCustomAttribute<SingleInstanceViewAttribute>() is not null)
-		{
 			throw new NotSupportedException($"{nameof(SingleInstanceViewAttribute)} is not supported");
-		}
 
 		serviceCollection.AddTransient(serviceImplementation);
 		serviceCollection.AddTransient(serviceInterface, provider => provider.GetRequiredService(serviceImplementation));
-	}
-
-	public static IServiceCollection RegisterHostedServices(
-		this IServiceCollection serviceCollection,
-		Assembly assembly)
-	{
-		bool IsHostedService(TypeInfo typeInfo) => typeInfo.IsSealed && typeInfo.ImplementedInterfaces
-			.Contains(typeof(IHostedService));
-
-		foreach (var typeInfo in assembly.DefinedTypes.Where(IsHostedService))
-		{
-			serviceCollection.AddSingleton(typeof(IHostedService), typeInfo);
-		}
-
-		return serviceCollection;
 	}
 }

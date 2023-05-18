@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Windows;
 using Dapplo.Microsoft.Extensions.Hosting.AppServices;
-using Dapplo.Microsoft.Extensions.Hosting.Wpf;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PilotLauncher.Common;
+using PilotLauncher.WPF.Common;
 using ReactiveUI;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
@@ -16,19 +14,11 @@ namespace PilotLauncher.WPF;
 
 public static class Program
 {
-	private const int ATTACH_PARENT_PROCESS = -1;
-
-	// Rider seem to receive console logging properly with WPF apps. This fixes that.
-	[DllImport("kernel32.dll")] private static extern bool AttachConsole(int dwProcessId);
-
 	[STAThread]
 	public static Task Main(string[] args)
 	{
-#if DEBUG
-		AttachConsole(ATTACH_PARENT_PROCESS);
-#endif
-
 		var host = Host.CreateDefaultBuilder(args)
+			.FixConsoleLogging()
 #if DEBUG
 			.UseEnvironment(Environments.Development)
 #endif
@@ -42,19 +32,6 @@ public static class Program
 			.Build()
 			.MapSplatLocator()
 			.RunAsync();
-	}
-
-	private static IHostBuilder ConfigureLogging(this IHostBuilder hostBuilder)
-	{
-		return hostBuilder.ConfigureLogging(builder =>
-		{
-			builder.AddSimpleConsole(options =>
-			{
-				options.SingleLine = true;
-				options.IncludeScopes = true;
-				options.TimestampFormat = "HH:mm:ss:";
-			});
-		});
 	}
 
 	private static IHostBuilder ConfigureSingleInstance(this IHostBuilder hostBuilder)
@@ -77,14 +54,6 @@ public static class Program
 		{
 			builder.RegisterViewsForViewModels(Assembly.GetExecutingAssembly());
 		});
-	}
-
-	private static IHostBuilder ConfigureWpf<T>(this IHostBuilder hostBuilder)
-		where T : Application
-	{
-		return hostBuilder
-			.ConfigureWpf(builder => builder.UseApplication<T>())
-			.UseWpfLifetime();
 	}
 
 	private static IHostBuilder ConfigureSplat(this IHostBuilder hostBuilder)

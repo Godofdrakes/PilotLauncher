@@ -12,6 +12,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.PropertyGrid.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.PropertyGrid", "PilotLauncher.PropertyGrid\PilotLauncher.PropertyGrid.csproj", "{A58153F8-175C-4568-A3C4-07843F60B600}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Workflow", "PilotLauncher.Workflow\PilotLauncher.Workflow.csproj", "{0803AA10-CACD-4EE6-AE84-A5EF112CDCBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Examples", "PilotLauncher.Examples\PilotLauncher.Examples.csproj", "{E0C53164-5801-48B1-9BCD-85311B360318}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Workflow.WPF", "PilotLauncher.Workflow.WPF\PilotLauncher.Workflow.WPF.csproj", "{BF31E25C-86D9-443B-80E1-BCA17A43C187}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.WorkflowLog", "PilotLauncher.WorkflowLog\PilotLauncher.WorkflowLog.csproj", "{18251658-7D10-4ECF-909A-3960E1BE28FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.WPF.Common", "PilotLauncher.WPF.Common\PilotLauncher.WPF.Common.csproj", "{2AE3A118-D962-47B4-8199-BE045B8089B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +52,26 @@ Global
 		{A58153F8-175C-4568-A3C4-07843F60B600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A58153F8-175C-4568-A3C4-07843F60B600}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A58153F8-175C-4568-A3C4-07843F60B600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0803AA10-CACD-4EE6-AE84-A5EF112CDCBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0803AA10-CACD-4EE6-AE84-A5EF112CDCBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0803AA10-CACD-4EE6-AE84-A5EF112CDCBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0803AA10-CACD-4EE6-AE84-A5EF112CDCBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0C53164-5801-48B1-9BCD-85311B360318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0C53164-5801-48B1-9BCD-85311B360318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0C53164-5801-48B1-9BCD-85311B360318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0C53164-5801-48B1-9BCD-85311B360318}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF31E25C-86D9-443B-80E1-BCA17A43C187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF31E25C-86D9-443B-80E1-BCA17A43C187}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF31E25C-86D9-443B-80E1-BCA17A43C187}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF31E25C-86D9-443B-80E1-BCA17A43C187}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18251658-7D10-4ECF-909A-3960E1BE28FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18251658-7D10-4ECF-909A-3960E1BE28FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18251658-7D10-4ECF-909A-3960E1BE28FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18251658-7D10-4ECF-909A-3960E1BE28FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AE3A118-D962-47B4-8199-BE045B8089B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE3A118-D962-47B4-8199-BE045B8089B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE3A118-D962-47B4-8199-BE045B8089B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE3A118-D962-47B4-8199-BE045B8089B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection

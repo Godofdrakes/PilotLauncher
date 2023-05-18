@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace PilotLauncher.Common;
+﻿namespace PilotLauncher.Common;
 
 public interface IWorkflowNode
 {

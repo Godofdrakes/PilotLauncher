@@ -27,8 +27,6 @@ public partial class App
 		_serviceProvider = serviceProvider;
 		_hostEnvironment = hostEnvironment;
 		_loggerFactory = loggerFactory;
-
-		InitializeComponent();
 	}
 
 	private void App_OnStartup(object sender, StartupEventArgs e)

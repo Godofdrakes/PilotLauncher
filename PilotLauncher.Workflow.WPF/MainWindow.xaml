@@ -1,0 +1,44 @@
+﻿<Window x:Class="PilotLauncher.Workflow.WPF.MainWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:local="clr-namespace:PilotLauncher.Workflow.WPF"
+	xmlns:system="clr-namespace:System;assembly=System.Runtime"
+	xmlns:examples="clr-namespace:PilotLauncher.Examples;assembly=PilotLauncher.Examples"
+	mc:Ignorable="d"
+	DataContext="{Binding RelativeSource={RelativeSource Self}}"
+	Title="MainWindow" Height="450" Width="800">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<ComboBox x:Name="ComboBox" Grid.Column="0" SelectedIndex="0">
+				<ComboBox.ItemsSource>
+					<x:Array Type="system:Type">
+						<x:Type Type="examples:DelayNode"/>
+						<x:Type Type="examples:EchoNode"/>
+					</x:Array>
+				</ComboBox.ItemsSource>
+			</ComboBox>
+
+			<Button Grid.Column="1" Content="Add"
+				Command="{Binding Factory.CreateNodeCommand, Mode=OneWay}"
+				CommandParameter="{Binding SelectedItem, Source={x:Reference ComboBox}}" />
+		</Grid>
+
+		<ListView Grid.Row="1"
+			ItemsSource="{Binding Workflow.Nodes}"/>
+
+		<TextBox Grid.Row="2" IsReadOnly="True" />
+	</Grid>
+</Window>
