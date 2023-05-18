@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using Dapplo.Microsoft.Extensions.Hosting.AppServices;
 using Dapplo.Microsoft.Extensions.Hosting.Wpf;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using PilotLauncher.Common;
 using ReactiveUI;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace PilotLauncher.WPF;
 
@@ -35,6 +29,9 @@ public static class Program
 #endif
 
 		var host = Host.CreateDefaultBuilder(args)
+#if DEBUG
+			.UseEnvironment(Environments.Development)
+#endif
 			.ConfigureLogging()
 			.ConfigureSingleInstance()
 			.ConfigureSplat()
@@ -55,10 +52,8 @@ public static class Program
 			{
 				options.SingleLine = true;
 				options.IncludeScopes = true;
-				options.TimestampFormat = "HH:mm:ss";
+				options.TimestampFormat = "HH:mm:ss:";
 			});
-			builder.AddConsole();
-			builder.AddDebug();
 		});
 	}
 
