@@ -3,6 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using Dapplo.Microsoft.Extensions.Hosting.AppServices;
@@ -10,18 +11,29 @@ using Dapplo.Microsoft.Extensions.Hosting.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using PilotLauncher.Common;
 using ReactiveUI;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace PilotLauncher.WPF;
 
 public static class Program
 {
+	private const int ATTACH_PARENT_PROCESS = -1;
+
+	// Rider seem to receive console logging properly with WPF apps. This fixes that.
+	[DllImport("kernel32.dll")] private static extern bool AttachConsole(int dwProcessId);
+
 	[STAThread]
 	public static Task Main(string[] args)
 	{
+#if DEBUG
+		AttachConsole(ATTACH_PARENT_PROCESS);
+#endif
+
 		var host = Host.CreateDefaultBuilder(args)
 			.ConfigureLogging()
 			.ConfigureSingleInstance()
@@ -39,6 +51,12 @@ public static class Program
 	{
 		return hostBuilder.ConfigureLogging(builder =>
 		{
+			builder.AddSimpleConsole(options =>
+			{
+				options.SingleLine = true;
+				options.IncludeScopes = true;
+				options.TimestampFormat = "HH:mm:ss";
+			});
 			builder.AddConsole();
 			builder.AddDebug();
 		});
