@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Reactive.Linq;
 using DynamicData;
+using Microsoft.Extensions.DependencyInjection;
+using PilotLauncher.Examples;
 using PilotLauncher.WorkflowLog;
 using ReactiveUI;
 
@@ -17,11 +19,16 @@ public partial class MainWindow
 	public WorkflowNodeFactoryViewModel Factory { get; }
 
 	public MainWindow(
+		IServiceProvider serviceProvider,
 		WorkflowViewModel workflow,
 		WorkflowNodeFactoryViewModel nodeFactory,
 		IWorkflowLog log)
 	{
 		Workflow = workflow;
+		Workflow.Add(ActivatorUtilities.CreateInstance<DelayNode>(serviceProvider));
+		Workflow.Add(ActivatorUtilities.CreateInstance<EchoNode>(serviceProvider));
+		Workflow.Add(ActivatorUtilities.CreateInstance<DelayNode>(serviceProvider));
+
 		Factory = nodeFactory;
 		Factory.CreateNodeCommand
 			.ObserveOn(Dispatcher)

@@ -41,6 +41,10 @@ public class WorkflowViewModel : ReactiveObject
 		ExecuteCommand = ReactiveCommand.CreateFromObservable(() => Nodes
 				// Construct ExecuteCommand observables
 				.Select(node => node.ExecuteCommand.Execute())
+				// Force the above transformation to run for all items immediately.
+				// This captures any necessary state at call time preventing changes
+				// to the nodes from affecting queued execution.
+				.ToArray()
 				// Run commands in sequence
 				.Concat(),
 			canExecute);
