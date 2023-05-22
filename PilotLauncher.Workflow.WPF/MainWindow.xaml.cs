@@ -18,24 +18,21 @@ public partial class MainWindow
 
 	public WorkflowNodeFactoryViewModel Factory { get; }
 
-	public MainWindow(
-		IServiceProvider serviceProvider,
-		WorkflowViewModel workflow,
-		WorkflowNodeFactoryViewModel nodeFactory,
-		IWorkflowLog log)
+	public MainWindow(IServiceProvider serviceProvider)
 	{
-		Workflow = workflow;
+		Workflow = serviceProvider.GetRequiredService<WorkflowViewModel>();
 		Workflow.Add(ActivatorUtilities.CreateInstance<DelayNode>(serviceProvider));
 		Workflow.Add(ActivatorUtilities.CreateInstance<EchoNode>(serviceProvider));
 		Workflow.Add(ActivatorUtilities.CreateInstance<DelayNode>(serviceProvider));
 
-		Factory = nodeFactory;
+		Factory = serviceProvider.GetRequiredService<WorkflowNodeFactoryViewModel>();
 		Factory.CreateNodeCommand
 			.ObserveOn(Dispatcher)
 			.Subscribe(node => Workflow.Add(node));
 
 		InitializeComponent();
 
+		var log = serviceProvider.GetRequiredService<IWorkflowLog>();
 		log.Connect()
 			.Filter(entry => entry.Source.Contains(nameof(PilotLauncher)))
 			.QueryWhenChanged()
