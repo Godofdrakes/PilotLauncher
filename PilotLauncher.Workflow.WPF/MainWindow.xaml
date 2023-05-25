@@ -26,8 +26,8 @@
 			<ComboBox x:Name="ComboBox" Grid.Column="0" SelectedIndex="0">
 				<ComboBox.ItemsSource>
 					<x:Array Type="system:Type">
-						<x:Type Type="examples:DelayNode"/>
-						<x:Type Type="examples:EchoNode"/>
+						<x:Type Type="examples:DelayNode" />
+						<x:Type Type="examples:EchoNode" />
 					</x:Array>
 				</ComboBox.ItemsSource>
 			</ComboBox>
@@ -37,11 +37,19 @@
 				CommandParameter="{Binding SelectedItem, Source={x:Reference ComboBox}}" />
 		</Grid>
 
-		<ListView Grid.Row="1" ItemsSource="{Binding Workflow.Nodes}"/>
+		<ListView Grid.Row="1" ItemsSource="{Binding Workflow.Nodes}" />
 
 		<Button Grid.Row="2" Content="Run"
-			Command="{Binding Workflow.ExecuteCommand}"/>
+			Command="{Binding Workflow.ExecuteCommand}" />
 
-		<TextBox x:Name="TextBox" Grid.Row="3" IsReadOnly="True" />
+		<DataGrid Grid.Row="3" ItemsSource="{Binding LogOutput}"
+			AutoGenerateColumns="False" IsReadOnly="True"
+			HeadersVisibility="None">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Time" Width="80" Binding="{Binding DateTime.TimeOfDay}"/>
+				<DataGridTextColumn Header="Source" Width="80" Binding="{Binding MinimalSource}"/>
+				<DataGridTextColumn Header="Message" Width="*" Binding="{Binding Message}"/>
+			</DataGrid.Columns>
+		</DataGrid>
 	</Grid>
 </Window>

@@ -23,15 +23,14 @@ public sealed class DelayNode : WorkflowNodeViewModel
 	{
 		ExecuteCommand = ReactiveCommand.CreateFromObservable(() =>
 		{
-			logger.LogInformation(
-				"{Node}: Invoking observable factory",
-				nameof(DelayNode));
+			logger.LogInformation("Invoking observable factory");
+
+			var seconds = Seconds;
 
 			return Observable
 				.Timer(TimeSpan.FromSeconds(Seconds))
-				.Do(seconds => logger.LogInformation(
-					"{Node}: Waited {Seconds} seconds",
-					nameof(DelayNode), seconds))
+				.Do(_ => logger.LogInformation(
+					"Waited {Seconds} second(s)", seconds))
 				.Select(_ => Unit.Default);
 		});
 

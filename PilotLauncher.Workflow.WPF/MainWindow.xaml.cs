@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using DynamicData;
 using Microsoft.Extensions.DependencyInjection;
 using PilotLauncher.Examples;
 using PilotLauncher.WorkflowLog;
-using ReactiveUI;
 
 namespace PilotLauncher.Workflow.WPF;
 
@@ -17,6 +17,10 @@ public partial class MainWindow
 	public WorkflowViewModel Workflow { get; }
 
 	public WorkflowNodeFactoryViewModel Factory { get; }
+
+	public IEnumerable<WorkflowLogEntry> LogOutput => _logOutput;
+
+	private readonly ReadOnlyObservableCollection<WorkflowLogEntry> _logOutput;
 
 	public MainWindow(IServiceProvider serviceProvider)
 	{
@@ -30,15 +34,13 @@ public partial class MainWindow
 			.ObserveOn(Dispatcher)
 			.Subscribe(node => Workflow.Add(node));
 
-		InitializeComponent();
-
-		var log = serviceProvider.GetRequiredService<IWorkflowLog>();
-		log.Connect()
+		serviceProvider.GetRequiredService<IWorkflowLog>()
+			.Connect()
 			.Filter(entry => entry.Source.Contains(nameof(PilotLauncher)))
-			.QueryWhenChanged()
-			.Select(lines => string
-				.Join(Environment.NewLine, lines.Select(line => line.Message)))
 			.ObserveOn(Dispatcher)
-			.BindTo(TextBox, textBox => textBox.Text);
+			.Bind(out _logOutput)
+			.Subscribe();
+
+		InitializeComponent();
 	}
 }

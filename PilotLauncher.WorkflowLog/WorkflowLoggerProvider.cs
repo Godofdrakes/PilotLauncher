@@ -25,6 +25,7 @@ public class WorkflowLoggerProvider : ILoggerProvider
 		_workflowLog.History.Add(new WorkflowLogEntry(
 			logLevel,
 			eventId,
+			DateTime.Now,
 			formatter(state, exception),
 			source));
 	}

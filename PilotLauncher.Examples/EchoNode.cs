@@ -23,15 +23,12 @@ public sealed class EchoNode : WorkflowNodeViewModel
 	{
 		ExecuteCommand = ReactiveCommand.CreateFromObservable(() =>
 		{
-			logger.LogInformation(
-				"{Node}: Invoking observable factory",
-				nameof(EchoNode));
+			logger.LogInformation("Invoking observable factory");
 
 			return Observable
 				.Return(Message)
 				.Do(message => logger.LogInformation(
-					"{Node}: {Message}",
-					nameof(EchoNode), message))
+					"{Message}", message))
 				.Select(_ => Unit.Default);
 		});
 
