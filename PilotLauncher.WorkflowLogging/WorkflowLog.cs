@@ -1,6 +1,6 @@
 ﻿using DynamicData;
 
-namespace PilotLauncher.WorkflowLog;
+namespace PilotLauncher.WorkflowLogging;
 
 public class WorkflowLog : IWorkflowLog
 {

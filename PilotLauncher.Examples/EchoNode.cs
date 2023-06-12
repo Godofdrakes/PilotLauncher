@@ -9,8 +9,6 @@ namespace PilotLauncher.Examples;
 
 public sealed class EchoNode : WorkflowNodeViewModel
 {
-	public override ReactiveCommand<Unit, Unit> ExecuteCommand { get; }
-
 	public string Message
 	{
 		get => _message;
@@ -19,21 +17,16 @@ public sealed class EchoNode : WorkflowNodeViewModel
 
 	private string _message = "echo";
 
-	public EchoNode(ILogger<EchoNode> logger)
+	public EchoNode(ILogger<EchoNode> logger) : base(logger)
 	{
-		ExecuteCommand = ReactiveCommand.CreateFromObservable(() =>
-		{
-			logger.LogInformation("Invoking observable factory");
-
-			return Observable
-				.Return(Message)
-				.Do(message => logger.LogInformation(
-					"{Message}", message))
-				.Select(_ => Unit.Default);
-		});
-
 		this.ValidationRule(node => node.Message,
 			message => !string.IsNullOrEmpty(message),
 			"You must specify a message");
 	}
+
+	protected override IObservable<Unit> CreateExecutionObservable() => Observable
+		.Return(Message)
+		.Do(message => Logger.LogInformation(
+			"{Message}", message))
+		.Select(_ => Unit.Default);
 }

@@ -11,7 +11,7 @@
 	<!-- Read-only "ToString" template, works for all types  -->
 	<DataTemplate x:Key="PilotLauncher.PropertyGridItem.Unknown"
 		DataType="{x:Type local:PropertyGridItem}">
-		<TextBlock Text="{Binding Value, Mode=OneWay}" />
+		<TextBlock Text="{Binding Value, Mode=OneWay}" IsEnabled="False" />
 	</DataTemplate>
 
 	<!-- string editor template -->

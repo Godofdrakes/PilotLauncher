@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
 
 namespace PilotLauncher.PropertyGrid;

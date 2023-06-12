@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Examples", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.Workflow.WPF", "PilotLauncher.Workflow.WPF\PilotLauncher.Workflow.WPF.csproj", "{BF31E25C-86D9-443B-80E1-BCA17A43C187}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.WorkflowLog", "PilotLauncher.WorkflowLog\PilotLauncher.WorkflowLog.csproj", "{18251658-7D10-4ECF-909A-3960E1BE28FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.WorkflowLogging", "PilotLauncher.WorkflowLogging\PilotLauncher.WorkflowLogging.csproj", "{18251658-7D10-4ECF-909A-3960E1BE28FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PilotLauncher.WPF.Common", "PilotLauncher.WPF.Common\PilotLauncher.WPF.Common.csproj", "{2AE3A118-D962-47B4-8199-BE045B8089B1}"
 EndProject

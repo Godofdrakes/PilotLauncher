@@ -4,55 +4,18 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:local="clr-namespace:PilotLauncher.WPF"
-	xmlns:reactiveUi="http://reactiveui.net"
 	xmlns:viewModels="clr-namespace:PilotLauncher.WPF.ViewModels"
 	xmlns:views="clr-namespace:PilotLauncher.WPF.Views"
 	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-	xmlns:system="clr-namespace:System;assembly=System.Runtime"
-	xmlns:plugins="clr-namespace:PilotLauncher.Common;assembly=PilotLauncher.Common"
+	xmlns:propertyGrid="clr-namespace:PilotLauncher.PropertyGrid;assembly=PilotLauncher.PropertyGrid"
+	xmlns:workflowLog="clr-namespace:PilotLauncher.WorkflowLogging;assembly=PilotLauncher.WorkflowLogging"
 	WindowStartupLocation="CenterScreen"
 	ResizeMode="CanResizeWithGrip"
 	MinHeight="400" Height="400"
 	MinWidth="500" Width="600"
 	mc:Ignorable="d"
-	DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}">
-
-	<Window.Resources>
-		<ResourceDictionary>
-			<Style TargetType="TreeViewItem"
-				BasedOn="{StaticResource {x:Type TreeViewItem}}">
-				<Setter Property="IsExpanded" Value="True"/>
-			</Style>
-
-			<local:WorkflowNodeTemplateSelector x:Key="WorkflowNodeTemplateSelector">
-				<local:WorkflowNodeTemplateSelector.BranchTemplate>
-					<HierarchicalDataTemplate
-						DataType="{x:Type plugins:WorkflowBranch}"
-						ItemsSource="{Binding Children}">
-						<TextBlock Text="{Binding Label}" />
-					</HierarchicalDataTemplate>
-				</local:WorkflowNodeTemplateSelector.BranchTemplate>
-
-				<DataTemplate DataType="{x:Type plugins:IWorkflowNode}">
-					<StackPanel Orientation="Horizontal">
-						<Label Content="{Binding Label}"/>
-						<Button Content="Run"
-							Command="{Binding
-									RelativeSource={RelativeSource AncestorType=views:MainWindow},
-									Path=ViewModel.ExecuteCommand}"
-							CommandParameter="{Binding}"/>
-						<Button Content="Edit"
-							Command="{Binding
-									RelativeSource={RelativeSource AncestorType=views:MainWindow},
-									Path=ViewModel.Interactions.ShowEditFlyoutCommand}"
-							CommandParameter="{Binding}"/>
-					</StackPanel>
-				</DataTemplate>
-			</local:WorkflowNodeTemplateSelector>
-		</ResourceDictionary>
-	</Window.Resources>
+	d:DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}">
 
 	<mah:MetroWindow.RightWindowCommands>
 		<mah:WindowCommands>
@@ -68,8 +31,8 @@
 				Position="Right" MinWidth="300">
 				<ListView x:Name="ConsoleOutput">
 					<ListView.ItemTemplate>
-						<DataTemplate DataType="{x:Type system:String}">
-							<TextBlock Text="{Binding}" />
+						<DataTemplate DataType="{x:Type workflowLog:WorkflowLogEntry}">
+							<TextBlock Text="{Binding Message}" />
 						</DataTemplate>
 					</ListView.ItemTemplate>
 				</ListView>
@@ -77,8 +40,9 @@
 
 			<mah:Flyout x:Name="EditWorkflowFlyout" Header="Edit Workflow Node"
 				Position="Right" MinWidth="200">
-				<views:PropertyEditorView
-					ViewModel="{Binding PropertyEditor}"/>
+				<propertyGrid:PropertyGridView x:Name="PropertyGridView"
+					PropertyItemAdded="PropertyGridView_OnPropertyItemAdded"
+					PropertyTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.CustomTemplateSelector}" />
 			</mah:Flyout>
 		</mah:FlyoutsControl>
 	</mah:MetroWindow.Flyouts>
@@ -87,17 +51,33 @@
 		<mah:MetroHeader DockPanel.Dock="Top">
 			<mah:MetroHeader.Header>
 				<Grid Margin="4,0">
-					<TextBlock Text="Workflow" FontSize="22"/>
+					<TextBlock Text="Workflow" FontSize="22" />
 					<Button Content="Run"
 						HorizontalAlignment="Right"
-						Command="{Binding ExecuteCommand}"
-						CommandParameter="{Binding WorkflowRoot}"/>
+						Command="{Binding  Workflow.ExecuteCommand}" />
 				</Grid>
 			</mah:MetroHeader.Header>
 		</mah:MetroHeader>
 
-		<TreeView x:Name="TreeView"
-			ItemTemplateSelector="{StaticResource WorkflowNodeTemplateSelector}"
-			ItemsSource="{Binding WorkflowRoot.Children}"/>
+		<ListView x:Name="ListView" ItemsSource="{Binding Workflow.Nodes}">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+
+						<TextBlock Grid.Column="0" Text="{Binding Label}" />
+						<Button Grid.Column="1" Command="{Binding ExecuteCommand}" Content="Run Step" />
+						<Button Grid.Column="2" Content="Edit"
+							Command="{Binding ViewModel.Interactions.ShowEditFlyoutCommand,
+								RelativeSource={RelativeSource AncestorType=views:MainWindow}}"
+							CommandParameter="{Binding}" />
+					</Grid>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
 	</DockPanel>
 </views:MetroWindowFor>

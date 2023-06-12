@@ -13,7 +13,12 @@ namespace PilotLauncher.PropertyGrid;
 public sealed class PropertyGridItem : ReactiveObject, IDisposable
 {
 	public PropertyInfo PropertyInfo { get; }
+
 	public bool IsReadOnly { get; }
+
+	public int SortValue { get; }
+
+	public string Category { get; }
 
 	public object? Value
 	{
@@ -37,6 +42,8 @@ public sealed class PropertyGridItem : ReactiveObject, IDisposable
 	{
 		PropertyInfo = propertyInfo;
 		IsReadOnly = propertyInfo is not { CanWrite: true, SetMethod.IsPublic: true };
+		SortValue = PropertyGridSortAttribute.GetValue(propertyInfo);
+		Category = PropertyGridCategoryAttribute.GetValue(propertyInfo);
 
 		var propertyExpression = Expression.Property(
 			Expression.Parameter(propertySource.GetType(), nameof(propertySource)),
@@ -48,9 +55,8 @@ public sealed class PropertyGridItem : ReactiveObject, IDisposable
 			.Subscribe(value =>
 			{
 				// Avoid infinite loop
-				_suppressValuePropagation.Set();
+				using var scopedSuppression = _suppressValuePropagation.ScopedSet();
 				this.RaiseAndSetIfChanged(ref _value, value, nameof(Value));
-				_suppressValuePropagation.Reset();
 			})
 			.DisposeWith(_disposable);
 
@@ -60,8 +66,6 @@ public sealed class PropertyGridItem : ReactiveObject, IDisposable
 			.Subscribe(change => propertyInfo.SetValue(propertySource, change.GetValue()))
 			.DisposeWith(_disposable);
 	}
-
-	private static readonly NullabilityInfoContext NullabilityContext = new();
 
 	public static IEnumerable<PropertyGridItem> Scan(object? propertySource, Func<PropertyInfo, bool>? filter = default)
 	{

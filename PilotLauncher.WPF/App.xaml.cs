@@ -17,23 +17,20 @@ public partial class App
 {
 	private readonly IServiceProvider _serviceProvider;
 	private readonly IHostEnvironment _hostEnvironment;
-	private readonly ILoggerFactory _loggerFactory;
 
 	public App(
 		IServiceProvider serviceProvider,
-		IHostEnvironment hostEnvironment,
-		ILoggerFactory loggerFactory)
+		IHostEnvironment hostEnvironment)
 	{
 		_serviceProvider = serviceProvider;
 		_hostEnvironment = hostEnvironment;
-		_loggerFactory = loggerFactory;
 	}
 
 	private void App_OnStartup(object sender, StartupEventArgs e)
 	{
 		var mainWindowView = _serviceProvider.GetRequiredService<MainWindow>();
 
-		mainWindowView.ViewModel = new MainWindowViewModel(_loggerFactory)
+		mainWindowView.ViewModel = new MainWindowViewModel(_serviceProvider)
 		{
 			Title = _hostEnvironment.ApplicationName,
 		};

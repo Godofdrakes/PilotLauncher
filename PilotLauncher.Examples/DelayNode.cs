@@ -9,8 +9,6 @@ namespace PilotLauncher.Examples;
 
 public sealed class DelayNode : WorkflowNodeViewModel
 {
-	public override ReactiveCommand<Unit, Unit> ExecuteCommand { get; }
-
 	public int Seconds
 	{
 		get => _seconds;
@@ -19,23 +17,21 @@ public sealed class DelayNode : WorkflowNodeViewModel
 
 	private int _seconds = 1;
 
-	public DelayNode(ILogger<DelayNode> logger)
+	public DelayNode(ILogger<DelayNode> logger) : base(logger)
 	{
-		ExecuteCommand = ReactiveCommand.CreateFromObservable(() =>
-		{
-			logger.LogInformation("Invoking observable factory");
-
-			var seconds = Seconds;
-
-			return Observable
-				.Timer(TimeSpan.FromSeconds(Seconds))
-				.Do(_ => logger.LogInformation(
-					"Waited {Seconds} second(s)", seconds))
-				.Select(_ => Unit.Default);
-		});
-
 		this.ValidationRule(node => node.Seconds,
 			seconds => seconds > 0,
 			"You must specify a positive value");
+	}
+
+	protected override IObservable<Unit> CreateExecutionObservable()
+	{
+		var seconds = Seconds;
+
+		return Observable
+			.Timer(TimeSpan.FromSeconds(seconds))
+			.Do(_ => Logger.LogInformation(
+				"Waited {Seconds} second(s)", seconds))
+			.Select(_ => Unit.Default);
 	}
 }

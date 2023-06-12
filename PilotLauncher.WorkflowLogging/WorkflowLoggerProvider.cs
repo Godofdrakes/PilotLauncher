@@ -2,7 +2,7 @@
 using DynamicData;
 using Microsoft.Extensions.Logging;
 
-namespace PilotLauncher.WorkflowLog;
+namespace PilotLauncher.WorkflowLogging;
 
 public class WorkflowLoggerProvider : ILoggerProvider
 {

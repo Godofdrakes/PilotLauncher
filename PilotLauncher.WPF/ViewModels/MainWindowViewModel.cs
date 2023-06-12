@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using DynamicData;
-using Microsoft.Extensions.Logging;
-using PilotLauncher.Common;
+using Microsoft.Extensions.DependencyInjection;
+using PilotLauncher.Examples;
+using PilotLauncher.Workflow;
+using PilotLauncher.WorkflowLogging;
 using ReactiveUI;
 
 namespace PilotLauncher.WPF.ViewModels;
@@ -16,55 +15,23 @@ public class MainWindowViewModel : WindowViewModel
 {
 	public MainWindowInteractions Interactions { get; } = new();
 
-	public PropertyEditorViewModel PropertyEditor { get; } = new();
+	public WorkflowViewModel Workflow { get; }
 
-	public ReactiveCommand<IWorkflowNode,Unit> ExecuteCommand { get; }
+	public IEnumerable<WorkflowLogEntry> LogOutput => _logOutput;
 
-	public WorkflowBranch WorkflowRoot { get; }
+	private readonly ReadOnlyObservableCollection<WorkflowLogEntry> _logOutput;
 
-	public IObserver<string> ConsoleOutputObserver => ConsoleOutputSubject.AsObserver();
-
-	private Subject<string> ConsoleOutputSubject { get; } = new();
-
-	public ReadOnlyObservableCollection<string> ConsoleOutput => _consoleOutput;
-
-	private readonly ReadOnlyObservableCollection<string> _consoleOutput;
-
-	public MainWindowViewModel(ILoggerFactory loggerFactory)
+	public MainWindowViewModel(IServiceProvider serviceProvider)
 	{
-		ConsoleOutputSubject.ToObservableChangeSet(limitSizeTo: 10000)
+		Workflow = serviceProvider.GetRequiredService<WorkflowViewModel>();
+		Workflow.Add(ActivatorUtilities.CreateInstance<DelayNode>(serviceProvider));
+		Workflow.Add(ActivatorUtilities.CreateInstance<EchoNode>(serviceProvider));
+
+		serviceProvider.GetRequiredService<IWorkflowLog>()
+			.Connect()
+			.Filter(entry => entry.Source.Contains(nameof(PilotLauncher)))
 			.ObserveOn(RxApp.MainThreadScheduler)
-			.Bind(out _consoleOutput)
+			.Bind(out _logOutput)
 			.Subscribe();
-
-		ExecuteCommand = ReactiveCommand.CreateFromObservable<IWorkflowNode, Unit>(node =>
-		{
-			return GetWorkflowQueue(node)
-				.ToObservable()
-				// Commands will be executed as they are subscribed to
-				.Select(leaf => leaf.ExecuteCommand.Execute())
-				// Concat to subscribe in sequence
-				.Concat();
-		});
-
-		WorkflowRoot = new WorkflowBranch()
-			.Sequence(
-				new WorkflowStepExample
-				{
-					Delay = 1, Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
-				},
-				new WorkflowStepExample
-				{
-					Delay = 2, Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
-				})
-			.Add(new WorkflowStepExample
-			{
-				Delay = 3, Logger = loggerFactory.CreateLogger<WorkflowStepExample>(),
-			});
-	}
-
-	private static IEnumerable<WorkflowStep> GetWorkflowQueue(IWorkflowNode root)
-	{
-		return root.Flatten(node => node.Children).OfType<WorkflowStep>();
 	}
 }

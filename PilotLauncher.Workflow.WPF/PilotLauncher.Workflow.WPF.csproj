@@ -9,7 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PilotLauncher.Examples\PilotLauncher.Examples.csproj" />
-      <ProjectReference Include="..\PilotLauncher.WorkflowLog\PilotLauncher.WorkflowLog.csproj" />
+      <ProjectReference Include="..\PilotLauncher.WorkflowLogging\PilotLauncher.WorkflowLogging.csproj" />
       <ProjectReference Include="..\PilotLauncher.Workflow\PilotLauncher.Workflow.csproj" />
       <ProjectReference Include="..\PilotLauncher.WPF.Common\PilotLauncher.WPF.Common.csproj" />
     </ItemGroup>

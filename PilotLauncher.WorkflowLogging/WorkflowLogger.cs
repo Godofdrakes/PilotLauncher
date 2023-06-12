@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace PilotLauncher.WorkflowLog;
+namespace PilotLauncher.WorkflowLogging;
 
 public class WorkflowLogger : ILogger
 {

@@ -1,4 +1,4 @@
-﻿namespace PilotLauncher.WorkflowLog;
+﻿namespace PilotLauncher.WorkflowLogging;
 
 public class WorkflowLogOptions
 {

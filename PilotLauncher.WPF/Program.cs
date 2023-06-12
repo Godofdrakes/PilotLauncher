@@ -2,9 +2,12 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using Dapplo.Microsoft.Extensions.Hosting.AppServices;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PilotLauncher.Common;
+using PilotLauncher.Workflow;
+using PilotLauncher.WorkflowLogging;
 using PilotLauncher.WPF.Common;
 using ReactiveUI;
 using Splat;
@@ -23,10 +26,24 @@ public static class Program
 			.UseEnvironment(Environments.Development)
 #endif
 			.ConfigureLogging()
+			.ConfigureLogging(builder =>
+			{
+				builder.AddWorkflowLog(options =>
+				{
+					options.HistorySize = 1000;
+				});
+			})
 			.ConfigureSingleInstance()
 			.ConfigureSplat()
 			.ConfigureReactiveUIViews()
-			.ConfigureWpf<App>();
+			.ConfigureWpf<App>()
+			.ConfigureServices(collection =>
+			{
+				collection.AddTransient<WorkflowViewModel>();
+				collection.AddSingleton<WorkflowLog>();
+				collection.AddTransient<IWorkflowLog>(provider =>
+					provider.GetRequiredService<WorkflowLog>());
+			});
 
 		return host
 			.Build()

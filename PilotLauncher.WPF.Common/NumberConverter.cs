@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace PilotLauncher.WPF;
+namespace PilotLauncher.WPF.Common;
 
 [ValueConversion(typeof(IConvertible), typeof(double))]
 public class NumberConverter : IValueConverter

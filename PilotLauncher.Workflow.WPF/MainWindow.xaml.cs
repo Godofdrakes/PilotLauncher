@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using DynamicData;
 using Microsoft.Extensions.DependencyInjection;
 using PilotLauncher.Examples;
-using PilotLauncher.WorkflowLog;
+using PilotLauncher.WorkflowLogging;
 
 namespace PilotLauncher.Workflow.WPF;
 
@@ -27,7 +27,6 @@ public partial class MainWindow
 		Workflow = serviceProvider.GetRequiredService<WorkflowViewModel>();
 		Workflow.Add(ActivatorUtilities.CreateInstance<DelayNode>(serviceProvider));
 		Workflow.Add(ActivatorUtilities.CreateInstance<EchoNode>(serviceProvider));
-		Workflow.Add(ActivatorUtilities.CreateInstance<DelayNode>(serviceProvider));
 
 		Factory = serviceProvider.GetRequiredService<WorkflowNodeFactoryViewModel>();
 		Factory.CreateNodeCommand

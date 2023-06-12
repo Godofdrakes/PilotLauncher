@@ -1,6 +1,9 @@
 ﻿using System.Reactive;
-using PilotLauncher.Common;
+using System.Reactive.Disposables;
+using PilotLauncher.PropertyGrid;
+using PilotLauncher.Workflow;
 using ReactiveUI;
+using ReactiveUI.Validation.Helpers;
 
 namespace PilotLauncher.WPF.Views;
 
@@ -15,22 +18,27 @@ public partial class MainWindow
 
 		this.WhenActivated(d =>
 		{
-			d(ViewModel!.Interactions.ShowEditFlyout.RegisterHandler(ShowEditFlyout));
-			d(ViewModel!.Interactions.ShowConsoleOutput.RegisterHandler(ShowConsoleOutput));
+			ViewModel!.Interactions.ShowEditFlyout
+				.RegisterHandler(ShowEditFlyout)
+				.DisposeWith(d);
+			ViewModel!.Interactions.ShowConsoleOutput
+				.RegisterHandler(ShowConsoleOutput)
+				.DisposeWith(d);
 
 			this.BindCommand(ViewModel,
 				model => model.Interactions.ShowConsoleOutputCommand,
 				window => window.ConsoleOutputButton);
-
 			this.OneWayBind(ViewModel,
-				model => model.ConsoleOutput,
+				model => model.LogOutput,
 				window => window.ConsoleOutput.ItemsSource);
 		});
+		
+		//@todo property editor sorting and grouping
 	}
 
-	private void ShowEditFlyout(InteractionContext<IWorkflowNode, Unit> context)
+	private void ShowEditFlyout(InteractionContext<WorkflowNodeViewModel, Unit> context)
 	{
-		ViewModel!.PropertyEditor.SelectedNode = context.Input;
+		PropertyGridView.PropertySource = context.Input;
 
 		EditWorkflowFlyout.IsOpen = true;
 
@@ -49,5 +57,26 @@ public partial class MainWindow
 		ConsoleOutputFlyout.IsOpen = shouldOpen;
 
 		context.SetOutput(Unit.Default);
+	}
+
+	private void PropertyGridView_OnPropertyItemAdded(object sender, PropertyGridItemAddedEventArgs e)
+	{
+		var propertyType = e.PropertyInfo.PropertyType;
+		var declaringType = e.PropertyInfo.DeclaringType;
+		
+		if (declaringType?.IsAssignableFrom(typeof(ReactiveObject)) is true)
+		{
+			e.Cancel = true;
+		}
+		
+		if (declaringType?.IsAssignableFrom(typeof(ReactiveValidationObject)) is true)
+		{
+			e.Cancel = true;
+		}
+
+		if (propertyType.IsAssignableTo(typeof(IReactiveCommand)))
+		{
+			e.Cancel = true;
+		}
 	}
 }

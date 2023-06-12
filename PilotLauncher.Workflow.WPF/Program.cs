@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PilotLauncher.WorkflowLog;
+using PilotLauncher.WorkflowLogging;
 using PilotLauncher.WPF.Common;
 
 namespace PilotLauncher.Workflow.WPF;
