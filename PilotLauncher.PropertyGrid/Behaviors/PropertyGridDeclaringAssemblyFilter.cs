@@ -1,10 +1,12 @@
 ﻿using System.Windows;
+using JetBrains.Annotations;
 using PilotLauncher.Common;
 using PilotLauncher.WPF.Common;
 
 namespace PilotLauncher.PropertyGrid;
 
 // Exclude properties declared in the specified assembly
+[PublicAPI]
 public class PropertyGridDeclaringAssemblyFilter : PropertyGridFilter
 {
 	public static readonly DependencyProperty TargetAssemblyProperty = DependencyObjectEx

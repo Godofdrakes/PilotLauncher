@@ -1,8 +1,10 @@
 using System;
+using JetBrains.Annotations;
 
 namespace PilotLauncher.PropertyGrid;
 
 // Exclude properties of the specified type
+[PublicAPI]
 public class PropertyGridPropertyTypeFilter : PropertyGridTypeFilter
 {
 	protected override void OnPropertyItemAdded(object sender, PropertyGridItemAddedEventArgs e)

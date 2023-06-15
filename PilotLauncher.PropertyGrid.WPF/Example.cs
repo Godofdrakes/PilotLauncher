@@ -4,6 +4,7 @@ using ReactiveUI;
 
 namespace PilotLauncher.PropertyGrid.WPF;
 
+[PropertyGridCategory("Example Object")]
 public class Example : ReactiveObject
 {
 	public string FirstName
@@ -34,6 +35,12 @@ public class Example : ReactiveObject
 	{
 		get => _propertyTypeVisibility;
 		set => this.RaiseAndSetIfChanged(ref _propertyTypeVisibility, value);
+	}
+
+	public bool Temp
+	{
+		get;
+		set;
 	}
 
 	public string FullName => _fullName.Value;

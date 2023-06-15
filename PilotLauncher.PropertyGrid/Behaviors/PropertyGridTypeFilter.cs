@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Windows;
+using JetBrains.Annotations;
 using PilotLauncher.WPF.Common;
 
 namespace PilotLauncher.PropertyGrid;
 
+[PublicAPI]
 public abstract class PropertyGridTypeFilter : PropertyGridFilter
 {
 	public static readonly DependencyProperty TargetTypeProperty = DependencyObjectEx

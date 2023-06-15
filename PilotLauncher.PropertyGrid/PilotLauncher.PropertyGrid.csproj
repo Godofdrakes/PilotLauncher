@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
+      <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
     </ItemGroup>
 
     <ItemGroup>

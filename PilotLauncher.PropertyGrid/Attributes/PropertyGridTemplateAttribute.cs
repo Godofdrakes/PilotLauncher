@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Reflection;
 using System.Text;
+using JetBrains.Annotations;
 using PilotLauncher.Common;
 
 namespace PilotLauncher.PropertyGrid;
 
 [AttributeUsage(AttributeTargets.Property)]
+[MeansImplicitUse(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]
+[PublicAPI]
 public class PropertyGridTemplateAttribute : Attribute
 {
 	public string Template { get; }
