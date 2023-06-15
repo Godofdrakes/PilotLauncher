@@ -4,12 +4,8 @@ using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Interactivity;
-using System.Windows.Markup;
 using DynamicData;
-using DynamicData.Binding;
 using PilotLauncher.WPF.Common;
 using ReactiveUI;
 

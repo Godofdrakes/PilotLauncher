@@ -15,4 +15,8 @@
       <ProjectReference Include="..\PilotLauncher.WPF.Common\PilotLauncher.WPF.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Behaviors\" />
+    </ItemGroup>
+
 </Project>
