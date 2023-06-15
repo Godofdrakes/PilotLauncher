@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
 
+// ReSharper disable UnusedMethodReturnValue.Local
+
 namespace PilotLauncher.WorkflowLogging;
 
 public static class WorkflowLogHostExtensions

@@ -18,7 +18,7 @@ public class EnumItemsConverter : IValueConverter
 		return Enum.GetValues(type);
 	}
 
-	public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 	{
 		throw new NotSupportedException();
 	}

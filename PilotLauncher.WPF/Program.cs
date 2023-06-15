@@ -5,7 +5,6 @@ using Dapplo.Microsoft.Extensions.Hosting.AppServices;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PilotLauncher.Common;
 using PilotLauncher.Workflow;
 using PilotLauncher.WorkflowLogging;
 using PilotLauncher.WPF.Common;
@@ -58,7 +57,7 @@ public static class Program
 			const string singleInstanceMutexId = "{D57B9A73-D6B0-4EA9-ABEA-50A483B159FC}";
 
 			builder.MutexId = singleInstanceMutexId;
-			builder.WhenNotFirstInstance = (environment, logger) =>
+			builder.WhenNotFirstInstance = (_, logger) =>
 			{
 				logger.LogWarning("An instance of the application already exists");
 			};

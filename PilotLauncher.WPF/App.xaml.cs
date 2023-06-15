@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Reactive.Linq;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using PilotLauncher.WPF.ViewModels;
 using PilotLauncher.WPF.Views;
-using ReactiveUI;
 
 namespace PilotLauncher.WPF;
 

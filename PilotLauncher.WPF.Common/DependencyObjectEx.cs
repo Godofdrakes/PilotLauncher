@@ -63,7 +63,7 @@ public static class DependencyObjectEx
 		Ensure.Argument(parent, expr => expr!.NodeType == ExpressionType.Parameter,
 			"Property expression must be of the form 'x => x.SomeProperty'");
 
-		var memberInfo = expression!.GetMemberInfo();
+		var memberInfo = expression.GetMemberInfo();
 
 		Ensure.Argument(memberInfo, expr => expr != null,
 			"The property expression does not point towards a valid member.");

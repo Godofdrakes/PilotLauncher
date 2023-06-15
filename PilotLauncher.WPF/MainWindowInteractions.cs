@@ -1,5 +1,4 @@
 ﻿using System.Reactive;
-using PilotLauncher.Common;
 using PilotLauncher.Workflow;
 using ReactiveUI;
 
