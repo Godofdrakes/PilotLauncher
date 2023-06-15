@@ -2,8 +2,28 @@
 
 public static class EnumerableEx
 {
-	public static IEnumerable<T> Flatten<T>(this T root, Func<T, IEnumerable<T>> selector)
+	public static IEnumerable<T> Flatten<T>(this T root, Func<T, T?> selector)
 	{
-		return selector(root).SelectMany(x => x.Flatten(selector)).Prepend(root);
+		ArgumentNullException.ThrowIfNull(root);
+
+		var items = new List<T>();
+
+		var item = root;
+
+		do
+		{
+#if DEBUG
+			if (items.Contains(item))
+			{
+				throw new InvalidOperationException("Infinite loop detected");
+			}
+#endif
+
+			items.Add(item);
+			item = selector(item);
+		}
+		while (item is not null);
+
+		return items;
 	}
 }
