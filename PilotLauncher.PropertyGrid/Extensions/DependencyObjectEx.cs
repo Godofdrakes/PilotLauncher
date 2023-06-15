@@ -1,34 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using System.Windows;
+using PilotLauncher.Common;
 using ReactiveUI;
 
 namespace PilotLauncher.PropertyGrid;
 
 public static class DependencyObjectEx
 {
-	[DebuggerHidden, StackTraceHidden]
-	private static void ArgumentAssertion<T>(
-		T param,
-		Expression<Func<T, bool>> assertion,
-		string? message = default,
-		[CallerArgumentExpression("param")] string paramName = "")
-	{
-		if (!assertion.Compile().Invoke(param))
-		{
-			ThrowArgumentAssertion(message, assertion, paramName);
-		}
-	}
-
-	[DoesNotReturn, DebuggerHidden, StackTraceHidden]
-	private static void ThrowArgumentAssertion(string? message, LambdaExpression assertion, string paramName)
-	{
-		throw new ArgumentException(message ?? $"Assertion failed: {assertion.Body}", paramName);
-	}
-
 	private static PropertyMetadata? CreatePropertyMetadata(
 		object? defaultValue = default,
 		bool affectsRender = default,
@@ -79,14 +58,14 @@ public static class DependencyObjectEx
 
 		var parent = expression.GetParent();
 
-		ArgumentAssertion(parent, expr => expr != null,
+		Ensure.Argument(parent, expr => expr != null,
 			"The property expression does not have a valid parent.");
-		ArgumentAssertion(parent, expr => expr!.NodeType == ExpressionType.Parameter,
+		Ensure.Argument(parent, expr => expr!.NodeType == ExpressionType.Parameter,
 			"Property expression must be of the form 'x => x.SomeProperty'");
 
 		var memberInfo = expression!.GetMemberInfo();
 
-		ArgumentAssertion(memberInfo, expr => expr != null,
+		Ensure.Argument(memberInfo, expr => expr != null,
 			"The property expression does not point towards a valid member.");
 
 		var memberName = memberInfo!.Name;
