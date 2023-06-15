@@ -13,15 +13,19 @@ public static class WpfHostBuilderEx
 
 	[DllImport("kernel32.dll")] private static extern bool AttachConsole(int dwProcessId);
 
-	// Rider doesn't seem to receive console logging properly with WPF apps. This fixes that.
-	public static IHostBuilder FixConsoleLogging(this IHostBuilder hostBuilder)
+	public static void FixConsoleLogging()
 	{
 #if DEBUG
 		AttachConsole(ATTACH_PARENT_PROCESS);
 #endif
-		return hostBuilder;
 	}
 
+	// Rider doesn't seem to receive console logging properly with WPF apps. This fixes that.
+	public static IHostBuilder FixConsoleLogging(this IHostBuilder hostBuilder)
+	{
+		FixConsoleLogging();
+		return hostBuilder;
+	}
 
 	public static IHostBuilder ConfigureLogging(this IHostBuilder hostBuilder)
 	{

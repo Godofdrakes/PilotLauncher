@@ -11,7 +11,6 @@
 	<propertyGrid:PropertyGridView x:Name="PropertyGridView"
 		PropertySource="{Binding Example}"
 		PropertyItemAdded="PropertyGridView_OnPropertyItemAdded"
-		PropertyTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.CustomTemplateSelector}"
 		ShowPropertyName="{Binding Example.IsNameVisible, Mode=OneWay}"
 		ShowPropertyType="{Binding Example.IsTypeVisible, Mode=OneWay}" />
 </Window>

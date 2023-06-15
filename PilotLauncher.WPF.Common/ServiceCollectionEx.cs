@@ -1,8 +1,10 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
-namespace PilotLauncher.Common;
+namespace PilotLauncher.WPF.Common;
 
 public static class ServiceCollectionEx
 {
@@ -18,7 +20,12 @@ public static class ServiceCollectionEx
 		if (assembly is null)
 			throw new ArgumentNullException(nameof(assembly));
 
-		bool IsViewFor(TypeInfo typeInfo) => ImplementsViewFor(typeInfo) && !typeInfo.IsAbstract;
+		bool IsViewFor(TypeInfo typeInfo) => ImplementsViewFor(typeInfo) && typeInfo is
+		{
+			IsAbstract: false,
+			IsGenericType: false,
+		};
+
 		bool ImplementsViewFor(TypeInfo typeInfo) => typeInfo.ImplementedInterfaces.Contains(typeof(IViewFor));
 
 		// for each type that implements IViewFor

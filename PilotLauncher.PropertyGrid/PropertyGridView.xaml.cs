@@ -180,7 +180,7 @@ public partial class PropertyGridView
 		set => SetValue(PropertySourceProperty, value);
 	}
 
-	public IEnumerable<PropertyGridItem> PropertyItems { get; init; }
+	public IEnumerable<PropertyGridItem> PropertyItems { get; }
 
 #endregion
 

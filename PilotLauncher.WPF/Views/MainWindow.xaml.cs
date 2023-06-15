@@ -58,25 +58,4 @@ public partial class MainWindow
 
 		context.SetOutput(Unit.Default);
 	}
-
-	private void PropertyGridView_OnPropertyItemAdded(object sender, PropertyGridItemAddedEventArgs e)
-	{
-		var propertyType = e.PropertyInfo.PropertyType;
-		var declaringType = e.PropertyInfo.DeclaringType;
-		
-		if (declaringType?.IsAssignableFrom(typeof(ReactiveObject)) is true)
-		{
-			e.Cancel = true;
-		}
-		
-		if (declaringType?.IsAssignableFrom(typeof(ReactiveValidationObject)) is true)
-		{
-			e.Cancel = true;
-		}
-
-		if (propertyType.IsAssignableTo(typeof(IReactiveCommand)))
-		{
-			e.Cancel = true;
-		}
-	}
 }

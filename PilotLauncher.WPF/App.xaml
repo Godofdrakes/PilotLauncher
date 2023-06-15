@@ -1,38 +1,18 @@
 ﻿<Application x:Class="PilotLauncher.WPF.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:propertyGrid="clr-namespace:PilotLauncher.PropertyGrid;assembly=PilotLauncher.PropertyGrid"
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:system="clr-namespace:System;assembly=System.Runtime"
-             Startup="App_OnStartup">
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <!-- Theme setting -->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Orange.xaml" />
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	Startup="App_OnStartup">
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+				<!-- Theme setting -->
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Orange.xaml" />
 
-                <ResourceDictionary Source="pack://application:,,,/PilotLauncher.PropertyGrid;component/PropertyGrid.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-
-            <DataTemplate x:Key="PilotLauncher.PropertyGridItem.Int32"
-                DataType="{x:Type propertyGrid:PropertyGridItem}">
-                <mah:NumericUpDown Value="{Binding Value,
-					Converter={StaticResource FloatToIntConverter}}"
-                    NumericInputMode="Numbers"
-                    HideUpDownButtons="True"
-                    TextAlignment="Left" />
-            </DataTemplate>
-
-            <propertyGrid:PropertyGridTemplateSelector x:Key="PilotLauncher.PropertyGrid.CustomTemplateSelector"
-                BasedOn="{StaticResource PilotLauncher.PropertyGrid.DefaultTemplateSelector}">
-                <propertyGrid:PropertyGridTemplate
-                    Priority="{x:Static system:Int32.MaxValue}"
-                    Match="{propertyGrid:PropertyMatch IsReadOnly=False, ExactType=system:Int32}"
-                    DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Int32}" />
-            </propertyGrid:PropertyGridTemplateSelector>
-        </ResourceDictionary>
-    </Application.Resources>
+				<ResourceDictionary Source="pack://application:,,,/PilotLauncher.PropertyGrid.MahApps;component/PropertyGrid.MahApps.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
 </Application>

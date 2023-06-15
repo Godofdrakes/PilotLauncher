@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Reactive.Disposables;
+using System.Windows;
 using MahApps.Metro.Controls;
 using PilotLauncher.WPF.ViewModels;
 using ReactiveUI;
@@ -39,8 +40,13 @@ public class MetroWindowFor<TViewModel> : MetroWindow, IViewFor<TViewModel>
 
 	protected MetroWindowFor()
 	{
-		this.OneWayBind(ViewModel, model => model.Title, window => window.Title);
-		this.WhenAnyValue(window => window.ViewModel)
-			.BindTo(this, window => window.DataContext);
+		this.WhenActivated(d =>
+		{
+			this.OneWayBind(ViewModel, model => model.Title, window => window.Title)
+				.DisposeWith(d);
+			this.WhenAnyValue(window => window.ViewModel)
+				.BindTo(this, window => window.DataContext)
+				.DisposeWith(d);
+		});
 	}
 }

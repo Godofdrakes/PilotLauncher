@@ -11,8 +11,7 @@
 	xmlns:propertyGrid="clr-namespace:PilotLauncher.PropertyGrid;assembly=PilotLauncher.PropertyGrid"
 	xmlns:workflowLog="clr-namespace:PilotLauncher.WorkflowLogging;assembly=PilotLauncher.WorkflowLogging"
 	xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-	xmlns:helpers="clr-namespace:ReactiveUI.Validation.Helpers;assembly=ReactiveUI.Validation"
-	xmlns:reactiveUi="clr-namespace:ReactiveUI;assembly=ReactiveUI"
+	xmlns:workflow="clr-namespace:PilotLauncher.Workflow;assembly=PilotLauncher.Workflow"
 	WindowStartupLocation="CenterScreen"
 	ResizeMode="CanResizeWithGrip"
 	MinHeight="400" Height="400"
@@ -43,12 +42,9 @@
 
 			<mah:Flyout x:Name="EditWorkflowFlyout" Header="Edit Workflow Node"
 				Position="Right" MinWidth="200">
-				<propertyGrid:PropertyGridView x:Name="PropertyGridView"
-					PropertyTemplateSelector="{StaticResource PilotLauncher.PropertyGrid.CustomTemplateSelector}">
+				<propertyGrid:PropertyGridView x:Name="PropertyGridView">
 					<i:Interaction.Behaviors>
-						<propertyGrid:PropertyGridDeclaringTypeFilter TargetType="{x:Type helpers:ReactiveValidationObject}" />
-						<propertyGrid:PropertyGridPropertyTypeFilter TargetType="{x:Type reactiveUi:IReactiveCommand}"
-							FilterAssignableTo="True" />
+						<propertyGrid:PropertyGridDeclaringTypeFilter TargetType="workflow:WorkflowNodeViewModel" />
 					</i:Interaction.Behaviors>
 				</propertyGrid:PropertyGridView>
 			</mah:Flyout>
@@ -78,11 +74,12 @@
 						</Grid.ColumnDefinitions>
 
 						<TextBlock Grid.Column="0" Text="{Binding Label}" />
-						<Button Grid.Column="1" Command="{Binding ExecuteCommand}" Content="Run Step" />
-						<Button Grid.Column="2" Content="Edit"
+						<Button Grid.Column="1" Content="Edit"
 							Command="{Binding ViewModel.Interactions.ShowEditFlyoutCommand,
 								RelativeSource={RelativeSource AncestorType=views:MainWindow}}"
 							CommandParameter="{Binding}" />
+						<Button Grid.Column="2" Content="Run"
+							Command="{Binding ExecuteCommand}" />
 					</Grid>
 				</DataTemplate>
 			</ListView.ItemTemplate>

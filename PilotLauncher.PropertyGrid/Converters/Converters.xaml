@@ -4,6 +4,5 @@
 	<BooleanToVisibilityConverter x:Key="VisibilityConverter" />
 	<propertyGrid:IndexConverter x:Key="IndexConverter" />
 	<propertyGrid:EnumItemsConverter x:Key="EnumItemsConverter" />
-	<propertyGrid:NumberConverter x:Key="FloatToIntConverter"
-		InputType="Single" OutputType="Int32" />
+	<propertyGrid:NumberConverter x:Key="IntToFloatConverter" />
 </ResourceDictionary>

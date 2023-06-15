@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using PilotLauncher.Common;
 
 namespace PilotLauncher.PropertyGrid;
 
@@ -24,6 +25,8 @@ public class PropertyGridCategoryAttribute : Attribute
 
 	public PropertyGridCategoryAttribute(string value)
 	{
+		Ensure.False(() => string.IsNullOrEmpty(value));
+
 		Value = value;
 	}
 

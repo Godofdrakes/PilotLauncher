@@ -33,22 +33,8 @@
 	</DataTemplate>
 
 	<!-- template selector for the view of a property value -->
-	<local:PropertyGridTemplateSelector x:Key="PilotLauncher.PropertyGrid.DefaultTemplateSelector">
-		<local:PropertyGridTemplate
-			Match="{local:PropertyMatch IsReadOnly=False, IsEnum=True}"
-			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Enum}">
-		</local:PropertyGridTemplate>
-
-		<local:PropertyGridTemplate
-			Match="{local:PropertyMatch IsReadOnly=False, ExactType=system:String}"
-			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.String}">
-		</local:PropertyGridTemplate>
-
-		<!-- fallback for all unhandled types -->
-		<local:PropertyGridTemplate
-			Priority="{x:Static system:Int32.MinValue}"
-			DataTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}" />
-	</local:PropertyGridTemplateSelector>
+	<local:PropertyGridTemplateSelector x:Key="PilotLauncher.PropertyGrid.DefaultTemplateSelector"
+		UnknownItemTemplate="{StaticResource PilotLauncher.PropertyGridItem.Unknown}" />
 
 	<!-- default style for PropertyGridView -->
 	<Style TargetType="local:PropertyGridView">
