@@ -21,19 +21,11 @@ public static class Ensure
 	}
 
 	[StackTraceHidden]
-	public static void True(Expression<Func<bool>> expression) =>
-		Ensure.That(expression, true);
-
-	[StackTraceHidden]
-	public static void False(Expression<Func<bool>> expression) =>
-		Ensure.That(expression, false);
-
-	[StackTraceHidden]
-	private static void That(Expression<Func<bool>> expression, bool expected)
+	public static void That(Expression<Func<bool>> expression)
 	{
 		var condition = expression.Compile();
 
-		if (condition() != expected)
+		if (condition() == false)
 		{
 			ThrowEnsureFailed(expression);
 		}
@@ -48,5 +40,5 @@ public static class Ensure
 	[DoesNotReturn]
 	[StackTraceHidden]
 	private static void ThrowEnsureFailed(Expression<Func<bool>> expression) =>
-		throw new InvalidOperationException($"Ensure condition failed: {expression.Body}");
+		throw new InvalidOperationException($"Ensure failed: {expression.Body}");
 }

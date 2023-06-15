@@ -8,12 +8,11 @@
 
     <ItemGroup>
       <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
-      <PackageReference Include="ReactiveUI" Version="19.2.1" />
-      <PackageReference Include="ReactiveUI.WPF" Version="19.2.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\PilotLauncher.Common\PilotLauncher.Common.csproj" />
+      <ProjectReference Include="..\PilotLauncher.WPF.Common\PilotLauncher.WPF.Common.csproj" />
     </ItemGroup>
 
 </Project>

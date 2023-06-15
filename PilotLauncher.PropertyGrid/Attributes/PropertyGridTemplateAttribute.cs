@@ -12,7 +12,7 @@ public class PropertyGridTemplateAttribute : Attribute
 
 	public PropertyGridTemplateAttribute(string template)
 	{
-		Ensure.False(() => string.IsNullOrEmpty(template));
+		Ensure.That(() => !string.IsNullOrEmpty(template));
 
 		Template = template;
 	}

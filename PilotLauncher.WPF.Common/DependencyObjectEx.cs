@@ -4,7 +4,7 @@ using System.Windows;
 using PilotLauncher.Common;
 using ReactiveUI;
 
-namespace PilotLauncher.PropertyGrid;
+namespace PilotLauncher.WPF.Common;
 
 public static class DependencyObjectEx
 {

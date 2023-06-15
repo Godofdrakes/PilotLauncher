@@ -25,7 +25,7 @@ public class PropertyGridCategoryAttribute : Attribute
 
 	public PropertyGridCategoryAttribute(string value)
 	{
-		Ensure.False(() => string.IsNullOrEmpty(value));
+		Ensure.That(() => !string.IsNullOrEmpty(value));
 
 		Value = value;
 	}
