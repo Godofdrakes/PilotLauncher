@@ -37,12 +37,6 @@ public class Example : ReactiveObject
 		set => this.RaiseAndSetIfChanged(ref _propertyTypeVisibility, value);
 	}
 
-	public bool Temp
-	{
-		get;
-		set;
-	}
-
 	public string FullName => _fullName.Value;
 	public bool IsNameVisible => _isNameVisible.Value;
 	public bool IsTypeVisible => _isTypeVisible.Value;

@@ -7,7 +7,7 @@ using PilotLauncher.Common;
 namespace PilotLauncher.PropertyGrid;
 
 [AttributeUsage(AttributeTargets.Property)]
-[MeansImplicitUse(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]
+[MeansImplicitUse(ImplicitUseKindFlags.Access, ImplicitUseTargetFlags.Members)]
 [PublicAPI]
 public class PropertyGridTemplateAttribute : Attribute
 {

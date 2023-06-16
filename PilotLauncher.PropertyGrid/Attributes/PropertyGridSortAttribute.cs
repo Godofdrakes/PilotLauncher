@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace PilotLauncher.PropertyGrid;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class)]
-[MeansImplicitUse(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]
+[MeansImplicitUse(ImplicitUseKindFlags.Access, ImplicitUseTargetFlags.Members)]
 [PublicAPI]
 public class PropertyGridSortAttribute : Attribute
 {

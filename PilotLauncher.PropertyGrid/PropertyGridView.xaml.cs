@@ -94,6 +94,7 @@ public partial class PropertyGridView
 			.Select(source => PropertyGridItem
 				.Scan(source, FilterPropertyInfo)
 				.AsObservableChangeSet(item => item.PropertyInfo.Name)
+				.SortBy(item => item.SortValue)
 				.DisposeMany())
 			.Switch()
 			.Bind(out var propertyItems)
