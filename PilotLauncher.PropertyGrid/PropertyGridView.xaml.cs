@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using DynamicData;
+using DynamicData.Binding;
 using PilotLauncher.WPF.Common;
 using ReactiveUI;
 
@@ -68,6 +69,7 @@ public partial class PropertyGridView
 	}
 
 	public IEnumerable<PropertyGridItem> PropertyItems { get; }
+	public IEnumerable<IGroup<PropertyGridItem, string, string>> PropertyGroups { get; }
 
 #endregion
 
@@ -94,13 +96,26 @@ public partial class PropertyGridView
 			.Select(source => PropertyGridItem
 				.Scan(source, FilterPropertyInfo)
 				.AsObservableChangeSet(item => item.PropertyInfo.Name)
-				.SortBy(item => item.SortValue)
+				// Dispose of property items when no longer in use
 				.DisposeMany())
+			// Throw out all existing items when a new property source is set
 			.Switch()
+			// Sort property items
+			.SortBy(item => item.SortValue,
+				sortOptimisations: SortOptimisations.ComparesImmutableValuesOnly)
+			// Cache the property item list, in case we don't want groups for some reason
 			.Bind(out var propertyItems)
+			// Create the property groups
+			.Group(item => item.Category)
+			// Sort the property groups
+			.SortBy(group => group.Key,
+				sortOptimisations: SortOptimisations.ComparesImmutableValuesOnly)
+			// Cache the property group list separately
+			.Bind(out var propertyGroups)
 			.Subscribe();
 
 		PropertyItems = propertyItems;
+		PropertyGroups = propertyGroups;
 	}
 
 	private bool FilterPropertyInfo(PropertyInfo propertyInfo)
